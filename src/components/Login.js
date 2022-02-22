@@ -11,10 +11,10 @@ import {
   import {AuthContext} from '../context/AuthContext';
   import * as Keychain from 'react-native-keychain';
   import {AxiosContext} from '../context/AxiosContext';
+import { deviceStorage } from '../services/deviceStorage';
   
   export const Login = () => {
     const [email, setEmail] = useState('');
-  
     const [password, setPassword] = useState('');
     const authContext = useContext(AuthContext);
     const {publicAxios} = useContext(AxiosContext);
@@ -26,18 +26,17 @@ import {
           password,
         });
   
-        const {accessToken, refreshToken} = response.data;
+        const {accessToken} = response.data;
         authContext.setAuthState({
           accessToken,
-          refreshToken,
           authenticated: true,
         });
+        deviceStorage.saveKey("id_token", accessToken);
   
         await Keychain.setGenericPassword(
           'token',
           JSON.stringify({
-            accessToken,
-            refreshToken,
+            accessToken
           }),
         );
       } catch (error) {

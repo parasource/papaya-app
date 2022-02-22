@@ -4,6 +4,7 @@ import Keychain from 'react-native-keychain'
 import { Login } from '../components/Login';
 import { Dashboard } from '../components/Dashboard';
 import { Spinner } from '../components/Spinner';
+import { deviceStorage } from '../services/deviceStorage';
 
 export const LoginPage = () => {
   const authContext = useContext(AuthContext);
@@ -16,7 +17,6 @@ export const LoginPage = () => {
 
       authContext.setAuthState({
         accessToken: jwt.accessToken || null,
-        refreshToken: jwt.refreshToken || null,
         authenticated: jwt.accessToken !== null,
       });
       setStatus('success');
@@ -25,7 +25,6 @@ export const LoginPage = () => {
       console.log(`Keychain Error: ${error.message}`);
       authContext.setAuthState({
         accessToken: null,
-        refreshToken: null,
         authenticated: false,
       });
     }

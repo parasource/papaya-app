@@ -1,8 +1,6 @@
 import React, {createContext, useContext} from 'react';
 import axios from 'axios';
 import {AuthContext} from './AuthContext';
-import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import * as Keychain from 'react-native-keychain';
 
 export const AxiosContext = createContext();
 const {Provider} = AxiosContext;
@@ -30,47 +28,6 @@ export const AxiosProvider = ({children}) => {
       return Promise.reject(error);
     },
   );
-
-  const refreshAuthLogic = failedRequest => {
-    const data = {
-      refreshToken: authContext.authState.refreshToken,
-    };
-
-    const options = {
-      method: 'POST',
-      data,
-      url: 'http://localhost:3001/api/refreshToken',
-    };
-
-    return axios(options)
-      .then(async tokenRefreshResponse => {
-        failedRequest.response.config.headers.Authorization =
-          'Bearer ' + tokenRefreshResponse.data.accessToken;
-
-        authContext.setAuthState({
-          ...authContext.authState,
-          accessToken: tokenRefreshResponse.data.accessToken,
-        });
-
-        await Keychain.setGenericPassword(
-          'token',
-          JSON.stringify({
-            accessToken: tokenRefreshResponse.data.accessToken,
-            refreshToken: authContext.authState.refreshToken,
-          }),
-        );
-
-        return Promise.resolve();
-      })
-      .catch(e => {
-        authContext.setAuthState({
-          accessToken: null,
-          refreshToken: null,
-        });
-      });
-  };
-
-  createAuthRefreshInterceptor(authAxios, refreshAuthLogic, {});
 
   return (
     <Provider
