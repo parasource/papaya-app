@@ -9,7 +9,8 @@ import {
   } from 'react-native';
   import React, {useContext, useState} from 'react';
   import {AuthContext} from '../context/AuthContext';
-  import * as Keychain from 'react-native-keychain';
+  import * as SecureStore from 'expo-secure-store';
+  // import * as Keychain from 'react-native-keychain';
   import {AxiosContext} from '../context/AxiosContext';
 import { deviceStorage } from '../services/deviceStorage';
   
@@ -33,7 +34,7 @@ import { deviceStorage } from '../services/deviceStorage';
         });
         deviceStorage.saveKey("id_token", accessToken);
   
-        await Keychain.setGenericPassword(
+        await SecureStore.setItemAsync(
           'token',
           JSON.stringify({
             accessToken

@@ -5,6 +5,7 @@ import { Login } from '../components/Login';
 import { Dashboard } from '../components/Dashboard';
 import { Spinner } from '../components/Spinner';
 import { deviceStorage } from '../services/deviceStorage';
+import * as SecureStore from 'expo-secure-store';
 
 export const LoginPage = () => {
   const authContext = useContext(AuthContext);
@@ -12,7 +13,7 @@ export const LoginPage = () => {
 
   const loadJWT = useCallback(async () => {
     try {
-      const value = await Keychain.getGenericPassword();
+      const value = await SecureStore.getItemAsync('token')
       const jwt = JSON.parse(value.password);
 
       authContext.setAuthState({
