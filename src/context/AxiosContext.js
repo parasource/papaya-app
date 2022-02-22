@@ -11,11 +11,11 @@ export const AxiosProvider = ({children}) => {
   const authContext = useContext(AuthContext);
 
   const authAxios = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://localhost:8000/api/auth',
   });
 
   const publicAxios = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: 'http://localhost:8000/api/auth',
   });
 
   authAxios.interceptors.request.use(
