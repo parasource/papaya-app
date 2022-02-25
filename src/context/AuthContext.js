@@ -1,7 +1,5 @@
-import React, {createContext, useEffect, useState} from 'react';
-// import * as Keychain from 'react-native-keychain';
+import React, {createContext, useState} from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { deviceStorage } from '../services/deviceStorage';
 
 export const AuthContext = createContext(null);
 const {Provider} = AuthContext;
@@ -12,23 +10,13 @@ export const AuthProvider = ({children}) => {
     authenticated: null,
   });
 
-  useEffect(() => {
-    if(deviceStorage.loadJWT()){
-        setAuthState({
-            accessToken: deviceStorage.loadJWT(),
-            authenticated: null,
-        })
-    }
-  }, [])
-
   const logout = async () => {
-    await SecureStore.deleteItemAsync('token')
-    deviceStorage.deleteJWT();
     setAuthState({
         accessToken: null,
         authenticated: false,
     });
-    console.log(authState);
+    
+    await SecureStore.deleteItemAsync('token', null)
   };
 
   const getAccessToken = () => {

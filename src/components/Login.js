@@ -1,102 +1,100 @@
 import {
-    View,
-    Text,
-    StyleSheet,
-    SafeAreaView,
-    TextInput,
-    Button,
-    Alert,
-  } from 'react-native';
-  import React, {useContext, useState} from 'react';
-  import {AuthContext} from '../context/AuthContext';
-  import * as SecureStore from 'expo-secure-store';
-  // import * as Keychain from 'react-native-keychain';
-  import {AxiosContext} from '../context/AxiosContext';
-import { deviceStorage } from '../services/deviceStorage';
-  
-  export const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const authContext = useContext(AuthContext);
-    const {publicAxios} = useContext(AxiosContext);
-  
-    const onLogin = async () => {
-      try {
-        const response = await publicAxios.post('/login', {
-          email,
-          password,
-        });
-  
-        const {accessToken} = response.data;
-        authContext.setAuthState({
-          accessToken,
-          authenticated: true,
-        });
-        deviceStorage.saveKey("id_token", accessToken);
-  
-        await SecureStore.setItemAsync(
-          'token',
-          JSON.stringify({
-            accessToken
-          }),
-        );
-      } catch (error) {
-        Alert.alert('Login Failed', error.response.data.message);
-      }
-    };
-  
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.logo}>Login</Text>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#fefefe"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            onChangeText={text => setEmail(text)}
-            value={email}
-          />
-  
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#fefefe"
-            secureTextEntry
-            onChangeText={text => setPassword(text)}
-            value={password}
-          />
-        </View>
-        <Button title="Login" style={styles.button} onPress={() => onLogin()} />
-      </SafeAreaView>
-    );
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  Button,
+  Alert,
+} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from '../context/AuthContext';
+import * as SecureStore from 'expo-secure-store';
+import {AxiosContext} from '../context/AxiosContext';
+
+export const Login = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const authContext = useContext(AuthContext);
+  const {publicAxios} = useContext(AxiosContext);
+
+  const onLogin = async () => {
+    try {
+      const response = await publicAxios.post('/login', {
+        email,
+        password,
+      });
+
+      const {accessToken} = response.data;
+      authContext.setAuthState({
+        accessToken,
+        authenticated: true,
+      });
+
+      await SecureStore.setItemAsync(
+        'token',
+        JSON.stringify({
+          accessToken
+        }),
+      )
+    } catch (error) {
+      Alert.alert('Login Failed', error.response.data.message);
+    }
   };
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#000',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      width: '100%',
-    },
-    logo: {
-      fontSize: 60,
-      color: '#fff',
-      margin: '20%',
-    },
-    form: {
-      width: '80%',
-      margin: '10%',
-    },
-    input: {
-      fontSize: 20,
-      color: '#fff',
-      paddingBottom: 10,
-      borderBottomColor: '#fff',
-      borderBottomWidth: 1,
-      marginVertical: 20,
-    },
-    button: {},
-  });
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.logo}>Login</Text>
+      <View style={styles.form}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#fefefe"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={text => setEmail(text)}
+          value={email}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#fefefe"
+          secureTextEntry
+          onChangeText={text => setPassword(text)}
+          value={password}
+        />
+      </View>
+      <Button title="Login" style={styles.button} onPress={() => onLogin()} />
+      <Button title="create accaunt" style={styles.link} onPress={() => navigation.navigate('Register')} />
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  logo: {
+    fontSize: 60,
+    color: '#fff',
+    margin: '20%',
+  },
+  form: {
+    width: '80%',
+    margin: '10%',
+  },
+  input: {
+    fontSize: 20,
+    color: '#fff',
+    paddingBottom: 10,
+    borderBottomColor: '#fff',
+    borderBottomWidth: 1,
+    marginVertical: 20,
+  },
+  button: {},
+});

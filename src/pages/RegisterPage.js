@@ -1,11 +1,10 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Login } from '../components/Login';
-import { Dashboard } from '../components/Dashboard';
 import { Spinner } from '../components/Spinner';
 import * as SecureStore from 'expo-secure-store';
+import { Register } from '../components/Register';
 
-export const LoginPage = ({navigation}) => {
+export const RegisterPage = ({navigation}) => {
   const authContext = useContext(AuthContext);
   const [status, setStatus] = useState('loading');
 
@@ -36,5 +35,5 @@ export const LoginPage = ({navigation}) => {
     return <Spinner />;
   }
 
-  return <Login navigation={navigation}/>
+  return <Register  navigation={navigation}/>
 };
