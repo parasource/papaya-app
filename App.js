@@ -1,13 +1,11 @@
-import { AppContainer } from './src/components/AppContainer';
-import {AuthProvider} from './src/context/AuthContext';
-import {AxiosProvider} from './src/context/AxiosContext';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
+import AppContainer from './src/components/AppContainer';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AxiosProvider>
+    <Provider store={store}>
         <AppContainer/>
-      </AxiosProvider>
-    </AuthProvider>
+    </Provider>
   );
 }

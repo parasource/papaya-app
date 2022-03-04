@@ -1,45 +1,22 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Alert } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
-import { AxiosContext } from '../context/AxiosContext';
+import React from 'react';
+import { StyleSheet, View, Button } from 'react-native';
+import SetInterests from '../pages/SetInterests';
+import { logout } from '../redux/auth-reducer';
+import { connect } from 'react-redux';
 
 
-export const Dashboard = () => {
-  const authContext = useContext(AuthContext);
-  const {authAxios} = useContext(AxiosContext);
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-      authAxios.get('/user').then(
-        response => {
-          setUser(response.data)
-          console.log(response.data);
-        }
-      )
-      // .catch(error => {
-      //   Alert.alert('User error: ', error.response.data.message);
-      // })
-  }, []) 
-
+const Dashboard = (props) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>WELCOME</Text>
-      <Text></Text>
-      <View style={styles.buttonGroup}>
-        <Button title="Logout" onPress={() => authContext.logout()} />
-      </View>
+      <SetInterests/>
+      <Button title="Logout" onPress={() => props.logout()} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  text: {
-    fontSize: 32
+    paddingHorizontal: 20
   },
   buttonGroup: {
     marginTop: 20,
@@ -48,3 +25,5 @@ const styles = StyleSheet.create({
     width: '90%',
   }
 });
+
+export default connect(null, {logout})(Dashboard)

@@ -7,42 +7,17 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
-import {AuthContext} from '../context/AuthContext';
-import * as SecureStore from 'expo-secure-store';
-import {AxiosContext} from '../context/AxiosContext';
+import React, {useState} from 'react';
+import { register } from '../redux/auth-reducer';
+import { connect } from 'react-redux';
 
-export const Register = ({navigation}) => {
+const Register = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const authContext = useContext(AuthContext);
-  const {publicAxios} = useContext(AxiosContext);
 
-  const onRegister = async () => {
-    try {
-      const response = await publicAxios.post('/register', {
-        name,
-        email,
-        password
-      });
-
-      const {accessToken} = response.data;
-      authContext.setAuthState({
-        accessToken,
-        authenticated: true,
-      });
-
-      await SecureStore.setItemAsync(
-        'token',
-        JSON.stringify({
-          accessToken
-        }),
-      );
-      // navigation.navigate('Dashboard')
-    } catch (error) {
-      Alert.alert('Register Failed', error.response.data);
-    }
+  const onRegister = () => {
+    props.register(name, email, password)
   };
 
   return (
@@ -78,7 +53,7 @@ export const Register = ({navigation}) => {
             />
         </View>
       <Button title="Register" style={styles.button} onPress={() => onRegister()} />
-      <Button title="login" style={styles.link} onPress={() => navigation.navigate('Login')} />
+      <Button title="login" style={styles.link} onPress={() => props.navigation.navigate('Login')} />
     </SafeAreaView>
   );
 };
@@ -110,3 +85,5 @@ const styles = StyleSheet.create({
   },
   button: {},
 });
+
+export default connect(null, {register})(Register)
