@@ -12,6 +12,7 @@ let initialState = {
     login: null,
     accessToken: null,
     isAuth: false,
+    loginError: ''
 }
 
 export const authReducer = (state = initialState, action) => {
@@ -53,21 +54,22 @@ export const setAuthUserToken = (accessToken, isAuth) =>
         }
     })
 
-export const login = (email, password) => async (dispatch) => {
-        let response = await authAPI.login(email, password)
-        if(response.data.success){
-            const accessToken = response.data.token;
-            await SecureStore.setItemAsync('token', accessToken)
-            let userResponse = await authAPI.me()
-            let {
-                id,
-                email,
-                name
-            } = userResponse.data
-            dispatch(setAuthUserData(id, email, name, accessToken, true))
-        }else{
-            console.log("Login error: ", response.data.message);
-        }
+export const login = (data) => async (dispatch) => {
+    let response = await authAPI.login(data)
+    console.log(response.config);
+    if(response.status == 200){
+        const accessToken = response.data.token;
+        await SecureStore.setItemAsync('token', accessToken)
+        let userResponse = await authAPI.me()
+        let {
+            id,
+            email,
+            name
+        } = userResponse.data
+        dispatch(setAuthUserData(id, email, name, accessToken, true))
+    }else{
+        console.log("Login error: ", response.data.message);
+    }
 }
 
 export const register = (name, email, password) => async (dispatch) => {

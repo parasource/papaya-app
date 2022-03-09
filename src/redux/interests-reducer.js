@@ -36,3 +36,14 @@ export const requestInterests = () => async (dispatch) => {
         console.log("Interests error: ", response.data.message);
     }
 }
+
+export const setInterests = (interests) => async (dispatch) => {
+    let response = await interestsAPI.SetInterests(interests)
+    if(response.status == 200){
+        const interests = response.data
+        let categories = Array.from([...interests].reduce((acc, elem) => acc.add(elem.category), new Set()))
+        dispatch(getInterests(interests, categories))
+    }else{
+        console.log("Interests error: ", response.data.message);
+    }
+}

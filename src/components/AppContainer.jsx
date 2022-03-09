@@ -6,6 +6,7 @@ import { RegisterPage } from '../pages/RegisterPage';
 import Dashboard from './Dashboard';
 import { connect } from 'react-redux';
 import { checkToken } from '../redux/auth-reducer';
+import { FirstScreen } from '../pages/FirstScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -15,10 +16,15 @@ const AppContainer = (props) => {
     props.checkToken()
   }, [])
 
+  const screenOptions = {
+    headerShown: false
+  }
+
   if(!props.isAuth){
     return(
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={screenOptions}>
+          <Stack.Screen name="FirstScreen" component={FirstScreen} />
           <Stack.Screen name="Login" component={LoginPage} />
           <Stack.Screen name="Register" component={RegisterPage} />
         </Stack.Navigator>

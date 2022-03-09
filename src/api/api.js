@@ -2,7 +2,6 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    withCredentials: true,
     baseURL: 'http://localhost:8000/api'
 })
 
@@ -31,11 +30,8 @@ export const authAPI = {
     me() {
         return instance.get(`auth/user`)
     },
-    login(email, password) {
-        const response = instance.post(`auth/login`, {
-            email,
-            password
-        })
+    login(values) {
+        const response = instance.post(`auth/login`, values)
         response.then((res) => {
             setInterseptors(res)
         })
@@ -44,7 +40,9 @@ export const authAPI = {
     register(name, email, password) {
         console.log();
         const response =  instance.post(`auth/register`, {
-            name, email, password
+            name,
+            email,
+            password
         })
         response.then((res) => {
             setInterseptors(res)
@@ -56,5 +54,8 @@ export const authAPI = {
 export const interestsAPI = {
     getInterests() {
         return instance.get(`/get-interests`)
+    },
+    setInterests(interests) {
+        return instance.post(`/profile/set-interests`, interests)
     }
 }
