@@ -72,21 +72,19 @@ export const login = (data) => async (dispatch) => {
     }
 }
 
-export const register = (name, email, password) => async (dispatch) => {
-    try{   
-        let response = await authAPI.register(name, email, password)
+export const register = (data) => async (dispatch) => {
+    let response = await authAPI.register(data)
+    if(response.status == 200){
         const accessToken = response.data.token;
         await SecureStore.setItemAsync('token', accessToken)
-
         let userResponse = await authAPI.me()
-        const {
-            userId,
-            userEmail,
-            userName
+        let {
+            id,
+            email,
+            name
         } = userResponse.data
-        
-        dispatch(setAuthUserData(userId, userEmail, userName, accessToken, true))
-    }catch (error) {
+        dispatch(setAuthUserData(id, email, name, accessToken, true))
+    }else{
         console.log("Register error: ", response.data.message);
     }
 }

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { GREEN_COLOR, BG_COLOR, GRAY_COLOR } from '../../theme'
 
-export const FullButton = ({label, style, theme, navigation, to}) => {
+export const FullButton = ({label, style, theme, navigation, to, pressHandler}) => {
   return (
     <TouchableOpacity
       style={{
@@ -13,7 +13,7 @@ export const FullButton = ({label, style, theme, navigation, to}) => {
         borderWidth: theme == "light" ? 1 : "none",
         borderColor: theme == "light" ? GRAY_COLOR : "none",
       }}
-      onPress={() => navigation.navigate(to)}
+      onPress={navigation ? () => navigation.navigate(to) : pressHandler}
     >
       <Text
         style={{

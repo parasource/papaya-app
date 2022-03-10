@@ -2,94 +2,138 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
-  Button,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import { login } from '../redux/auth-reducer';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import { FullButton } from './UI/FullButton';
+import { BG_COLOR, GRAY_COLOR } from '../theme';
+import * as Yup from 'yup';
 
 const Login = (props) => {
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [error, setError] = useState('');
-
+  
   const onLogin = async (values) => {
     await props.login(values)
   };
 
+  const SignupSchema = Yup.object().shape({
+       password: Yup.string()
+         .required('Введите пароль'),
+       email: Yup.string().required('Введите email'),
+     });
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.logo}>Login</Text>
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        onSubmit={values => onLogin(values)}
-        style={styles.form}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.wrapper}>
+          <Formik
+            initialValues={{ email: '', password: '' }}
+            onSubmit={values => onLogin(values)}
+            validationSchema={SignupSchema}
+          >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              <View>
+                <Text style={styles.title}>Снова привет!</Text>
+                <Text style={styles.subtitle}>Мы рады, что ты вернулся к нам</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Электронная почта"
+                  placeholderTextColor="#fff"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                {errors.email && touched.email ? (<Text style={styles.error}>{'\u25CF'}{errors.email}</Text>) : null}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Пароль"
+                  placeholderTextColor="#fff"
+                  secureTextEntry
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
+                {errors.password && touched.password ? (<Text style={styles.error}>{'\u25CF'}{errors.password}</Text>) : null}
+                <FullButton label="Войти в аккаунт" handlePress={handleSubmit}style={styles.button}/>
+                <Text style={styles.forget} onPress={() => props.navigation.navigate('Register')}>Забыли пароль?</Text> 
+              </View>
+            )}
+          </Formik>
           <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor="#fefefe"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#fefefe"
-              secureTextEntry
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur('password')}
-              value={values.password}
-            />
-            <Button onPress={handleSubmit} title="Login" style={styles.button}/>
-            <Button title=""  onPress={() => onLogin()} />
+            <Text style={styles.forget}>У тебя нет аккаунта?</Text>
+            <Text style={styles.link} onPress={() => props.navigation.navigate('Register')}>Зарегистрироваться</Text>
           </View>
-        )}
-      </Formik>
-      <Button title="create accaunt" style={styles.link} onPress={() => props.navigation.navigate('Register')} />
-    </SafeAreaView>
-    
+        </View>
+      </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
+    backgroundColor: BG_COLOR,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+    paddingTop: '23%',
+    paddingBottom: 74
   },
-  logo: {
-    fontSize: 60,
+  title: {
+    fontSize: 28,
     color: '#fff',
-    margin: '20%',
+    textAlign: 'center',
+    fontFamily: 'GilroyMedium',
   },
-  form: {
-    width: '80%',
-    margin: '10%',
+  subtitle: {
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
+    fontFamily: 'GilroyRegular',
+    marginTop: 8,
+    marginBottom: 44
   },
   input: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#fff',
-    paddingBottom: 10,
-    borderBottomColor: '#fff',
-    borderBottomWidth: 1,
-    marginVertical: 20,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    borderColor: GRAY_COLOR,
+    borderWidth: 1,
+    fontFamily: 'GilroyRegular',
+    borderRadius: 8,
+    marginTop: 16
   },
   error: {
     fontSize: 20,
     color: '#FF2B2B'
   },
-  button: {},
+  forget: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: GRAY_COLOR,
+    fontFamily: 'GilroyRegular',
+    marginTop: 12
+  },
+  button: {
+    marginTop: 24
+  },
+  link: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#5096FF',
+    fontFamily: 'GilroyRegular',
+    marginTop: 4
+  },
+  error: {
+    color: '#F25757',
+    marginTop: 8,
+    fontFamily: 'GilroyRegular',
+    fontSize: 14
+  },
 });
 
 const mapStateToProps = (state) => ({

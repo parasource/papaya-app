@@ -2,88 +2,140 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
-  Button,
-  Alert,
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
-import React, {useState} from 'react';
-import { register } from '../redux/auth-reducer';
+import React from 'react';
 import { connect } from 'react-redux';
+import { Formik } from 'formik';
+import { FullButton } from './UI/FullButton';
+import { BG_COLOR, GRAY_COLOR } from '../theme';
+import { register } from '../redux/auth-reducer';
+import * as Yup from 'yup';
 
 const Register = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
 
-  const onRegister = () => {
-    props.register(name, email, password)
+  const onRegister = values => {
+    props.register(values)
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.logo}>Register</Text>
-        <View style={styles.form}>
-          <TextInput
-              style={styles.input}
-              placeholder="Name"
-              placeholderTextColor="#fefefe"
-              autoCapitalize="none"
-              onChangeText={text => setName(text)}
-              value={name}
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor="#fefefe"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              onChangeText={text => setEmail(text)}
-              value={email}
-            />
+  const SignupSchema = Yup.object().shape({
+    password: Yup.string()
+      .min('Минимум 8 символов')
+      .required('Введите пароль'),
+    email: Yup.string().email('Введите email верно').required('Введите email'),
+    name: Yup.string().required('Введите имя'),
+  });
 
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#fefefe"
-              secureTextEntry
-              onChangeText={text => setPassword(text)}
-              value={password}
-            />
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.wrapper}>
+          <Formik
+            initialValues={{ name: '', email: '', password: '' }}
+            onSubmit={values => onRegister(values)}
+            validationSchema={SignupSchema}
+          >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              <View>
+                <Text style={styles.title}>Снова привет!</Text>
+                <Text style={styles.subtitle}>Мы рады, что ты вернулся к нам</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Имя"
+                  placeholderTextColor="#fff"
+                  autoCapitalize="none"
+                  onChangeText={handleChange('name')}
+                  onBlur={handleBlur('name')}
+                  value={values.name}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Электронная почта"
+                  placeholderTextColor="#fff"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Пароль"
+                  placeholderTextColor="#fff"
+                  secureTextEntry
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
+                <FullButton label="Войти в аккаунт" handlePress={handleSubmit} style={styles.button}/> 
+              </View>
+            )}
+          </Formik>
+          <View>
+            <Text style={styles.forget}>Уже есть аккаунт?</Text>
+            <Text style={styles.link} onPress={() => props.navigation.navigate('Login')}>Войти в аккаунт</Text>
+          </View>
         </View>
-      <Button title="Register" style={styles.button} onPress={() => onRegister()} />
-      <Button title="login" style={styles.link} onPress={() => props.navigation.navigate('Login')} />
-    </SafeAreaView>
+      </TouchableWithoutFeedback>
   );
 };
-
+  
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    width: '100%',
+    backgroundColor: BG_COLOR,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+    paddingTop: '23%',
+    paddingBottom: 74
   },
-  logo: {
-    fontSize: 60,
+  title: {
+    fontSize: 28,
     color: '#fff',
-    margin: '20%',
+    textAlign: 'center',
+    fontFamily: 'GilroyMedium',
   },
-  form: {
-    width: '80%',
-    margin: '10%',
+  subtitle: {
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
+    fontFamily: 'GilroyRegular',
+    marginTop: 8,
+    marginBottom: 44
   },
   input: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#fff',
-    paddingBottom: 10,
-    borderBottomColor: '#fff',
-    borderBottomWidth: 1,
-    marginVertical: 20,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    borderColor: GRAY_COLOR,
+    borderWidth: 1,
+    fontFamily: 'GilroyRegular',
+    borderRadius: 8,
+    marginTop: 16
   },
-  button: {},
-});
+  error: {
+    fontSize: 20,
+    color: '#FF2B2B'
+  },
+  forget: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: GRAY_COLOR,
+    fontFamily: 'GilroyRegular',
+    marginTop: 12
+  },
+  button: {
+    marginTop: 24
+  },
+  link: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: '#5096FF',
+    fontFamily: 'GilroyRegular',
+    marginTop: 4
+  }
+})
 
 export default connect(null, {register})(Register)
