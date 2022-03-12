@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet, Image} from 'react-native'
 import React from 'react'
+import { TEXT_COLOR } from '../../theme'
 
 const FeedCard = ({navigation, item}) => {
   return (
-    <View style={styles.cardWrapper}>
-        <Image source={require(item.imageUrl)} style={styles.image} />
+    <View style={styles.cardWrapper} key={item.id}>
+        <Image source={{uri: item.imageUrl}} style={styles.image} />
+        <Text style={styles.text}>{item.imageUrl}</Text>
     </View>
   )
 }
@@ -18,8 +20,10 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 200,
-        alignSelf: 'stretch',
         resizeMode: 'cover'
+    },
+    text: {
+        color: TEXT_COLOR
     }
 })
 

@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ForYou from '../components/Feed/ForYou'
 import { ScrollView } from 'react-native';
