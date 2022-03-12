@@ -3,12 +3,18 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ForYou from '../components/Feed/ForYou'
 import { ScrollView } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-export const HomePage = ({navigation}) => {
+const Tab = createMaterialTopTabNavigator();
+
+export const HomePage = () => {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView>
-            <ForYou/>
+          <Tab.Navigator>
+            <Tab.Screen name="ForYou" component={ForYou} />
+            <Tab.Screen name="Settings" component={ForYou} />
+          </Tab.Navigator>
         </ScrollView>
     </SafeAreaView>
   )
