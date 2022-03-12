@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
-import Dashboard from './Dashboard';
 import { connect } from 'react-redux';
 import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
@@ -15,6 +14,7 @@ import { HomePage } from '../pages/HomePage';
 import { NotificationPage } from '../pages/NotificationPage';
 import { FavoritesPage } from '../pages/FavoritesPage';
 import ProfilePage from '../pages/ProfilePage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -50,54 +50,56 @@ const AppContainer = (props) => {
   }
 
   return (
-    <NavigationContainer theme={MyTheme}>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === "Home") {
-              iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Notification") {
-              iconName = focused ? "notifications" : "notifications-outline";
-            } else if (route.name === "Favorites") {
-              iconName = focused ? "heart" : "heart-outline";
-            } else if (route.name === "Profile") {
-              iconName = focused ? "person" : "person-outline";
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: GREEN_COLOR,
-          tabBarInactiveTintColor: "#fff",
-          tabBarStyle: styles.tab,
-          headerShown: false
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={HomePage}
-          options={{ title: "Главная" }}
-        />
-        <Tab.Screen
-          name="Notification"
-          component={NotificationPage}
-          options={{
-            title: "Уведомления",
-            tabBarBadge: 9,
-            tabBarBadgeStyle: { backgroundColor: GREEN_COLOR },
-          }}
-        />
-        <Tab.Screen
-          name="Favorites"
-          component={FavoritesPage}
-          options={{ title: "Избранное" }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfilePage}
-          options={{ title: "Профиль" }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer theme={MyTheme}>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === "Home") {
+                iconName = focused ? "home" : "home-outline";
+              } else if (route.name === "Notification") {
+                iconName = focused ? "notifications" : "notifications-outline";
+              } else if (route.name === "Favorites") {
+                iconName = focused ? "heart" : "heart-outline";
+              } else if (route.name === "Profile") {
+                iconName = focused ? "person" : "person-outline";
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: GREEN_COLOR,
+            tabBarInactiveTintColor: "#fff",
+            tabBarStyle: styles.tab,
+            headerShown: false
+          })}
+        >
+          <Tab.Screen
+            name="Home"
+            component={HomePage}
+            options={{ title: "Главная" }}
+          />
+          <Tab.Screen
+            name="Notification"
+            component={NotificationPage}
+            options={{
+              title: "Уведомления",
+              tabBarBadge: 9,
+              tabBarBadgeStyle: { backgroundColor: GREEN_COLOR },
+            }}
+          />
+          <Tab.Screen
+            name="Favorites"
+            component={FavoritesPage}
+            options={{ title: "Избранное" }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfilePage}
+            options={{ title: "Профиль" }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

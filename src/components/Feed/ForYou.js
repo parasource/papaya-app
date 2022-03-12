@@ -1,8 +1,9 @@
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { TEXT_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import FeedCard from './FeedCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ForYou = ({navigation}) => {
     const data = [
@@ -33,22 +34,27 @@ const ForYou = ({navigation}) => {
       };
 
   return (
-    <View style={{paddingBottom: 100}}>
-      <Text style={styles.title}>Образ на сегодня</Text>
-      <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1600574691453-499962cc0611?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'}}/>
-      <MasonryList
-            contentContainerStyle={{
-              alignSelf: 'stretch',
-            }}
-            numColumns={2}
-            data={data}
-            renderItem={renderItem}
-        />
-    </View>
+        <ScrollView>
+            <View style={{paddingBottom: 100, paddingHorizontal: 16}}>
+            <Text style={styles.title}>Образ на сегодня</Text>
+            <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1600574691453-499962cc0611?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'}}/>
+            <MasonryList
+                    contentContainerStyle={{
+                    alignSelf: 'stretch',
+                    }}
+                    numColumns={2}
+                    data={data}
+                    renderItem={renderItem}
+                />
+            </View>
+        </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 16
+    },
     title: {
         color: TEXT_COLOR,
         fontFamily: 'GilroyBold',
