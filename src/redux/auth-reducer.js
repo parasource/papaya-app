@@ -69,7 +69,6 @@ export const setLoginError = (loginError) =>
     })
 
 export const login = (data) => async (dispatch) => {
-    dispatch(setLoginError(''))
     let response = await authAPI.login(data)
     if(response.status == 200){
         const accessToken = response.data.token;
@@ -87,7 +86,6 @@ export const login = (data) => async (dispatch) => {
     }
 }
 export const register = (data) => async (dispatch) => {
-    dispatch(setLoginError(''))
     let response = await authAPI.register(data)
     if(response.status == 200){
         const accessToken = response.data.token;

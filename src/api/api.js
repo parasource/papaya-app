@@ -31,20 +31,23 @@ export const authAPI = {
         return instance.get(`auth/user`)
     },
     login(values) {
-        const response = instance.post(`auth/login`, values)
+        let response = instance.post(`auth/login`, values)
         .catch(error => {return error = error?.response?.data?.message});
-        response.then((res) => {
-            setInterseptors(res)
-        })
+        if(response.status == 200){
+            response.then((res) => {
+                setInterseptors(res)
+            })
+        }
         return response
     },
     register(values) {
-        console.log();
-        const response =  instance.post(`auth/register`, values)
+        let response =  instance.post(`auth/register`, values)
         .catch(error => {return error?.response?.data?.message});
-        response.then((res) => {
-            setInterseptors(res)
-        })
+        if(response.status == 200){
+            response.then((res) => {
+                setInterseptors(res)
+            })
+        }
         return response
     }
 }
