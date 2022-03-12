@@ -32,18 +32,16 @@ export const authAPI = {
     },
     login(values) {
         const response = instance.post(`auth/login`, values)
+        .catch(error => {return error = error?.response?.data?.message});
         response.then((res) => {
             setInterseptors(res)
         })
         return response
     },
-    register(name, email, password) {
+    register(values) {
         console.log();
-        const response =  instance.post(`auth/register`, {
-            name,
-            email,
-            password
-        })
+        const response =  instance.post(`auth/register`, values)
+        .catch(error => {return error?.response?.data?.message});
         response.then((res) => {
             setInterseptors(res)
         })
@@ -53,7 +51,7 @@ export const authAPI = {
 
 export const interestsAPI = {
     getInterests() {
-        return instance.get(`/get-interests`)
+        return instance.get(`/get-wardrobe-items`)
     },
     setInterests(interests) {
         return instance.post(`/profile/set-interests`, interests)

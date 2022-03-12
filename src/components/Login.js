@@ -17,7 +17,7 @@ import * as Yup from 'yup';
 const Login = (props) => {
   
   const onLogin = async (values) => {
-    await props.login(values)
+      await props.login(values)
   };
 
   const SignupSchema = Yup.object().shape({
@@ -38,6 +38,7 @@ const Login = (props) => {
               <View>
                 <Text style={styles.title}>Снова привет!</Text>
                 <Text style={styles.subtitle}>Мы рады, что ты вернулся к нам</Text>
+                {props.loginError ? (<Text style={styles.error}>{'\u25CF'}{props.loginError}</Text>) : null}
                 <TextInput
                   style={styles.input}
                   placeholder="Электронная почта"
@@ -59,7 +60,7 @@ const Login = (props) => {
                   value={values.password}
                 />
                 {errors.password && touched.password ? (<Text style={styles.error}>{'\u25CF'}{errors.password}</Text>) : null}
-                <FullButton label="Войти в аккаунт" handlePress={handleSubmit}style={styles.button}/>
+                <FullButton label="Войти в аккаунт" pressHandler={() => handleSubmit()} style={styles.button}/> 
                 <Text style={styles.forget} onPress={() => props.navigation.navigate('Register')}>Забыли пароль?</Text> 
               </View>
             )}
@@ -106,10 +107,6 @@ const styles = StyleSheet.create({
     fontFamily: 'GilroyRegular',
     borderRadius: 8,
     marginTop: 16
-  },
-  error: {
-    fontSize: 20,
-    color: '#FF2B2B'
   },
   forget: {
     fontSize: 16,

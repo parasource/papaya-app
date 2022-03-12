@@ -22,7 +22,7 @@ const Register = (props) => {
 
   const SignupSchema = Yup.object().shape({
     password: Yup.string()
-      .min('Минимум 8 символов')
+      .min(8, 'Минимум 8 символов')
       .required('Введите пароль'),
     email: Yup.string().email('Введите email верно').required('Введите email'),
     name: Yup.string().required('Введите имя'),
@@ -40,6 +40,7 @@ const Register = (props) => {
               <View>
                 <Text style={styles.title}>Снова привет!</Text>
                 <Text style={styles.subtitle}>Мы рады, что ты вернулся к нам</Text>
+                {props.loginError ? (<Text style={styles.error}>{'\u25CF'}{props.loginError}</Text>) : null}
                 <TextInput
                   style={styles.input}
                   placeholder="Имя"
@@ -49,6 +50,7 @@ const Register = (props) => {
                   onBlur={handleBlur('name')}
                   value={values.name}
                 />
+                {errors.name && touched.name ? (<Text style={styles.error}>{'\u25CF'}{errors.name}</Text>) : null}
                 <TextInput
                   style={styles.input}
                   placeholder="Электронная почта"
@@ -59,6 +61,7 @@ const Register = (props) => {
                   onBlur={handleBlur('email')}
                   value={values.email}
                 />
+                {errors.email && touched.email ? (<Text style={styles.error}>{'\u25CF'}{errors.email}</Text>) : null}
                 <TextInput
                   style={styles.input}
                   placeholder="Пароль"
@@ -68,7 +71,8 @@ const Register = (props) => {
                   onBlur={handleBlur('password')}
                   value={values.password}
                 />
-                <FullButton label="Войти в аккаунт" handlePress={handleSubmit} style={styles.button}/> 
+                {errors.password && touched.password ? (<Text style={styles.error}>{'\u25CF'}{errors.password}</Text>) : null}
+                <FullButton label="Войти в аккаунт" pressHandler={() => handleSubmit()} style={styles.button}/> 
               </View>
             )}
           </Formik>
@@ -115,10 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 16
   },
-  error: {
-    fontSize: 20,
-    color: '#FF2B2B'
-  },
   forget: {
     fontSize: 16,
     textAlign: 'center',
@@ -135,7 +135,17 @@ const styles = StyleSheet.create({
     color: '#5096FF',
     fontFamily: 'GilroyRegular',
     marginTop: 4
-  }
+  },
+  error: {
+    color: '#F25757',
+    marginTop: 8,
+    fontFamily: 'GilroyRegular',
+    fontSize: 14
+  },
 })
 
-export default connect(null, {register})(Register)
+const mapStateToProps = (state) => ({
+  loginError: state.auth.loginError
+})
+
+export default connect(mapStateToProps, {register})(Register)

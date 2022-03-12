@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const SET_TOKEN = 'SET_TOKEN'
+const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
 
 let initialState = {
     usersId: null,
@@ -12,7 +13,8 @@ let initialState = {
     login: null,
     accessToken: null,
     isAuth: false,
-    loginError: ''
+    loginError: '', 
+    registerError: ''
 }
 
 export const authReducer = (state = initialState, action) => {
@@ -23,6 +25,11 @@ export const authReducer = (state = initialState, action) => {
                 ...action.payload
             }
         case SET_TOKEN:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case SET_LOGIN_ERROR: 
             return {
                 ...state,
                 ...action.payload
@@ -53,10 +60,17 @@ export const setAuthUserToken = (accessToken, isAuth) =>
             isAuth
         }
     })
+export const setLoginError = (loginError) =>
+    ({
+        type: SET_TOKEN,
+        payload: {
+            loginError
+        }
+    })
 
 export const login = (data) => async (dispatch) => {
+    dispatch(setLoginError(''))
     let response = await authAPI.login(data)
-    console.log(response.config);
     if(response.status == 200){
         const accessToken = response.data.token;
         await SecureStore.setItemAsync('token', accessToken)
@@ -67,12 +81,13 @@ export const login = (data) => async (dispatch) => {
             name
         } = userResponse.data
         dispatch(setAuthUserData(id, email, name, accessToken, true))
+        dispatch(setLoginError(''))
     }else{
-        console.log("Login error: ", response.data.message);
+        dispatch(setLoginError(response))
     }
 }
-
 export const register = (data) => async (dispatch) => {
+    dispatch(setLoginError(''))
     let response = await authAPI.register(data)
     if(response.status == 200){
         const accessToken = response.data.token;
@@ -84,8 +99,9 @@ export const register = (data) => async (dispatch) => {
             name
         } = userResponse.data
         dispatch(setAuthUserData(id, email, name, accessToken, true))
+        dispatch(setLoginError(''))
     }else{
-        console.log("Register error: ", response.data.message);
+        dispatch(setLoginError(response))
     }
 }
 

@@ -1,15 +1,23 @@
-import React, { useCallback, useContext, useEffect, useReducer, useState} from 'react'
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect } from 'react'
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import Dashboard from './Dashboard';
 import { connect } from 'react-redux';
 import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { BG_COLOR, GREEN_COLOR } from '../theme';
+import { StyleSheet } from 'react-native';
+import { HomePage } from '../pages/HomePage';
+import { NotificationPage } from '../pages/NotificationPage';
+import { FavoritesPage } from '../pages/FavoritesPage';
+import ProfilePage from '../pages/ProfilePage';
 
-
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
+const Tab = createBottomTabNavigator()
 
 const AppContainer = (props) => {
   useEffect(() => {
@@ -20,9 +28,18 @@ const AppContainer = (props) => {
     headerShown: false
   }
 
+  const MyTheme = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: BG_COLOR,
+      text: '#fff'
+    },
+  };
+
   if(!props.isAuth){
     return(
-      <NavigationContainer>
+    <NavigationContainer>
         <Stack.Navigator screenOptions={screenOptions}>
           <Stack.Screen name="FirstScreen" component={FirstScreen} />
           <Stack.Screen name="Login" component={LoginPage} />
@@ -33,13 +50,73 @@ const AppContainer = (props) => {
   }
 
   return (
-    <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Dashboard" component={Dashboard} />
-        </Stack.Navigator>
+    <NavigationContainer theme={MyTheme}>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+            if (route.name === "Home") {
+              iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "Notification") {
+              iconName = focused ? "notifications" : "notifications-outline";
+            } else if (route.name === "Favorites") {
+              iconName = focused ? "heart" : "heart-outline";
+            } else if (route.name === "Profile") {
+              iconName = focused ? "person" : "person-outline";
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: GREEN_COLOR,
+          tabBarInactiveTintColor: "#fff",
+          tabBarStyle: styles.tab,
+          headerShown: false
+        })}
+      >
+        <Tab.Screen
+          name="Home"
+          component={HomePage}
+          options={{ title: "Главная" }}
+        />
+        <Tab.Screen
+          name="Notification"
+          component={NotificationPage}
+          options={{
+            title: "Уведомления",
+            tabBarBadge: 9,
+            tabBarBadgeStyle: { backgroundColor: GREEN_COLOR },
+          }}
+        />
+        <Tab.Screen
+          name="Favorites"
+          component={FavoritesPage}
+          options={{ title: "Избранное" }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfilePage}
+          options={{ title: "Профиль" }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  tab: {
+    backgroundColor: '#1F1F1F',
+    paddingTop: 8,
+    height: 93,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  container: { 
+    backgroundColor: BG_COLOR
+  }
+})
 
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
