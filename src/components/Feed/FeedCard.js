@@ -1,17 +1,19 @@
-import { View, Text, StyleSheet, Image} from 'react-native'
+import { View, TouchableHighlight, StyleSheet, Image} from 'react-native'
 import React, { useMemo } from 'react'
 import { TEXT_COLOR } from '../../theme'
 import AutoHeightImage from 'react-native-auto-height-image'
 
 const FeedCard = ({navigation, item}) => {
   return (
-    <View style={styles.cardWrapper}>
-      <AutoHeightImage
-        source={{uri: item.imgURL}}
-        width={200}
-        resizeMode="cover"
-      />
-    </View>
+    <TouchableHighlight onPress={() => navigation.navigate('LookPage')}>
+      <View style={styles.cardWrapper} >
+        <AutoHeightImage
+          source={{uri: item.imgURL}}
+          width={200}
+          resizeMode="cover"
+        />
+      </View>
+    </TouchableHighlight>
   )
 }
 

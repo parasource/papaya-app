@@ -8,7 +8,7 @@ const SET_TOKEN = 'SET_TOKEN'
 const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
 
 let initialState = {
-    usersId: null,
+    id: null,
     email: null,
     login: null,
     accessToken: null,
@@ -75,11 +75,11 @@ export const login = (data) => async (dispatch) => {
         await SecureStore.setItemAsync('token', accessToken)
         let userResponse = await authAPI.me()
         let {
-            id,
+            ID,
             email,
             name
         } = userResponse.data
-        dispatch(setAuthUserData(id, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))
@@ -92,11 +92,11 @@ export const register = (data) => async (dispatch) => {
         await SecureStore.setItemAsync('token', accessToken)
         let userResponse = await authAPI.me()
         let {
-            id,
+            ID,
             email,
             name
         } = userResponse.data
-        dispatch(setAuthUserData(id, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))

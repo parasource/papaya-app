@@ -13,23 +13,6 @@ export const NotificationPage = () => {
     {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
     {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
     {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '21 марта', seen: true},
-    {from: 'Dutchman', text: 'Вы вошли в аккаунт', atCreated: '2 декабря', seen: true},
   ]
 
   return (
@@ -37,8 +20,8 @@ export const NotificationPage = () => {
       <Text style={styles.title}>Уведомления</Text>
       <FlatList 
         data={notifications} 
-        renderItem={({item}) => <Notification notification={item}/>}
         keyExtractor={(item, index) => item.key}
+        renderItem={({item}) => <Notification notification={item} key={item.key}/>}
       />
     </SafeAreaView>
   )

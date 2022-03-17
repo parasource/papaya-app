@@ -1,16 +1,23 @@
-import { Animated, View, TouchableOpacity , Text, StyleSheet } from 'react-native'
+import {
+  Animated,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  StyleSheet
+} from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ForYou from '../components/Feed/ForYou'
-import { ScrollView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme';
+import { LinearGradient } from "expo-linear-gradient";
 
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation, position }) {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginLeft: 8}}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
@@ -82,25 +89,30 @@ const TabNaigator = () => {
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
           <Tab.Screen name="Settings" component={ForYou} options={{ title: "Подборки" }}/>
-          <Tab.Screen name="Page1" component={ForYou} options={{ title: "Коллекция 1" }}/>
-          <Tab.Screen name="Page2" component={ForYou} options={{ title: "Коллекция 2" }}/>
-          <Tab.Screen name="Page3" component={ForYou} options={{ title: "Коллекция 3" }}/>
-          <Tab.Screen name="Page4" component={ForYou} options={{ title: "Коллекция 4" }}/>
       </Tab.Navigator>
   )
 }
 
 export const HomePage = () => {
   return (
-     <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      {/* <ScrollView> */}
+          <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
           <TabNaigator/>
-      </SafeAreaView>
+      {/* </ScrollView> */}
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
     container: {
-        // paddingHorizontal: 16,
         flex: 1,
+    },
+    logo: {
+      width: 135,
+      height: 30,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      marginBottom: 12
     }
 })

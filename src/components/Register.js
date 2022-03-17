@@ -72,7 +72,7 @@ const Register = (props) => {
                   value={values.password}
                 />
                 {errors.password && touched.password ? (<Text style={styles.error}>{'\u25CF'}{errors.password}</Text>) : null}
-                <FullButton label="Войти в аккаунт" pressHandler={() => handleSubmit()} style={styles.button}/> 
+                <FullButton label="Зарегистрироваться" pressHandler={() => handleSubmit()} style={styles.button}/> 
               </View>
             )}
           </Formik>

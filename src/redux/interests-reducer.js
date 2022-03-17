@@ -20,18 +20,34 @@ export const interestsReducer = (state = initialState, action) => {
     }
 }
 
-export const getInterests = (interests, categories) =>
+export const getInterests = (interests) =>
     ({
         type: GET_INTERESTS,
-        payload: {interests, categories}
+        payload: {interests}
     })
 
-export const requestInterests = () => async (dispatch) => {
+export const getCategories = (categories) =>
+    ({
+        type: GET_INTERESTS,
+        payload: {categories}
+    })
+
+export const requestInterests = (id) => async (dispatch) => {
     let response = await interestsAPI.getInterests()
     if(response.status == 200){
-        const interests = response.data
-        let categories = Array.from([...interests].reduce((acc, elem) => acc.add(elem.category), new Set()))
-        dispatch(getInterests(interests, categories))
+        let interests = response.data.filter(item => item.ID === id)
+        interests = interests.map(item => item.items)
+        dispatch(getInterests(interests))
+    }else{
+        console.log("Interests error: ", response.data.message);
+    }
+}
+
+export const requestCategories = () => async (dispatch) => {
+    let response = await interestsAPI.getInterests()
+    if(response.status == 200){
+        const categories = response.data.map(category => ({name: category.name , id: category.ID}))
+        dispatch(getCategories(categories))
     }else{
         console.log("Interests error: ", response.data.message);
     }

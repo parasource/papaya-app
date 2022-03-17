@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8000/api'
+    baseURL: 'http://papaya-api.lightswitch.digital/api'
 })
 
 instance.interceptors.request.use(
@@ -41,7 +41,7 @@ export const authAPI = {
         return response
     },
     register(values) {
-        let response =  instance.post(`auth/register`, values)
+        let response =  instance.post(`auth/register`, {...values, "sex": "male"})
         .catch(error => {return error?.response?.data?.message});
         if(response.status == 200){
             response.then((res) => {
