@@ -85,6 +85,7 @@ export const login = (data) => async (dispatch) => {
         dispatch(setLoginError(response))
     }
 }
+
 export const register = (data) => async (dispatch) => {
     let response = await authAPI.register(data)
     if(response.status == 200){
@@ -97,6 +98,21 @@ export const register = (data) => async (dispatch) => {
             name
         } = userResponse.data
         dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setLoginError(''))
+    }else{
+        dispatch(setLoginError(response))
+    }
+}
+
+export const requestUser = () => async (dispatch) => {
+    let response = await authAPI.me()
+    if(response.status == 200){
+        let {
+            ID,
+            email,
+            name
+        } = response.data
+        dispatch(setAuthUserData(ID, email, name))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))

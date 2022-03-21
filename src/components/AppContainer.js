@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react'
+import { StyleSheet, StatusBar, View, Text} from 'react-native';
+import { connect } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { BG_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme';
+
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
-import { connect } from 'react-redux';
 import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { BG_COLOR, GREEN_COLOR } from '../theme';
-import { StyleSheet, StatusBar} from 'react-native';
 import { HomePage } from '../pages/HomePage';
 import { FavoritesPage } from '../pages/FavoritesPage';
 import ProfilePage from '../pages/ProfilePage';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import LookPage from '../pages/LookPage';
 import { WardrobePage } from '../pages/WardrobePage';
 
@@ -26,45 +28,49 @@ const TabNaigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
+          let title;
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
+            title = "Главная"
           } else if (route.name === "Wardrobe") {
             iconName = focused ? "shirt" : "shirt-outline";
+            title = "Гардероб"
           } else if (route.name === "Favorites") {
             iconName = focused ? "bookmark" : "bookmark-outline";
+            title = "Закладки"
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
+            title = "Профиль"
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return (
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <Ionicons name={iconName} size={size} color={color} />
+              <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
+            </View>
+          )
         },
         tabBarActiveTintColor: GREEN_COLOR,
         tabBarInactiveTintColor: "#fff",
         tabBarStyle: styles.tab,
-        headerShown: false
+        tabBarLabel: () => {return null},
+        headerShown: false,
       })}
     >
         <Tab.Screen
           name="Home"
           component={HomePage}
-          options={{ title: "Главная" }}
         />
         <Tab.Screen
           name="Wardrobe"
           component={WardrobePage}
-          options={{
-            title: "Гардероб",
-            tabBarBadgeStyle: { backgroundColor: GREEN_COLOR },
-          }}
         />
         <Tab.Screen
           name="Favorites"
           component={FavoritesPage}
-          options={{ title: "Закладки" }}
         />
         <Tab.Screen
           name="Profile"
           component={ProfilePage}
-          options={{ title: "Профиль" }}
         />
     </Tab.Navigator>
   )
@@ -119,7 +125,7 @@ const AppContainer = (props) => {
             <Stack.Screen
               name="LookPage"
               component={LookPage}
-              options={{title: "Образ"}}
+              options={({ route }) => ({ title: route.params.lookName })}
             />
         </Stack.Navigator>
       </NavigationContainer>
@@ -130,8 +136,8 @@ const AppContainer = (props) => {
 const styles = StyleSheet.create({
   tab: {
     backgroundColor: '#1F1F1F',
-    paddingTop: 8,
-    height: 93,
+    paddingVertical: 8,
+    minHeight: 60,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
     position: 'absolute',

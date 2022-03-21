@@ -95,12 +95,10 @@ const TabNaigator = () => {
 
 export const HomePage = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
-          <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
-          <TabNaigator/>
-      {/* </ScrollView> */}
-    </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
+        <TabNaigator/>
+      </SafeAreaView>
   )
 }
 
@@ -113,6 +111,7 @@ const styles = StyleSheet.create({
       height: 30,
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginBottom: 12
+      marginBottom: 12,
+      marginTop: 12
     }
 })

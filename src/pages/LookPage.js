@@ -1,24 +1,34 @@
-import { View, Text, Image, StyleSheet } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { getCurrentLook } from '../redux/looks-reducer';
 
-const LookPage = ({navigation}) => {
+const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
+  const { lookSlug } = route.params;
+
+  useEffect(() => {
+      getCurrentLook(lookSlug)
+  }, [])
+
   return (
-      <View style={{flex: 1}}>
-        <View style={styles.container}>
-            <View style={styles.wrapper}>
-                <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1608748010899-18f300247112?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80'}} />
-            </View>
-        </View>
+    <ScrollView style={styles.container}>
+        {isFetching ?
+         <ActivityIndicator/> :
+        <View style={styles.wrapper}>
+            <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1608748010899-18f300247112?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80'}} />
+        </View>}
+
         <View style={styles.bar}>
             <Icon name="share-outline" style={styles.iconSM}/>
             <Icon name="heart-outline" style={styles.icon}/>
             <Icon name="heart-dislike-outline" style={styles.icon}/>
             <Icon name="bookmark-outline" style={styles.iconSM}/>
         </View>
-      </View> 
+        <Text style={styles.title}>{currentLook.name}</Text>
+        <Text style={styles.text}>{currentLook.desc}</Text>
+    </ScrollView>
   )
 }
 
@@ -30,30 +40,25 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         width: '100%',
-        height: 590,
+        height: 500,
         overflow: 'hidden',
         borderRadius: 8,
-        backgroundColor: GREEN_COLOR
     },
     image: {
         height: '100%',
         resizeMode: 'cover'
     },
     bar: {
-        paddingTop: 16,
-        paddingBottom: 40,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
         width: '100%',
         backgroundColor: "#1f1f1f",
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        paddingHorizontal: 42,
+        borderRadius: 12,
+        marginTop: 12,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+
     },
     icon: {
         color: TEXT_COLOR,
@@ -62,7 +67,24 @@ const styles = StyleSheet.create({
     iconSM: {
         color: TEXT_COLOR,
         fontSize: 28
+    },
+    title: {
+        color: TEXT_COLOR,
+        fontFamily: 'SFsemibold',
+        fontSize: 24,
+        marginTop: 16
+    },
+    text: {
+        color: TEXT_COLOR,
+        fontFamily: 'SFregular',
+        fontSize: 16,
+        marginTop: 8
     }
 })
 
-export default LookPage
+const mapStateToProps = (state) => ({
+    currentLook: state.feed.currentLook,
+    isFetching: state.feed.isFetching
+})
+
+export default connect(mapStateToProps, {getCurrentLook})(LookPage)

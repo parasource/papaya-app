@@ -2,7 +2,8 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    baseURL: 'http://papaya-api.lightswitch.digital/api'
+    baseURL: 'https://papaya-api.lightswitch.digital/api'
+    // baseURL: 'http://127.0.0.1:8000/api'
 })
 
 instance.interceptors.request.use(
@@ -58,5 +59,14 @@ export const interestsAPI = {
     },
     setInterests(interests) {
         return instance.post(`/profile/set-interests`, interests)
+    }
+}
+
+export const feedAPI = {
+    getLooks(page) {
+        return instance.get(`/feed/${page}`)
+    },
+    getLook(slug) {
+        return instance.get(`/looks/${slug}`)
     }
 }

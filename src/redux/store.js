@@ -3,18 +3,15 @@ import {
     applyMiddleware,
     combineReducers,
     compose,
-    createStore
-} from "redux";
-import {
-    authReducer
-} from "./auth-reducer";
-import {
-    interestsReducer
-} from "./interests-reducer";
+    createStore } from "redux";
+import {authReducer} from "./auth-reducer";
+import {interestsReducer} from "./interests-reducer";
+import { looksReducer } from "./looks-reducer";
 
 const reducers = combineReducers({
     auth: authReducer,
-    interests: interestsReducer
+    interests: interestsReducer,
+    feed: looksReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
