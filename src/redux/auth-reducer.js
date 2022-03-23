@@ -128,5 +128,14 @@ export const checkToken = () => async (dispatch) => {
     const token = await SecureStore.getItemAsync('token')
     if(!initialState.accessToken && token){
         dispatch(setAuthUserToken(token, true))
+        let userResponse = await authAPI.me()
+        if(userResponse.status == 200){
+            let {
+                ID,
+                email,
+                name
+            } = userResponse.data
+            dispatch(setAuthUserData(ID, email, name, token, true))
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
-import { GREEN_COLOR, TEXT_COLOR } from '../theme';
+import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook } from '../redux/looks-reducer';
@@ -17,7 +17,7 @@ const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
         {isFetching ?
          <ActivityIndicator/> :
         <View style={styles.wrapper}>
-            <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1608748010899-18f300247112?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80'}} />
+            <Image style={styles.image} source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} />
         </View>}
 
         <View style={styles.bar}>

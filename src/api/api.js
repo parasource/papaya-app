@@ -64,9 +64,22 @@ export const interestsAPI = {
 
 export const feedAPI = {
     getLooks(page) {
-        return instance.get(`/feed/${page}`)
+        return instance.get(`/feed?page=${page}`)
     },
     getLook(slug) {
         return instance.get(`/looks/${slug}`)
-    }
+    },
+    getAllTopics() {
+        return instance.get(`/topics`)
+    },
+    getTopic(slug) {
+        return instance.get(`/topics/${slug}`)
+    },
+    addToFavorited(slug) {
+        return instance.put(`looks/${slug}/favorites`)
+    },
+    removeFromFavorited(slug) {
+        return instance.delete(`looks/${slug}/favorites`)
+    },
+
 }

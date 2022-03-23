@@ -1,4 +1,4 @@
-import { Button, View, Text,Image, StyleSheet } from 'react-native'
+import { Button, View, Text,Image, StyleSheet, Alert } from 'react-native'
 import React from 'react'
 import { TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,6 +6,24 @@ import { connect } from 'react-redux';
 import { logout } from '../redux/auth-reducer';
 
 const ProfilePage = ({navigation, logout, login, id, email}) => {
+  const logoutAlert = () => {  
+      Alert.alert(  
+          'Вы уверены?',  
+          'Вы точно хотите выйте',  
+          [  
+              {  
+                  text: 'Отмена',    
+                  style: 'cancel'
+              },  
+              {
+                text: 'Выйти', 
+                onPress: () => logout(),
+              },  
+          ],
+          {cancelable: true}
+      );  
+  }  
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Профиль</Text>
@@ -17,7 +35,7 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
           <Text style={styles.login}>{login}</Text>
           <Text style={styles.email}>{email}</Text>
           <Text style={styles.email}>{id}</Text>
-          <Text style={styles.logout} onPress={() => logout()}>Выйти</Text>
+          <Text style={styles.logout} onPress={logoutAlert}>Выйти</Text>
         </View>
       </View>
     </SafeAreaView>
