@@ -1,20 +1,29 @@
-import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { TEXT_COLOR } from '../../theme';
+import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native'
+import React, {useEffect, useState, useCallback} from 'react'
+import { TEXT_COLOR, GREEN_COLOR } from '../../theme';
 import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { requestLooks } from '../../redux/looks-reducer';
 
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 
 const ForYou = ({navigation, isFetching, looks, requestLooks}) => {
   const [page, setPage] = useState(0)
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     requestLooks(page)
   }, [])
   
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}>
       <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
         <Text style={styles.title}>Образ на сегодня</Text>
         <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1600574691453-499962cc0611?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'}}/>
