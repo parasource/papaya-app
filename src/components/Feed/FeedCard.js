@@ -1,6 +1,7 @@
-import { View, TouchableHighlight, StyleSheet, Image, Text} from 'react-native'
+import { View, TouchableHighlight, StyleSheet, Text, ActivityIndicator} from 'react-native'
 import React from 'react'
-import { TEXT_COLOR } from '../../theme'
+import { BG_COLOR, GRAY_COLOR, TEXT_COLOR } from '../../theme'
+import { Image } from 'react-native-elements'
 
 const FeedCard = ({navigation, item}) => {
   return (
@@ -11,7 +12,8 @@ const FeedCard = ({navigation, item}) => {
           <View style={styles.cardWrapper}> 
             <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}
             resizeMode = "cover"
-            style = {{height: '100%'}}/>
+            style = {{height: '100%'}}
+            PlaceholderContent={<ActivityIndicator />}/>
           </View>
           <Text style={styles.text}>{item.name}</Text>
         </View>

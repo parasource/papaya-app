@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
 import WardrobeThingCard from './WardrobeThingCard';
 
-const WardrobeDetail = ({route, interests, requestInterests}) => {
+const WardrobeDetail = ({route, interests, requestInterests, isFetching}) => {
   const { categoryId, categoryName } = route.params;
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const WardrobeDetail = ({route, interests, requestInterests}) => {
 
   return (
     <View style={styles.row}>
-      {!interests.length ? <ActivityIndicator /> :
+      {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={interests[0]}
                 numColumns={3}
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => ({
-  interests: state.interests.interests
+  interests: state.interests.interests,
+  isFetching: state.interests.isFetching
 })
 
 export default connect(mapStateToProps, {requestInterests})(WardrobeDetail)

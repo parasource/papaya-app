@@ -1,9 +1,10 @@
-import { View, Text, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
-import { TEXT_COLOR } from '../theme';
+import { GREEN_COLOR, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook } from '../redux/looks-reducer';
+import { Image } from 'react-native-elements';
 
 const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
   const { lookSlug } = route.params;
@@ -17,7 +18,9 @@ const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
         {isFetching ?
          <ActivityIndicator/> :
         <View style={styles.wrapper}>
-            <Image style={styles.image} source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} />
+            <Image style={styles.image} 
+            source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} 
+            PlaceholderContent={<ActivityIndicator/>}/>
         </View>}
 
         <View style={styles.bar}>

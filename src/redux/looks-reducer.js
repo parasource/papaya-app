@@ -50,6 +50,7 @@ export const requestLooks = (page) => async (dispatch) => {
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 
@@ -61,6 +62,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 
@@ -72,6 +74,7 @@ export const requestTopics = () => async (dispatch) => {
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 
@@ -83,6 +86,7 @@ export const getCurrentTopic = (slug) => async (dispatch) => {
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 

@@ -5,7 +5,7 @@ import { View, StyleSheet, Text, FlatList, ActivityIndicator } from 'react-nativ
 import WardrobeCard from "./WardrobeCard";
 import { TEXT_COLOR } from '../../theme';
 
-const Wardrobe = ({navigation, categories, requestCategories}) => {
+const Wardrobe = ({navigation, categories, requestCategories, isFetching}) => {
     useEffect(() => {
         requestCategories()
     }, [])
@@ -13,7 +13,7 @@ const Wardrobe = ({navigation, categories, requestCategories}) => {
     return(
       <View>
         <Text style={styles.title}>Гардероб</Text>
-        {!categories.length ? <ActivityIndicator /> :
+        {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={categories}
                 numColumns={2}
@@ -49,7 +49,8 @@ const Wardrobe = ({navigation, categories, requestCategories}) => {
 
 
     const mapStateToProps = (state) => ({
-        categories: state.interests.categories
+        categories: state.interests.categories,
+        isFetching: state.interests.isFetching
     })
 
     export default connect(mapStateToProps, {requestCategories})(Wardrobe)
