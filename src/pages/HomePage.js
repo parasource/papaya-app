@@ -6,19 +6,21 @@ import {
   Image,
   StyleSheet
 } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ForYou from '../components/Feed/ForYou'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme';
-import { LinearGradient } from "expo-linear-gradient";
+import { connect } from 'react-redux';
+import { requestTopics } from '../redux/looks-reducer';
+import Topic from '../components/Feed/Topic';
 
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabBar({ state, descriptors, navigation, position }) {
   return (
     <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{marginLeft: 8}}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabWrapper}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -59,8 +61,9 @@ function MyTabBar({ state, descriptors, navigation, position }) {
             onPress={onPress}
             onLongPress={onLongPress}
             style={{ 
-              width: 120,
+              minWidth: 120,
               paddingVertical: 6,
+              paddingHorizontal: 6,
               borderWidth: 1,
               borderColor: isFocused ? GREEN_COLOR : GRAY_COLOR,
               borderRadius: 8,
@@ -84,20 +87,33 @@ function MyTabBar({ state, descriptors, navigation, position }) {
   );
 }
 
-const TabNaigator = () => {
+const TabNaigator = ({topics}) => {
   return (
-      <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
+      <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}}>
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
           <Tab.Screen name="Settings" component={ForYou} options={{ title: "Подборки" }}/>
+          {topics.map(topic => (
+            <Tab.Screen 
+              key={topic.ID}
+              name={topic.slug} 
+              component={Topic} 
+              options={{ title: topic.name }} 
+              initialParams={{ topicSlug: topic.slug }}
+             />
+          ))}
       </Tab.Navigator>
   )
 }
 
-export const HomePage = () => {
+const HomePage = (props) => {
+  useEffect(() => {
+    props.requestTopics()
+  }, [])
+
   return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
-        <TabNaigator/>
+        <TabNaigator topics={props.topics}/>
       </SafeAreaView>
   )
 }
@@ -113,5 +129,14 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
       marginBottom: 12,
       marginTop: 12
+    },
+    tabWrapper:{
+      marginLeft: 8
     }
 })
+
+const mapStateToProps = (state) => ({
+  topics: state.feed.topics
+})
+
+export default connect(mapStateToProps, {requestTopics})(HomePage)

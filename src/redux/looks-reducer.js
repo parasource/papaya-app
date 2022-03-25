@@ -78,9 +78,9 @@ export const requestTopics = () => async (dispatch) => {
     }
 }
 
-export const getCurrentTopic = (slug) => async (dispatch) => {
+export const getCurrentTopic = (slug, page) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
-    const response = await feedAPI.getTopic(slug)
+    const response = await feedAPI.getTopic(slug, page)
     if(response.status == 200){
         dispatch(setTopic(response.data))
         dispatch(toggleIsFetching(false))

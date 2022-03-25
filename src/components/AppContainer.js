@@ -13,11 +13,11 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
-import { HomePage } from '../pages/HomePage';
 import { FavoritesPage } from '../pages/FavoritesPage';
 import ProfilePage from '../pages/ProfilePage';
 import LookPage from '../pages/LookPage';
 import { WardrobePage } from '../pages/WardrobePage';
+import HomePage from '../pages/HomePage';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()

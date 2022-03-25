@@ -72,8 +72,8 @@ export const feedAPI = {
     getAllTopics() {
         return instance.get(`/topics`)
     },
-    getTopic(slug) {
-        return instance.get(`/topics/${slug}`)
+    getTopic(slug, page) {
+        return instance.get(`/topics/${slug}?page=${page}`)
     },
     addToFavorited(slug) {
         return instance.put(`looks/${slug}/favorites`)

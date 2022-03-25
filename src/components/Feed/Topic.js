@@ -6,25 +6,27 @@ import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 
 
-const Topic = ({navigation, isFetching, currentTopic}) => {
+const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
   const [page, setPage] = useState(0)
+  const { topicSlug } = route.params;
 
   useEffect(() => {
-    getCurrentTopic(page)
+    getCurrentTopic(topicSlug, page)
   }, [])
   
   return (
     <ScrollView>
-      <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
-        <Text style={styles.title}>{currentTopic.topic.name}</Text>
-       {isFetching ?
+      {(isFetching && currentTopic.topic) ?
          <ActivityIndicator/> :
-        <View style={styles.row}>
-          {looks && currentTopic.looks.map((item,index) => (
-            <FeedCard item={item} key={index} navigation={navigation}/>
-          ))}
-        </View>}
-      </View>
+          <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
+            <Text style={styles.title}>{currentTopic.topic.name}</Text>
+            <View style={styles.row}>
+              {currentTopic.looks.map(item => (
+                <FeedCard item={item} key={item.ID} navigation={navigation}/>
+              ))}
+            </View>
+          </View>
+      }
     </ScrollView>
   )
 }
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   currentTopic: state.feed.currentTopic,
+  isFetching: state.feed.isFetching
 })
 
 export default connect(mapStateToProps, {getCurrentTopic})(Topic)

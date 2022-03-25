@@ -5,7 +5,7 @@ import { TEXT_COLOR } from '../../theme'
 const WardrobeCard = ({item, navigation}) => {
   return (
     <TouchableOpacity style={styles.wrapper} onPress={() => navigation.navigate('WardrobeDetail', ({categoryId: item.id, categoryName: item.name}))}>
-        <ImageBackground style={styles.background} source={{uri: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=776&q=80'}}/>
+        <ImageBackground style={styles.background} source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}/>
         <View style={styles.darkness}></View>
         <Text style={styles.text}>{item.name}</Text>
     </TouchableOpacity>
