@@ -12,7 +12,7 @@ import ForYou from '../components/Feed/ForYou'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme';
 import { connect } from 'react-redux';
-import { requestTopics } from '../redux/looks-reducer';
+import { requestTopics, getCurrentTopic } from '../redux/looks-reducer';
 import Topic from '../components/Feed/Topic';
 
 const Tab = createMaterialTopTabNavigator();
@@ -87,18 +87,19 @@ function MyTabBar({ state, descriptors, navigation, position }) {
   );
 }
 
-const TabNaigator = ({topics}) => {
+const TabNavigator = ({topics, getCurrentTopic}) => {
   return (
-      <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}}>
+      <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}} >
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
           <Tab.Screen name="Settings" component={ForYou} options={{ title: "Подборки" }}/>
           {topics.map(topic => (
             <Tab.Screen 
-              key={topic.ID}
+              key={topic.slug}
               name={topic.slug} 
               component={Topic} 
-              options={{ title: topic.name }} 
+              options={{ title: topic.name, unmountOnBlur: true }}
               initialParams={{ topicSlug: topic.slug }}
+              listeners={{tabPress: e => getCurrentTopic(topic.slug)}}
              />
           ))}
       </Tab.Navigator>
@@ -113,7 +114,7 @@ const HomePage = (props) => {
   return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
-        <TabNaigator topics={props.topics}/>
+        <TabNavigator topics={props.topics} {...props}/>
       </SafeAreaView>
   )
 }
@@ -139,4 +140,4 @@ const mapStateToProps = (state) => ({
   topics: state.feed.topics
 })
 
-export default connect(mapStateToProps, {requestTopics})(HomePage)
+export default connect(mapStateToProps, {requestTopics, getCurrentTopic})(HomePage)
