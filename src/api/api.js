@@ -53,13 +53,16 @@ export const authAPI = {
     }
 }
 
-export const interestsAPI = {
-    getInterests() {
+export const wardrobeAPI = {
+    getAllWardrobe() {
         return instance.get(`/get-wardrobe-items`)
     },
-    setInterests(interests) {
-        return instance.post(`/profile/set-interests`, interests)
-    }
+    setWardrobe(interests) {
+        return instance.post(`/profile/set-wardrobe`, interests)
+    },
+    getSelectedWardrobe() {
+        return instance.get(`/profile/get-wardrobe`)
+    },
 }
 
 export const feedAPI = {
@@ -81,5 +84,7 @@ export const feedAPI = {
     removeFromFavorited(slug) {
         return instance.delete(`looks/${slug}/favorites`)
     },
-
+    pinTopic(slug) {
+        return instance.put(`topics/${slug}/watch`)
+    }
 }

@@ -5,12 +5,12 @@ import {
     compose,
     createStore } from "redux";
 import {authReducer} from "./auth-reducer";
-import {interestsReducer} from "./interests-reducer";
 import { looksReducer } from "./looks-reducer";
+import { wardrobeReducer } from "./wardrobe-reducer";
 
 const reducers = combineReducers({
     auth: authReducer,
-    interests: interestsReducer,
+    wardrobe: wardrobeReducer,
     feed: looksReducer
 })
 

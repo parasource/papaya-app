@@ -14,6 +14,7 @@ import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme';
 import { connect } from 'react-redux';
 import { requestTopics, getCurrentTopic } from '../redux/looks-reducer';
 import Topic from '../components/Feed/Topic';
+import AllTopics from '../components/Feed/AllTopics';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -91,8 +92,8 @@ const TabNavigator = ({topics, getCurrentTopic}) => {
   return (
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}} >
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
-          <Tab.Screen name="Settings" component={ForYou} options={{ title: "Подборки" }}/>
-          {topics.map(topic => (
+          <Tab.Screen name="Topics" component={AllTopics} options={{ title: "Темы" }}/>
+          {/* {topics.map(topic => (
             <Tab.Screen 
               key={topic.slug}
               name={topic.slug} 
@@ -101,7 +102,7 @@ const TabNavigator = ({topics, getCurrentTopic}) => {
               initialParams={{ topicSlug: topic.slug }}
               listeners={{tabPress: e => getCurrentTopic(topic.slug)}}
              />
-          ))}
+          ))} */}
       </Tab.Navigator>
   )
 }

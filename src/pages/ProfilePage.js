@@ -4,6 +4,7 @@ import { TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';
 import { logout } from '../redux/auth-reducer';
+import { Avatar } from 'react-native-elements';
 
 const ProfilePage = ({navigation, logout, login, id, email}) => {
   const logoutAlert = () => {  
@@ -26,18 +27,18 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Профиль</Text>
-      <View style={styles.flex}>
-        <View style={styles.imgWrap}>
-          <Image style={styles.image} source={{uri: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=798&q=80'}}/>
-        </View>
-        <View style={styles.column}>
+      <View style={styles.wrapper}>
+          <Avatar
+            title={login}
+            rounded
+            size="xlarge" 
+            source={{uri: 'https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=798&q=80'}}
+          />
           <Text style={styles.login}>{login}</Text>
           <Text style={styles.email}>{email}</Text>
-          <Text style={styles.email}>{id}</Text>
-          <Text style={styles.logout} onPress={logoutAlert}>Выйти</Text>
-        </View>
       </View>
+        
+        <Text style={styles.logout} onPress={logoutAlert}>Выйти</Text>
     </SafeAreaView>
   )
 }
@@ -46,13 +47,12 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16
     },
-    column: {
-      flexDirection: 'column',
-    },
     login: {
       color: TEXT_COLOR,
-      fontSize: 16,
-      fontFamily: 'SFmedium'
+      fontSize: 24,
+      textAlign: 'center',
+      fontFamily: 'SFmedium', 
+      marginTop: 12
     },  
     logout: {
       color: 'red',
@@ -64,6 +64,11 @@ const styles = StyleSheet.create({
       color: TEXT_COLOR,
       fontSize: 16,
       fontFamily: 'SFregular',
+      textAlign: 'center',
+      opacity: 0.4
+    },  
+    id: {
+      color: TEXT_COLOR,
       opacity: 0.4
     },  
     title: {
@@ -83,9 +88,10 @@ const styles = StyleSheet.create({
       height: 109,
       resizeMode: 'cover'
     },
-    flex: {
+    wrapper: {
       marginTop: 20,
-      flexDirection: 'row',
+      justifyContent: 'center', 
+      alignItems: 'center'
     }
 })
 

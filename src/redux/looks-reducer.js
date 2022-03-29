@@ -70,7 +70,10 @@ export const requestTopics = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getAllTopics()
     if(response.status == 200){
-        dispatch(setTopics(response.data.map(topic => ({name: topic.name, slug: topic.slug}))))
+        dispatch(setTopics(response.data.map((topic, index) => ({
+            name: topic.name,
+            slug: topic.slug
+        }))))
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);

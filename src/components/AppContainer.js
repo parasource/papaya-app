@@ -18,6 +18,7 @@ import ProfilePage from '../pages/ProfilePage';
 import LookPage from '../pages/LookPage';
 import { WardrobePage } from '../pages/WardrobePage';
 import HomePage from '../pages/HomePage';
+import { TopicDetail } from '../pages/TopicDetail';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -126,6 +127,11 @@ const AppContainer = (props) => {
               name="LookPage"
               component={LookPage}
               options={({ route }) => ({ title: route.params.lookName })}
+            />
+            <Stack.Screen
+              name="TopicPage"
+              component={TopicDetail}
+              options={({ route }) => ({ title: route.params.topicName })}
             />
         </Stack.Navigator>
       </NavigationContainer>

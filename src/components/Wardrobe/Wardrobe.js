@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from "react-redux"
-import { requestCategories } from '../../redux/interests-reducer';
+import { requestCategories } from '../../redux/wardrobe-reducer';
 import { View, StyleSheet, Text, FlatList, ActivityIndicator } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
 import { TEXT_COLOR } from '../../theme';
@@ -42,15 +42,14 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching}) => {
         },
         row: {
             flex: 1,
-            justifyContent: "space-around",
             marginHorizontal: -4
         }
     })
 
 
     const mapStateToProps = (state) => ({
-        categories: state.interests.categories,
-        isFetching: state.interests.isFetching
+        categories: state.wardrobe.categories,
+        isFetching: state.wardrobe.isFetching
     })
 
     export default connect(mapStateToProps, {requestCategories})(Wardrobe)

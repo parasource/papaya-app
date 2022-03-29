@@ -1,26 +1,51 @@
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
-import React, { useEffect } from 'react'
-import { requestInterests } from '../../redux/interests-reducer';
+import React, { useEffect, useState } from 'react'
+import { requestAllWardrobe, requestSelectedWardrobe, setInterests } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
 import WardrobeThingCard from './WardrobeThingCard';
+import { FullButton } from '../UI/FullButton';
 
-const WardrobeDetail = ({route, interests, requestInterests, isFetching}) => {
-  const { categoryId, categoryName } = route.params;
+const WardrobeDetail = ({
+    route,
+    wardrobeThings,
+    requestAllWardrobe,
+    requestSelectedWardrobe,
+    setInterests,
+    isFetching
+  }) => {
+  const { categoryId } = route.params;
+  const [things, setThings] = useState([])
 
   useEffect(() => {
-    requestInterests(categoryId)
+    requestAllWardrobe(categoryId)
+    requestSelectedWardrobe()
   }, [])
 
   return (
     <View style={styles.row}>
       {isFetching ? <ActivityIndicator /> :
+          <>
             <FlatList
-                data={interests[0]}
+                data={wardrobeThings[0]}
                 numColumns={3}
-                columnWrapperStyle={styles.row}
-                renderItem={({item, index}) => <WardrobeThingCard item={item} key={index}/>}
+                renderItem={({item}) => (
+                <WardrobeThingCard 
+                  item={item} 
+                  key={item.ID}
+                  selected={things.find(el => el.slug == item.slug)}
+                  onPress={() => {
+                    if(![...things].find(el => el == item)){
+                      setThings(prevArray => [...prevArray, item])
+                    }else{
+                      setThings(things.filter(el => el.slug !== item.slug))
+                    }
+                  }}
+                  />
+                )}
             />
+            <FullButton label="Сохранить" style={{width: 200, marginTop: 20}} pressHandler={() => {setInterests(things)}}/>
+          </>
         }
     </View>
   )
@@ -33,17 +58,13 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: TEXT_COLOR,
       fontSize: 14
-  },
-  row: {
-      flex: 1,
-      justifyContent: "space-around"
   }
 })
 
 
 const mapStateToProps = (state) => ({
-  interests: state.interests.interests,
-  isFetching: state.interests.isFetching
+  wardrobeThings: state.wardrobe.wardrobeThings,
+  isFetching: state.wardrobe.isFetching
 })
 
-export default connect(mapStateToProps, {requestInterests})(WardrobeDetail)
+export default connect(mapStateToProps, {requestAllWardrobe, requestSelectedWardrobe, setInterests})(WardrobeDetail)
