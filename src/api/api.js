@@ -58,6 +58,7 @@ export const wardrobeAPI = {
         return instance.get(`/get-wardrobe-items`)
     },
     setWardrobe(interests) {
+        console.log(interests);
         return instance.post(`/profile/set-wardrobe`, interests)
     },
     getSelectedWardrobe() {

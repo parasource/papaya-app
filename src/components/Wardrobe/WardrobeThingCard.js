@@ -3,7 +3,7 @@ import React from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
 
-const WardrobeThingCard = ({props ,item, navigation, selected, onPress}) => {
+const WardrobeThingCard = ({item, navigation, selected, onPress}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={selected ? styles.wrapperBorder : styles.wrapper}>

@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Animated, TouchableOpacity } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import { Image } from 'react-native-elements';
 
 const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
   const { lookSlug } = route.params;
+  const [booked, setBooked] = useState(false)
 
   useEffect(() => {
       getCurrentLook(lookSlug)
@@ -25,7 +26,12 @@ const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
 
         <View style={styles.bar}>
             <Icon name="share-outline" style={styles.iconSM}/>
-            <Icon name="heart-outline" style={styles.icon}/>
+            <Icon name = {!booked ? "heart-outline" : "heart"}
+            style = {{...styles.icon, color: booked ? 'red' : TEXT_COLOR}}
+            onPress={() => {
+                setBooked(!booked)
+            }}
+            />
             <Icon name="heart-dislike-outline" style={styles.icon}/>
             <Icon name="bookmark-outline" style={styles.iconSM}/>
         </View>

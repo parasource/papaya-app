@@ -23,7 +23,7 @@ const FeedCard = ({navigation, item}) => {
 
 const styles = StyleSheet.create({
     cardWrapper: {
-      height: 160,
+      height: 220,
       overflow: 'hidden',
       borderRadius: 8
     },
