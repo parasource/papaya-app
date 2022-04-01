@@ -19,12 +19,10 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
       {isFetching ?
          <ActivityIndicator/> : 
          <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
-            {/* <Text style={styles.title}>{currentTopic?.topic?.name}</Text> */}
             <View style={styles.row}>
               {currentTopic?.looks?.map(item => (
                 <FeedCard item={item} key={item.ID} navigation={navigation}/>
               ))}
-              {console.log(currentTopic)}
             </View>
           </View>
       }

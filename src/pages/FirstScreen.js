@@ -8,7 +8,8 @@ import useFonts from '../hooks/useFont';
 export const FirstScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <ImageBackground style={styles.img} source={require('../../assets/img/backgroundFull.png')}/>
+      <ImageBackground style={styles.img} source={require('../../assets/img/zack.jpg')}/>
+      <View style={styles.darkness}></View>
       <View style={styles.wrapper}> 
         <Text style={styles.h1}>Добро пожаловать</Text>
         <Text style={styles.text}>Войди в аккаунт, чтобы преобразиться вместе с нами</Text>
@@ -29,6 +30,13 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
     position: 'absolute'
+   },
+   darkness: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    backgroundColor: '#000',
+    opacity: 0.4
    },
    h1: {
      fontSize: 32,

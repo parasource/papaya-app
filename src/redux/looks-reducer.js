@@ -6,12 +6,14 @@ const SET_LOOKS = 'SET_LOOKS'
 const SET_TOPICS = 'SET_TOPICS'
 const SET_LOOK = 'SET_LOOK'
 const SET_TOPIC = 'SET_TOPIC'
+const TOGGLE_LIKED = 'TOGGLE_LIKED'
 
 let initialState = {
     looks: [],
     isFetching: false,
     currentPage: 0,
     currentLook: {},
+    isLiked: false,
     currentTopic: {},
     topics: []
 }
@@ -30,17 +32,21 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, currentLook: action.currentLook}
         case SET_TOPIC: 
             return {...state, currentTopic: action.currentTopic}
+        case TOGGLE_LIKED: 
+            return {...state, isLiked: action.isLiked}
         default: 
             return state
     }
 }
 
-export const setLooks = (looks) => ({ type: SET_LOOKS, looks })
-export const setTopics = (topics) => ({ type: SET_TOPICS, topics })
-export const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
-export const setTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
-export const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
-export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
+const setLooks = (looks) => ({ type: SET_LOOKS, looks })
+const setTopics = (topics) => ({ type: SET_TOPICS, topics })
+const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
+const setTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
+const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
+const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
+const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
+
 
 export const requestLooks = (page) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
@@ -58,12 +64,23 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
-        dispatch(setLook(response.data))
+        dispatch(setLook(response.data.look))
+        dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
     }
+}
+
+export const likeLook = (slug) => async (dispatch) => {
+    dispatch(toggleLiked(true))
+    await feedAPI.likeLook(slug)
+}
+
+export const dislikeLook = (slug) => async (dispatch) => {
+    dispatch(toggleLiked(false))
+    await feedAPI.dislikeLook(slug)
 }
 
 export const requestTopics = () => async (dispatch) => {

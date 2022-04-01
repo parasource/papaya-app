@@ -58,7 +58,6 @@ export const wardrobeAPI = {
         return instance.get(`/get-wardrobe-items`)
     },
     setWardrobe(interests) {
-        console.log(interests);
         return instance.post(`/profile/set-wardrobe`, interests)
     },
     getSelectedWardrobe() {
@@ -80,12 +79,18 @@ export const feedAPI = {
         return instance.get(`/topics/${slug}?page=${page}`)
     },
     addToFavorited(slug) {
-        return instance.put(`looks/${slug}/favorites`)
+        return instance.put(`/looks/${slug}/favorites`)
     },
     removeFromFavorited(slug) {
-        return instance.delete(`looks/${slug}/favorites`)
+        return instance.delete(`/looks/${slug}/favorites`)
+    },
+    likeLook(slug) {
+        return instance.post(`/looks/${slug}/like`)
+    },
+    dislikeLook(slug) {
+        return instance.delete(`/looks/${slug}/dislike`)
     },
     pinTopic(slug) {
-        return instance.put(`topics/${slug}/watch`)
+        return instance.put(`/topics/${slug}/watch`)
     }
 }

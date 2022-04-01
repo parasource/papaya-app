@@ -3,12 +3,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import { getCurrentLook } from '../redux/looks-reducer';
+import { getCurrentLook, dislikeLook, likeLook } from '../redux/looks-reducer';
 import { Image } from 'react-native-elements';
 
-const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
+const LookPage = ({route, isFetching, currentLook, getCurrentLook, isLiked, likeLook, dislikeLook}) => {
   const { lookSlug } = route.params;
-  const [booked, setBooked] = useState(false)
 
   useEffect(() => {
       getCurrentLook(lookSlug)
@@ -26,10 +25,14 @@ const LookPage = ({route, isFetching, currentLook, getCurrentLook}) => {
 
         <View style={styles.bar}>
             <Icon name="share-outline" style={styles.iconSM}/>
-            <Icon name = {!booked ? "heart-outline" : "heart"}
-            style = {{...styles.icon, color: booked ? 'red' : TEXT_COLOR}}
+            <Icon name = {!isLiked ? "heart-outline" : "heart"}
+            style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}
             onPress={() => {
-                setBooked(!booked)
+                if(isLiked){
+                    dislikeLook(lookSlug)
+                }else{
+                    likeLook(lookSlug)
+                }
             }}
             />
             <Icon name="heart-dislike-outline" style={styles.icon}/>
@@ -93,7 +96,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     currentLook: state.feed.currentLook,
-    isFetching: state.feed.isFetching
+    isFetching: state.feed.isFetching,
+    isLiked: state.feed.isLiked
 })
 
-export default connect(mapStateToProps, {getCurrentLook})(LookPage)
+export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook})(LookPage)

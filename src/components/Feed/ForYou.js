@@ -21,6 +21,7 @@ const ForYou = ({navigation, isFetching, looks, requestLooks}) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    requestLooks(page)
     wait(2000).then(() => setRefreshing(false));
   }, []);
 

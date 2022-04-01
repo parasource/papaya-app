@@ -37,7 +37,6 @@ export const wardrobeReducer = (state = initialState, action) => {
             if (index !== -1) {
                 removeWardrobe.splice(index, 1);
             }
-            console.log(removeWardrobe);
             return {...state, selectedWardrobeId: removeWardrobe}
         default:
             return state;
@@ -70,7 +69,7 @@ export const requestCategories = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getAllWardrobe()
     if(response.status == 200){
-        const categories = response.data.map(category => ({name: category.name , id: category.ID}))
+        const categories = response.data.map(category => ({name: category.name, id: category.ID, preview: category.preview}))
         dispatch(getCategories(categories))
         dispatch(toggleIsFetching(false))
     }else{
