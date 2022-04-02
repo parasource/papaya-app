@@ -85,9 +85,15 @@ export const feedAPI = {
         return instance.delete(`/looks/${slug}/favorites`)
     },
     likeLook(slug) {
-        return instance.post(`/looks/${slug}/like`)
+        return instance.put(`/looks/${slug}/like`)
+    },
+    unlikeLook(slug) {
+        return instance.delete(`/looks/${slug}/like`)
     },
     dislikeLook(slug) {
+        return instance.put(`/looks/${slug}/dislike`)
+    },
+    undislikeLook(slug) {
         return instance.delete(`/looks/${slug}/dislike`)
     },
     pinTopic(slug) {

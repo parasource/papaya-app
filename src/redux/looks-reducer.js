@@ -7,6 +7,7 @@ const SET_TOPICS = 'SET_TOPICS'
 const SET_LOOK = 'SET_LOOK'
 const SET_TOPIC = 'SET_TOPIC'
 const TOGGLE_LIKED = 'TOGGLE_LIKED'
+const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
 
 let initialState = {
     looks: [],
@@ -14,6 +15,7 @@ let initialState = {
     currentPage: 0,
     currentLook: {},
     isLiked: false,
+    isDisliked: false,
     currentTopic: {},
     topics: []
 }
@@ -34,6 +36,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, currentTopic: action.currentTopic}
         case TOGGLE_LIKED: 
             return {...state, isLiked: action.isLiked}
+        case TOGGLE_DISLIKED: 
+            return {...state, isDisliked: action.isDisliked}
         default: 
             return state
     }
@@ -46,6 +50,7 @@ const setTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
+const toggleDisliked = (isDisliked) => ({ type: TOGGLE_DISLIKED, isDisliked })
 
 
 export const requestLooks = (page) => async (dispatch) => {
@@ -66,6 +71,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     if(response.status == 200){
         dispatch(setLook(response.data.look))
         dispatch(toggleLiked(response.data.isLiked))
+        dispatch(toggleDisliked(response.data.isDisliked))
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
@@ -79,8 +85,18 @@ export const likeLook = (slug) => async (dispatch) => {
 }
 
 export const dislikeLook = (slug) => async (dispatch) => {
-    dispatch(toggleLiked(false))
+    dispatch(toggleDisliked(true))
     await feedAPI.dislikeLook(slug)
+}
+
+export const unlikeLook = (slug) => async (dispatch) => {
+    dispatch(toggleLiked(false))
+    await feedAPI.unlikeLook(slug)
+}
+
+export const undislikeLook = (slug) => async (dispatch) => {
+    dispatch(toggleDisliked(false))
+    await feedAPI.undislikeLook(slug)
 }
 
 export const requestTopics = () => async (dispatch) => {

@@ -3,10 +3,21 @@ import React, { useEffect, useRef, useState } from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import { getCurrentLook, dislikeLook, likeLook } from '../redux/looks-reducer';
+import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook } from '../redux/looks-reducer';
 import { Image } from 'react-native-elements';
 
-const LookPage = ({route, isFetching, currentLook, getCurrentLook, isLiked, likeLook, dislikeLook}) => {
+const LookPage = ({
+        route,
+        isFetching,
+        currentLook,
+        getCurrentLook,
+        isLiked,
+        isDisliked,
+        likeLook,
+        dislikeLook,
+        unlikeLook,
+        undislikeLook
+    }) => {
   const { lookSlug } = route.params;
 
   useEffect(() => {
@@ -29,13 +40,27 @@ const LookPage = ({route, isFetching, currentLook, getCurrentLook, isLiked, like
             style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}
             onPress={() => {
                 if(isLiked){
-                    dislikeLook(lookSlug)
+                    unlikeLook(lookSlug)
                 }else{
+                    if(isDisliked){
+                        undislikeLook(lookSlug)
+                    }
                     likeLook(lookSlug)
                 }
             }}
             />
-            <Icon name="heart-dislike-outline" style={styles.icon}/>
+            <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
+             style = {styles.icon}
+            onPress={() => {
+                if(isDisliked){
+                    undislikeLook(lookSlug)
+                }else{
+                    if(isLiked){
+                        unlikeLook(lookSlug)
+                    }
+                    dislikeLook(lookSlug)
+                }
+            }}/>
             <Icon name="bookmark-outline" style={styles.iconSM}/>
         </View>
         <Text style={styles.title}>{currentLook.name}</Text>
@@ -97,7 +122,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
     currentLook: state.feed.currentLook,
     isFetching: state.feed.isFetching,
-    isLiked: state.feed.isLiked
+    isLiked: state.feed.isLiked,
+    isDisliked: state.feed.isDisliked,
 })
 
-export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook})(LookPage)
+export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook, unlikeLook, undislikeLook})(LookPage)
