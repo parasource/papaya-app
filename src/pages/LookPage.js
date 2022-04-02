@@ -5,30 +5,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook } from '../redux/looks-reducer';
 import { Image } from 'react-native-elements';
+import { BounceAnimation } from '../components/UI/BounceAnimation';
 
 const LookPage = (
     {route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook}
     ) => {
   const { lookSlug } = route.params;
 
-  const animationScaleLike = useRef(new Animated.Value(0)).current
-  const animationScaleDislike = useRef(new Animated.Value(0)).current
-
   useEffect(() => {
       getCurrentLook(lookSlug)
-      animationScaleLike.setValue(1)
-      animationScaleDislike.setValue(1)
   }, [])
-
-  const pressHandler = (animated) => {
-    animated.setValue(0.6)
-      Animated.spring(animated, {
-          toValue: 1,
-          bounciness: 20,
-          speed: 30,
-          useNativeDriver: true
-      }).start()
-  }
 
   return (
     <ScrollView style={styles.container}>
@@ -41,12 +27,8 @@ const LookPage = (
         </View>}
 
         <View style={styles.bar}>
-            <Icon name="share-outline" style={styles.iconSM}/>
-            <Animated.View style={{transform: [{scale: animationScaleLike}]}}>
-                <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}
-                onPress={() => {
-                    pressHandler(animationScaleLike)
+            <BounceAnimation component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+            <BounceAnimation onPress={() => {
                     if(isLiked){
                         unlikeLook(lookSlug)
                     }else{
@@ -56,27 +38,26 @@ const LookPage = (
                         likeLook(lookSlug)
                     }
 
-                }}
-                />
-            </Animated.View>
-            <Animated.View style={{transform: [{scale: animationScaleDislike}]}}>
-            <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
-             style = {styles.icon}
-            onPress={() => {
-                pressHandler(animationScaleDislike)
-                if(isDisliked){
-                    undislikeLook(lookSlug)
-                }else{
-                    if(isLiked){
-                        unlikeLook(lookSlug)
+                }} component={
+                <Icon name = {!isLiked ? "heart-outline" : "heart"}
+                style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}/>
+            }/>
+            <BounceAnimation onPress={() => {
+                    if(isDisliked){
+                        undislikeLook(lookSlug)
+                    }else{
+                        if(isLiked){
+                            unlikeLook(lookSlug)
+                        }
+                        dislikeLook(lookSlug)
                     }
-                    dislikeLook(lookSlug)
-                }
-            }}/>
-            </Animated.View>
-            
-            
-            <Icon name="bookmark-outline" style={styles.iconSM}/>
+                }} component={
+                <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
+                style = {styles.icon}/>
+            }/>
+             <BounceAnimation component={
+                <Icon name="bookmark-outline" style={styles.iconSM}/>
+            }/>
         </View>
         <Text style={styles.title}>{currentLook.name}</Text>
         <Text style={styles.text}>{currentLook.desc}</Text>
