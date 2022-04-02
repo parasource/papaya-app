@@ -113,12 +113,24 @@ export const watchTopic = (slug) => async (dispatch) => {
     await feedAPI.watchTopic(slug).then(res => {
         dispatch(toggleWatched(true))
     })
+    const response = await feedAPI.getLooks(0)
+    if(response.status == 200){
+        dispatch(setWatchedTopics(response.data.topics))
+    }else{
+        console.log(response);
+    }
 }
 
 export const unwatchTopic = (slug) => async (dispatch) => {
     await feedAPI.unwatchTopic(slug).then(res => {
         dispatch(toggleWatched(false))
     })
+    const response = await feedAPI.getLooks(0)
+    if(response.status == 200){
+        dispatch(setWatchedTopics(response.data.topics))
+    }else{
+        console.log(response);
+    }
 }
 
 export const requestTopics = () => async (dispatch) => {
