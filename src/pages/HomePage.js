@@ -88,12 +88,12 @@ function MyTabBar({ state, descriptors, navigation, position }) {
   );
 }
 
-const TabNavigator = ({topics, getCurrentTopic}) => {
+const TabNavigator = ({watchedTopics, getCurrentTopic}) => {
   return (
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}} >
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
           <Tab.Screen name="Topics" component={AllTopics} options={{ title: "Темы" }}/>
-          {/* {topics.map(topic => (
+          {watchedTopics.map(topic => (
             <Tab.Screen 
               key={topic.slug}
               name={topic.slug} 
@@ -102,7 +102,7 @@ const TabNavigator = ({topics, getCurrentTopic}) => {
               initialParams={{ topicSlug: topic.slug }}
               listeners={{tabPress: e => getCurrentTopic(topic.slug)}}
              />
-          ))} */}
+          ))}
       </Tab.Navigator>
   )
 }
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-  topics: state.feed.topics
+  watchedTopics: state.feed.watchedTopics
 })
 
 export default connect(mapStateToProps, {requestTopics, getCurrentTopic})(HomePage)

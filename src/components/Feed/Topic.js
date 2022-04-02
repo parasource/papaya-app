@@ -1,12 +1,14 @@
-import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
 import React, {useEffect, useState} from 'react'
-import { TEXT_COLOR } from '../../theme';
+import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
 import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
-import { getCurrentTopic } from '../../redux/looks-reducer';
+import { getCurrentTopic, unwatchTopic, watchTopic } from '../../redux/looks-reducer';
+import { FullButton } from '../UI/FullButton';
+import { Image } from 'react-native-elements';
 
 
-const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
+const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic, watchTopic, unwatchTopic, isWatched}) => {
   const [page, setPage] = useState(0)
   const { topicSlug } = route.params;
 
@@ -18,11 +20,31 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
     <ScrollView key={topicSlug}>
       {isFetching ?
          <ActivityIndicator/> : 
-         <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
-            <View style={styles.row}>
-              {currentTopic?.looks?.map(item => (
-                <FeedCard item={item} key={item.ID} navigation={navigation}/>
-              ))}
+         <View style={{paddingBottom: 100, height: '100%'}}>
+           <Image source={{uri: `https://storage.lightswitch.digital/storage/${currentTopic?.topic?.image}`}} 
+            resizeMode = "cover"
+            style = {{height: 358, flex: 1}}
+            PlaceholderContent={<ActivityIndicator />}/>
+            <View style={{paddingHorizontal: 16}}>
+              <Text style={styles.title}>{currentTopic?.topic?.name}</Text>
+              <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
+              <FullButton 
+                style={{width: 168}} 
+                label={isWatched ? "Открепить" : "Закрепить"}
+                theme={isWatched ? null: 'light'}
+                pressHandler={() => {
+                  if(isWatched){
+                      unwatchTopic(topicSlug)
+                  }else{
+                      watchTopic(topicSlug)
+                  }
+                }}
+              /> 
+              <View style={styles.row}>
+                {currentTopic?.looks?.map(item => (
+                  <FeedCard item={item} key={item.ID} navigation={navigation}/>
+                ))}
+              </View>
             </View>
           </View>
       }
@@ -30,25 +52,30 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
   )
 }
 
-
-
 const styles = StyleSheet.create({
     row: {
       flex: 1,
       justifyContent: 'space-between',
       flexDirection: 'row',
       flexWrap: 'wrap',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      marginTop: 10
     },
     container: {
         paddingHorizontal: 16
     },
     title: {
         color: TEXT_COLOR,
-        fontFamily: 'GilroyBold',
+        fontFamily: 'SFsemibold',
         fontSize: 24,
-        marginTop: 20,
-        marginBottom: 12
+        marginTop: 10,
+    },
+    desc: {
+        color: GRAY_COLOR,
+        fontFamily: 'SFregular',
+        fontSize: 13,
+        marginTop:8,
+        marginBottom: 16
     },
     image: {
         width: '100%',
@@ -60,7 +87,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   currentTopic: state.feed.currentTopic,
-  isFetching: state.feed.isFetching
+  isFetching: state.feed.isFetching,
+  isWatched: state.feed.isWatched
 })
 
-export default connect(mapStateToProps, {getCurrentTopic})(Topic)
+export default connect(mapStateToProps, {getCurrentTopic, watchTopic, unwatchTopic})(Topic)

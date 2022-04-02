@@ -96,7 +96,10 @@ export const feedAPI = {
     undislikeLook(slug) {
         return instance.delete(`/looks/${slug}/dislike`)
     },
-    pinTopic(slug) {
+    watchTopic(slug) {
         return instance.put(`/topics/${slug}/watch`)
-    }
+    },
+    unwatchTopic(slug) {
+        return instance.delete(`/topics/${slug}/unwatch`)
+    },
 }

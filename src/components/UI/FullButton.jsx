@@ -8,10 +8,10 @@ export const FullButton = ({label, style, theme, navigation, to, pressHandler}) 
       style={{
         ...styles.button,
         ...style,
-        backgroundColor: theme == "light" ? "none" : GREEN_COLOR,
-        borderStyle: theme == "light" ? "solid" : "none",
-        borderWidth: theme == "light" ? 1 : "none",
-        borderColor: theme == "light" ? GRAY_COLOR : "none",
+        backgroundColor: theme == "light" ? null : GREEN_COLOR,
+        borderStyle: theme == "light" ? "solid" : null,
+        borderWidth: theme == "light" ? 1 : null,
+        borderColor: theme == "light" ? GRAY_COLOR : null,
       }}
       onPress={navigation ? () => navigation.navigate(to) : pressHandler}
     >

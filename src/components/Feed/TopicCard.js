@@ -10,7 +10,7 @@ export const TopicCard = ({navigation, item}) => {
       style = {styles.wrapper}>
         <View> 
           <View style={styles.cardWrapper}> 
-            <Image source={{uri: `https://images.unsplash.com/photo-1647755370031-2bb9782f922a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=930&q=80`}}
+            <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}} 
             resizeMode = "cover"
             style = {{height: '100%'}}
             PlaceholderContent={<ActivityIndicator />}/>
