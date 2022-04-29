@@ -63,19 +63,17 @@ function MyTabBar({ state, descriptors, navigation, position }) {
             onLongPress={onLongPress}
             style={{ 
               minWidth: 120,
-              paddingVertical: 6,
-              paddingHorizontal: 6,
-              borderWidth: 1,
-              borderColor: isFocused ? GREEN_COLOR : GRAY_COLOR,
-              borderRadius: 8,
+              paddingVertical: 8,
+              paddingHorizontal: 36,
+              borderRadius: 32,
               marginLeft: 8,
-              backgroundColor: isFocused ? GREEN_COLOR : null 
+              backgroundColor: isFocused ? GREEN_COLOR : TEXT_COLOR 
              }}
           >
             <Animated.Text style={{
-              color: isFocused ? BG_COLOR : TEXT_COLOR,
+              color: BG_COLOR,
               textAlign: 'center',
-              fontFamily: 'GilroyBold',
+              fontFamily: 'SFsemibold',
               fontSize: 16
               }}>
               {label}
@@ -91,7 +89,7 @@ function MyTabBar({ state, descriptors, navigation, position }) {
 const TabNavigator = ({watchedTopics, getCurrentTopic}) => {
   return (
       <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}} >
-          <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Для тебя" }}/>
+          <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Рекомендации" }}/>
           <Tab.Screen name="Topics" component={AllTopics} options={{ title: "Темы" }}/>
           {watchedTopics.map(topic => (
             <Tab.Screen 
@@ -129,7 +127,7 @@ const styles = StyleSheet.create({
       height: 30,
       resizeMode: 'contain',
       alignSelf: 'center',
-      marginBottom: 12,
+      marginBottom: 32,
       marginTop: 12
     },
     tabWrapper:{

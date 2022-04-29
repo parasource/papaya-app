@@ -4,6 +4,8 @@ import { TEXT_COLOR, GREEN_COLOR } from '../../theme';
 import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { requestLooks } from '../../redux/looks-reducer';
+import { RecomendLook } from '../RecomendLook';
+import SkeletonContent from 'react-native-skeleton-content';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -31,20 +33,37 @@ const ForYou = ({navigation, isFetching, looks, requestLooks}) => {
   
   return (
     <ScrollView refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}>
-      {isFetching ?
-         <ActivityIndicator/> :
-      <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
-        <Text style={styles.title}>Образ на сегодня</Text>
-        <Image style={styles.image} 
-          source={{uri: 'https://images.unsplash.com/photo-1600574691453-499962cc0611?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'}}
-        />
-        <Text style={styles.subtitle}>Образы для вас</Text>
-        <View style={styles.row}>
-          {looks && looks.map((item,index) => (
-            <FeedCard item={item} key={index} navigation={navigation}/>
-          ))}
+      <SkeletonContent
+            containerStyle={{ 
+              flex: 1, 
+              width: '100%', 
+            marginTop: 16, 
+            justifyContent: 'space-between', 
+            flexDirection: 'row',
+             flexWrap: 'wrap' }}
+            boneColor="#121212"
+            highlightColor="#333333"
+            animationType="pulse"
+            isLoading={isFetching}
+            layout={[
+            { key: 'title', width: 200, height: 26, marginBottom: 12, borderRadius: 12 },
+            { key: 'rec', width: '100%', height: 240, borderRadius: 12 },
+            { key: 'title2', width: 150, height: 22, marginTop: 24, marginBottom: 12,  borderRadius: 12 },
+            { key: 'card', width: '48%', height: 220, marginTop: 4, borderRadius: 12 },
+            { key: 'card2', width: '48%', height: 220, marginTop: 4, borderRadius: 12 },
+            ]}
+       >
+        <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
+          <Text style={styles.title}>Образ на сегодня</Text>
+          <RecomendLook/>
+          <Text style={styles.subtitle}>Образы для вас</Text>
+          <View style={styles.row}>
+            {looks && looks.map((item,index) => (
+              <FeedCard item={item} key={index} navigation={navigation}/>
+            ))}
+          </View>
         </View>
-      </View>}
+      </SkeletonContent>
     </ScrollView>
   )
 }
@@ -66,7 +85,7 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR,
         fontFamily: 'GilroyBold',
         fontSize: 24,
-        marginTop: 20,
+        marginTop: 0,
         marginBottom: 12
     },
     subtitle: {

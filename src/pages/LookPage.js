@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook } from '../redux/looks-reducer';
 import { Image } from 'react-native-elements';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
+import { LookItem } from '../components/LookItem';
+import SkeletonContent from 'react-native-skeleton-content';
 
 const LookPage = (
     {route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook}
@@ -18,49 +20,64 @@ const LookPage = (
 
   return (
     <ScrollView style={styles.container}>
-        {isFetching ?
-         <ActivityIndicator/> :
-        <View style={styles.wrapper}>
-            <Image style={styles.image} 
-            source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} 
-            PlaceholderContent={<ActivityIndicator/>}/>
-        </View>}
-
-        <View style={styles.bar}>
-            <BounceAnimation component={<Icon name="share-outline" style={styles.iconSM}/>}/>
-            <BounceAnimation onPress={() => {
-                    if(isLiked){
-                        unlikeLook(lookSlug)
-                    }else{
-                        if(isDisliked){
-                            undislikeLook(lookSlug)
-                        }
-                        likeLook(lookSlug)
-                    }
-
-                }} component={
-                <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}/>
-            }/>
-            <BounceAnimation onPress={() => {
-                    if(isDisliked){
-                        undislikeLook(lookSlug)
-                    }else{
+         <SkeletonContent
+            containerStyle={{ flex: 1, width: '100%' }}
+            boneColor="#121212"
+            highlightColor="#333333"
+            animationType="pulse"
+            isLoading={isFetching}
+            layout={[
+            { key: 'someId', width: '100%', height: 500, borderRadius: 12, },
+            { key: 'someOtherId', width: '100%', height: 68, marginTop: 12, borderRadius: 12, },
+            { key: 'title', width: 300, height: 22, marginTop: 24, borderRadius: 12, },
+            { key: 'item', width: '100%', height: 105, marginTop: 12, borderRadius: 12, },
+            ]}
+       >
+           <View style={styles.wrapper}>
+                <Image style={styles.image} 
+                source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} 
+                PlaceholderContent={<ActivityIndicator/>}/>
+            </View>
+            <View style={styles.bar}>
+                <BounceAnimation component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+                <BounceAnimation onPress={() => {
                         if(isLiked){
                             unlikeLook(lookSlug)
+                        }else{
+                            if(isDisliked){
+                                undislikeLook(lookSlug)
+                            }
+                            likeLook(lookSlug)
                         }
-                        dislikeLook(lookSlug)
-                    }
-                }} component={
-                <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
-                style = {styles.icon}/>
-            }/>
-             <BounceAnimation component={
-                <Icon name="bookmark-outline" style={styles.iconSM}/>
-            }/>
-        </View>
-        <Text style={styles.title}>{currentLook.name}</Text>
-        <Text style={styles.text}>{currentLook.desc}</Text>
+
+                    }} component={
+                    <Icon name = {!isLiked ? "heart-outline" : "heart"}
+                    style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}/>
+                }/>
+                <BounceAnimation onPress={() => {
+                        if(isDisliked){
+                            undislikeLook(lookSlug)
+                        }else{
+                            if(isLiked){
+                                unlikeLook(lookSlug)
+                            }
+                            dislikeLook(lookSlug)
+                        }
+                    }} component={
+                    <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
+                    style = {styles.icon}/>
+                }/>
+                <BounceAnimation component={
+                    <Icon name="bookmark-outline" style={styles.iconSM}/>
+                }/>
+            </View>
+            <Text style={styles.title}>Элементы образа</Text>
+            <LookItem/>
+            <LookItem/>
+            <LookItem/>
+            <LookItem/>
+            <LookItem/>
+       </SkeletonContent> 
     </ScrollView>
   )
 }
@@ -75,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 500,
         overflow: 'hidden',
-        borderRadius: 8,
+        borderRadius: 12,
     },
     image: {
         height: '100%',
@@ -105,7 +122,7 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR,
         fontFamily: 'SFsemibold',
         fontSize: 24,
-        marginTop: 16
+        marginTop: 24
     },
     text: {
         color: TEXT_COLOR,

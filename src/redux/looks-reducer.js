@@ -75,6 +75,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
+        console.log(response.data);
         dispatch(setLook(response.data.look))
         dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleDisliked(response.data.isDisliked))
