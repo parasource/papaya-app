@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dutchman-app",
-    "slug": "dutchman-app",
+    "name": "papaya",
+    "slug": "papaya",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
