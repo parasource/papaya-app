@@ -3,7 +3,7 @@ import React from 'react'
 import { BG_COLOR, GRAY_COLOR, TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
 
-const FeedCard = ({navigation, item}) => {
+const FeedCard = ({navigation, item, key}) => {
   return (
     <TouchableHighlight onPress = {
       () => navigation.navigate('LookPage', { lookSlug: item.slug, lookName: item.name })} 

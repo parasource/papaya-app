@@ -19,6 +19,7 @@ import LookPage from '../pages/LookPage';
 import { WardrobePage } from '../pages/WardrobePage';
 import HomePage from '../pages/HomePage';
 import { TopicDetail } from '../pages/TopicDetail';
+import { ItemScreen } from './ItemScreen';
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -133,6 +134,9 @@ const AppContainer = (props) => {
               component={TopicDetail}
               options={({ route }) => ({ title: route.params.topicName })}
             />
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                <Stack.Screen name="ItemModal" component={ItemScreen} />
+            </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

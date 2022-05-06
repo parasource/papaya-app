@@ -3,29 +3,31 @@ import { View, Text, Button, Linking, StyleSheet, ActivityIndicator, TouchableOp
 import { Image } from 'react-native-elements'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 
-export const LookItem = () => {
+export const LookItem = ({item, navigation}) => {
   return (
-    <View style={styles.wrapper}>
-       <Image source={{uri: `https://img.pikbest.com/png-images/20190903/black-t-shirt-template_2998598.png!bw700`}} 
-            resizeMode = "cover"
-            style = {{height: 95, width: 70, flex: 1, borderRadius: 12}}
-            PlaceholderContent={<ActivityIndicator />}/>
-        <View style={styles.content}>
-            <Text style={styles.title}>Черная майка</Text>
-            <Text style={styles.mute}>Бренды</Text>
-            <View style={styles.linksWrapper}>
-                <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
-                    <Text style={styles.link}>Zara</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
-                    <Text style={styles.link}>Pull&Bear</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => console.log('Ещё')}>
-                    <Text style={styles.moreBtn}>Ещё</Text>
-                </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('ItemModal')}>
+        <View style={styles.wrapper}>
+        <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}} 
+                resizeMode = "cover"
+                style = {{height: 95, width: 70, flex: 1, borderRadius: 12}}
+                PlaceholderContent={<ActivityIndicator />}/>
+            <View style={styles.content}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.mute}>Бренды</Text>
+                <View style={styles.linksWrapper}>
+                    <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
+                        <Text style={styles.link}>Zara</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
+                        <Text style={styles.link}>Pull&Bear</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => console.log('Ещё')}>
+                        <Text style={styles.moreBtn}>Ещё</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

@@ -17,8 +17,9 @@ import Topic from '../components/Feed/Topic';
 import AllTopics from '../components/Feed/AllTopics';
 
 const Tab = createMaterialTopTabNavigator();
+const descriptors = [];
 
-function MyTabBar({ state, descriptors, navigation, position }) {
+function MyTabBar({ state, descriptors, navigation }) {
   return (
     <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabWrapper}>
@@ -88,7 +89,7 @@ function MyTabBar({ state, descriptors, navigation, position }) {
 
 const TabNavigator = ({watchedTopics, getCurrentTopic}) => {
   return (
-      <Tab.Navigator tabBar={props => <MyTabBar {...props} />} screenOptions={{lazy: true}} >
+      <Tab.Navigator tabBar={props => <MyTabBar {...props}/>} screenOptions={{lazy: true}} >
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Рекомендации" }}/>
           <Tab.Screen name="Topics" component={AllTopics} options={{ title: "Темы" }}/>
           {watchedTopics.map(topic => (
@@ -113,6 +114,8 @@ const HomePage = (props) => {
   return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
+        {console.log(props)}
+        {/* <MyTabBar navigation={props.navigation} state={props.navigation.getState()} descriptors={descriptors}/> */}
         <TabNavigator topics={props.topics} {...props}/>
       </SafeAreaView>
   )
@@ -132,7 +135,8 @@ const styles = StyleSheet.create({
     },
     tabWrapper:{
       marginLeft: 8
-    }
+    },
+
 })
 
 const mapStateToProps = (state) => ({

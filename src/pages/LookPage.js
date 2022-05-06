@@ -9,9 +9,7 @@ import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
 
-const LookPage = (
-    {route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook}
-    ) => {
+const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook, navigation}) => {
   const { lookSlug } = route.params;
 
   useEffect(() => {
@@ -71,12 +69,12 @@ const LookPage = (
                     <Icon name="bookmark-outline" style={styles.iconSM}/>
                 }/>
             </View>
-            <Text style={styles.title}>Элементы образа</Text>
-            <LookItem/>
-            <LookItem/>
-            <LookItem/>
-            <LookItem/>
-            <LookItem/>
+            <View style={{paddingBottom: 100}}>
+                <Text style={styles.title}>Элементы образа</Text>
+                {currentLook?.items?.map(item => (
+                    <LookItem item={item} key={item.slug} navigation={navigation}/>
+                ))}
+            </View>
        </SkeletonContent> 
     </ScrollView>
   )

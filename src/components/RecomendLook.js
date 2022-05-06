@@ -3,29 +3,22 @@ import {View, StyleSheet, Text} from 'react-native';
 import { TEXT_COLOR } from '../theme';
 import Imageui from './UI/ImageUI';
 
-export const RecomendLook = () => {
+export const RecomendLook = ({look}) => {
     return (
         <View style={styles.wrapper}>
             <View style={styles.imgBlock}>
-                <Imageui uri={'https://images.unsplash.com/photo-1600574691453-499962cc0611?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'}/>
+                <Imageui uri={`https://storage.lightswitch.digital/storage/${look.image}`}/>
             </View>
-            
             <View style={styles.imgWrap}>
-                <View style={styles.itemBlock}>
-                    <Imageui uri={'https://img.pikbest.com/png-images/20190903/black-t-shirt-template_2998598.png!bw700'}/>
-                </View>
-                <View style={styles.itemBlock}>
-                    <Imageui uri={'https://img.pikbest.com/png-images/20190903/black-t-shirt-template_2998598.png!bw700'}/>
-                </View>
-                <View style={styles.itemBlock}>
-                    <Imageui uri={'https://img.pikbest.com/png-images/20190903/black-t-shirt-template_2998598.png!bw700'}/>
-                </View>
-                <View style={styles.itemBlock}>
-                    <Imageui uri={'https://img.pikbest.com/png-images/20190903/black-t-shirt-template_2998598.png!bw700'}/>
-                    <View style={styles.darkness}>
-                        <Text style={styles.number}>+2</Text>
+                {look?.items?.map((item, index) => (
+                    <View style={styles.itemBlock}>
+                        <Imageui uri={`https://storage.lightswitch.digital/storage/${item.image}`}/>
+                        {index == 3 ? 
+                            <View style={styles.darkness}>
+                                <Text style={styles.number}>+2</Text>
+                            </View> : null}
                     </View>
-                </View>
+                ))}
             </View>
         </View>
     );

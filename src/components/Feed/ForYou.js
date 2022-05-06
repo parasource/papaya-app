@@ -17,7 +17,7 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     contentSize.height - paddingToBottom;
 };
 
-const ForYou = ({navigation, isFetching, looks, requestLooks}) => {
+const ForYou = ({navigation, isFetching, looks, requestLooks, todayLook}) => {
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
 
@@ -55,7 +55,7 @@ const ForYou = ({navigation, isFetching, looks, requestLooks}) => {
        >
         <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
           <Text style={styles.title}>Образ на сегодня</Text>
-          <RecomendLook/>
+          <RecomendLook look={todayLook}/>
           <Text style={styles.subtitle}>Образы для вас</Text>
           <View style={styles.row}>
             {looks && looks.map((item,index) => (
@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   looks: state.feed.looks, 
-  isFetching: state.feed.isFetching
+  isFetching: state.feed.isFetching,
+  todayLook: state.feed.todayLook
 })
 
 export default connect(mapStateToProps, {requestLooks})(ForYou)

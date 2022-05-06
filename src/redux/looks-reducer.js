@@ -5,6 +5,7 @@ const SET_LOOKS = 'SET_LOOKS'
 const SET_TOPICS = 'SET_TOPICS'
 const SET_WATCHED_TOPICS = 'SET_WATCHED_TOPICS'
 const SET_LOOK = 'SET_LOOK'
+const SET_TODAY_LOOK = 'SET_TODAY_LOOK'
 const SET_TOPIC = 'SET_TOPIC'
 const TOGGLE_LIKED = 'TOGGLE_LIKED'
 const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
@@ -19,7 +20,8 @@ let initialState = {
     currentTopic: {},
     topics: [],
     isWatched: false,
-    watchedTopics: []
+    watchedTopics: [],
+    todayLook: {}
 }
 
 export const looksReducer = (state = initialState, action) => {
@@ -34,6 +36,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isFetching: action.isFetching}
         case SET_LOOK: 
             return {...state, currentLook: action.currentLook}
+        case SET_TODAY_LOOK: 
+            return {...state, todayLook: action.todayLook}
         case SET_TOPIC: 
             return {...state, currentTopic: action.currentTopic}
         case TOGGLE_LIKED: 
@@ -51,6 +55,7 @@ const setLooks = (looks) => ({ type: SET_LOOKS, looks })
 const setTopics = (topics) => ({ type: SET_TOPICS, topics })
 const setWatchedTopics = (watchedTopics) => ({ type: SET_WATCHED_TOPICS, watchedTopics })
 const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
+const setTodayLook = (todayLook) => ({ type: SET_TODAY_LOOK, todayLook })
 const setTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
@@ -64,7 +69,9 @@ export const requestLooks = (page) => async (dispatch) => {
     if(response.status == 200){
         dispatch(setLooks(response.data.looks))
         dispatch(setWatchedTopics(response.data.topics))
+        dispatch(setTodayLook(response.data.todayLook))
         dispatch(toggleIsFetching(false))
+        console.log(response.data.todayLook);
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
