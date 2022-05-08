@@ -42,7 +42,7 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
             <FullButton label="Пригласить"/>
           </View>
           <View style={styles.settingsWrap}>
-              <TouchableOpacity style={styles.settingsCard}>
+              <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('ProfileSettings', {email: email})}>
                 <Text style={styles.settingsTitle}>Аккаунт</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Изменить логин, пароль, почту и личные данные</Text>
               </TouchableOpacity>

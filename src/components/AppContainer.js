@@ -21,6 +21,7 @@ import { TopicDetail } from '../pages/TopicDetail';
 import { ItemScreen } from './ItemScreen';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import LookPage from '../pages/LookPage';
+import { ProfileSettings } from '../pages/ProfileSettings';
 
 const Stack = createNativeStackNavigator()
 const Share = createSharedElementStackNavigator()
@@ -139,6 +140,11 @@ const AppContainer = (props) => {
                     },
                   };
                 }, })}
+            />
+            <Share.Screen
+              name="ProfileSettings"
+              component={ProfileSettings}
+              options={{ title: 'Аккаунт'}}
             />
             <Share.Screen
               name="TopicPage"
