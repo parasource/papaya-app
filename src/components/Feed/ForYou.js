@@ -32,7 +32,9 @@ const ForYou = ({navigation, isFetching, looks, requestLooks, todayLook}) => {
   }, [page])
   
   return (
-    <ScrollView refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}>
       <SkeletonContent
             containerStyle={{ 
               flex: 1, 

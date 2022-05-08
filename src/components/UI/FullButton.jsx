@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         paddingVertical: 11,
-        borderRadius: 8,
+        borderRadius: 12,
     },
     label: {
         fontSize: 16,

@@ -4,7 +4,7 @@ import Topic from '../components/Feed/Topic'
 
 export const TopicDetail = (props) => {
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
         <Topic {...props}/>
     </ScrollView>
   )

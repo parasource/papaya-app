@@ -17,7 +17,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic, wa
   }, [])
   
   return (
-    <ScrollView key={topicSlug}>
+    <ScrollView key={topicSlug} showsVerticalScrollIndicator={false}>
       {isFetching ?
          <ActivityIndicator/> : 
          <View style={{paddingBottom: 100, height: '100%'}}>

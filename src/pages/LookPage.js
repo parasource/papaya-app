@@ -18,7 +18,7 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
   }, [])
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrapper}>
                 <SharedElement id={`feedCard${lookSlug}`}>
                     <Image style={styles.image} 
