@@ -15,9 +15,11 @@ import { connect } from 'react-redux';
 import { requestTopics, getCurrentTopic } from '../redux/looks-reducer';
 import Topic from '../components/Feed/Topic';
 import AllTopics from '../components/Feed/AllTopics';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createMaterialTopTabNavigator();
-const descriptors = [];
+const Stack = createNativeStackNavigator();
+
 
 function MyTabBar({ state, descriptors, navigation }) {
   return (
@@ -87,9 +89,79 @@ function MyTabBar({ state, descriptors, navigation }) {
   );
 }
 
+function TabBar({ state, navigation }) {
+  return (
+    <View style={{ flexDirection: 'row', paddingBottom: 20 }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabWrapper}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate({ name: route.name, merge: true });
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+
+        return (
+          <TouchableOpacity
+            key={index}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={{ 
+              minWidth: 120,
+              paddingVertical: 8,
+              paddingHorizontal: 36,
+              borderRadius: 32,
+              marginLeft: 8,
+              backgroundColor: isFocused ? GREEN_COLOR : TEXT_COLOR 
+             }}
+          >
+            <Animated.Text style={{
+              color: BG_COLOR,
+              textAlign: 'center',
+              fontFamily: 'SFsemibold',
+              fontSize: 16
+              }}>
+              {label}
+            </Animated.Text>
+          </TouchableOpacity>
+        );
+      })}
+      </ScrollView>
+    </View>
+  );
+}
+
 const TabNavigator = ({watchedTopics, getCurrentTopic}) => {
   return (
-      <Tab.Navigator tabBar={props => <MyTabBar {...props}/>} screenOptions={{lazy: true}} >
+      <Tab.Navigator 
+      tabBar={props => <MyTabBar {...props}/>} 
+      screenOptions={{lazy: true, tabBarScrollEnabled: true}} >
           <Tab.Screen name="ForYou" component={ForYou} options={{ title: "Рекомендации" }}/>
           <Tab.Screen name="Topics" component={AllTopics} options={{ title: "Темы" }}/>
           {watchedTopics.map(topic => (
@@ -114,8 +186,6 @@ const HomePage = (props) => {
   return (
       <SafeAreaView style={styles.container}>
         <Image source={require('../../assets/img/papaya.png')} style={styles.logo}/>
-        {console.log(props)}
-        {/* <MyTabBar navigation={props.navigation} state={props.navigation.getState()} descriptors={descriptors}/> */}
         <TabNavigator topics={props.topics} {...props}/>
       </SafeAreaView>
   )

@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Animated, TouchableOpacity } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import { GREEN_COLOR, TEXT_COLOR } from '../theme';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image } from 'react-native'
+import React, { useEffect } from 'react'
+import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook } from '../redux/looks-reducer';
-import { Image } from 'react-native-elements';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
+import { SharedElement } from 'react-navigation-shared-element';
 
 const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook, navigation}) => {
   const { lookSlug } = route.params;
+  const { item } = route.params;
 
   useEffect(() => {
       getCurrentLook(lookSlug)
@@ -18,6 +19,12 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
 
   return (
     <ScrollView style={styles.container}>
+        <View style={styles.wrapper}>
+                <SharedElement id={`feedCard${lookSlug}`}>
+                    <Image style={styles.image} 
+                    source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}/>
+                </SharedElement>
+            </View>
          <SkeletonContent
             containerStyle={{ flex: 1, width: '100%' }}
             boneColor="#121212"
@@ -25,17 +32,12 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
             animationType="pulse"
             isLoading={isFetching}
             layout={[
-            { key: 'someId', width: '100%', height: 500, borderRadius: 12, },
+            // { key: 'someId', width: '100%', height: 500, borderRadius: 12, },
             { key: 'someOtherId', width: '100%', height: 68, marginTop: 12, borderRadius: 12, },
             { key: 'title', width: 300, height: 22, marginTop: 24, borderRadius: 12, },
             { key: 'item', width: '100%', height: 105, marginTop: 12, borderRadius: 12, },
             ]}
        >
-           <View style={styles.wrapper}>
-                <Image style={styles.image} 
-                source={{uri: `https://storage.lightswitch.digital/storage/${currentLook.image}`}} 
-                PlaceholderContent={<ActivityIndicator/>}/>
-            </View>
             <View style={styles.bar}>
                 <BounceAnimation component={<Icon name="share-outline" style={styles.iconSM}/>}/>
                 <BounceAnimation onPress={() => {
@@ -136,5 +138,16 @@ const mapStateToProps = (state) => ({
     isLiked: state.feed.isLiked,
     isDisliked: state.feed.isDisliked,
 })
+
+LookPage.sharedElements = route => {
+    const { lookSlug } = route.params;
+    return [
+        {
+        id: `feedCard${lookSlug}`,
+        animation: 'fade',
+        resize: 'clip'
+        }
+    ];
+};
 
 export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook, unlikeLook, undislikeLook})(LookPage)

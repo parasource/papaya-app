@@ -1,19 +1,22 @@
 import { View, TouchableHighlight, StyleSheet, Text, ActivityIndicator} from 'react-native'
 import React from 'react'
-import { BG_COLOR, GRAY_COLOR, TEXT_COLOR } from '../../theme'
+import { TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
+import { SharedElement } from 'react-navigation-shared-element'
 
-const FeedCard = ({navigation, item, key}) => {
+const FeedCard = ({navigation, item}) => {
   return (
     <TouchableHighlight onPress = {
-      () => navigation.navigate('LookPage', { lookSlug: item.slug, lookName: item.name })} 
+      () => navigation.navigate('LookPage', { lookSlug: item.slug, lookName: item.name, item: item })} 
       style = {styles.wrapper}>
         <View> 
           <View style={styles.cardWrapper}> 
-            <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}
-            resizeMode = "cover"
-            style = {{height: '100%'}}
-            PlaceholderContent={<ActivityIndicator />}/>
+            <SharedElement id={`feedCard${item.slug}`}>
+              <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}
+                resizeMode = "cover"
+                style = {{height: '100%'}}
+                PlaceholderContent={<ActivityIndicator />}/>  
+            </SharedElement>
           </View>
           <Text style={styles.text}>{item.name}</Text>
         </View>

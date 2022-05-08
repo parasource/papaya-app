@@ -15,13 +15,15 @@ import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
 import { FavoritesPage } from '../pages/FavoritesPage';
 import ProfilePage from '../pages/ProfilePage';
-import LookPage from '../pages/LookPage';
 import { WardrobePage } from '../pages/WardrobePage';
 import HomePage from '../pages/HomePage';
 import { TopicDetail } from '../pages/TopicDetail';
 import { ItemScreen } from './ItemScreen';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import LookPage from '../pages/LookPage';
 
 const Stack = createNativeStackNavigator()
+const Share = createSharedElementStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const TabNaigator = () => {
@@ -114,30 +116,39 @@ const AppContainer = (props) => {
     <SafeAreaProvider>
       <StatusBar barStyle="light-content"/>
       <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator screenOptions={{  
+        <Share.Navigator screenOptions={{  
           headerShown: true, 
           headerBackTitleVisible: false  }}>
-            <Stack.Screen
+            <Share.Screen
               name="MainNavigator"
               component={TabNaigator}
               options={{ 
                 headerShown: false
               }}
             />
-            <Stack.Screen
+            <Share.Screen
               name="LookPage"
               component={LookPage}
-              options={({ route }) => ({ title: route.params.lookName })}
+              options={({ route }) => ({ 
+                title: route.params.lookName,
+                headerBackTitleVisible: false,
+                cardStyleInterpolator: ({ current: { progress } }) => {
+                  return {
+                    cardStyle: {
+                      opacity: progress,
+                    },
+                  };
+                }, })}
             />
-            <Stack.Screen
+            <Share.Screen
               name="TopicPage"
               component={TopicDetail}
               options={({ route }) => ({ title: route.params.topicName })}
             />
-            <Stack.Group screenOptions={{ presentation: 'modal' }}>
-                <Stack.Screen name="ItemModal" component={ItemScreen} />
-            </Stack.Group>
-        </Stack.Navigator>
+            <Share.Group screenOptions={{ presentation: 'modal' }}>
+                <Share.Screen name="ItemModal" component={ItemScreen} />
+            </Share.Group>
+        </Share.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
