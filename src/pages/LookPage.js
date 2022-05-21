@@ -74,7 +74,7 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
                 {currentLook?.items?.map(item => (
-                    <LookItem item={item} key={item.slug} navigation={navigation}/>
+                    <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
                 ))}
             </View>
        </SkeletonContent> 

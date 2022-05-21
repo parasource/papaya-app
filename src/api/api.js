@@ -72,6 +72,9 @@ export const feedAPI = {
     getLook(slug) {
         return instance.get(`/looks/${slug}`)
     },
+    getItem(slug, id) {
+        return instance.get(`/looks/${slug}/item/${id}`)
+    },
     getAllTopics() {
         return instance.get(`/topics`)
     },

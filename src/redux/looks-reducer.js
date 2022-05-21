@@ -2,6 +2,7 @@ import { feedAPI } from "../api/api"
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_LOOKS = 'SET_LOOKS'
+const SET_ITEM = 'SET_ITEM'
 const SET_TOPICS = 'SET_TOPICS'
 const SET_WATCHED_TOPICS = 'SET_WATCHED_TOPICS'
 const SET_LOOK = 'SET_LOOK'
@@ -21,13 +22,16 @@ let initialState = {
     topics: [],
     isWatched: false,
     watchedTopics: [],
-    todayLook: {}
+    todayLook: {},
+    currentItem: {}
 }
 
 export const looksReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_LOOKS: 
             return {...state, looks: action.looks}
+        case SET_ITEM: 
+            return {...state, currentItem: action.currentItem}
         case SET_TOPICS: 
             return {...state, topics: action.topics}
         case SET_WATCHED_TOPICS: 
@@ -52,6 +56,7 @@ export const looksReducer = (state = initialState, action) => {
 }
 
 const setLooks = (looks) => ({ type: SET_LOOKS, looks })
+const setCurrentItem = (currentItem) => ({ type: SET_ITEM, currentItem })
 const setTopics = (topics) => ({ type: SET_TOPICS, topics })
 const setWatchedTopics = (watchedTopics) => ({ type: SET_WATCHED_TOPICS, watchedTopics })
 const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
@@ -75,6 +80,15 @@ export const requestLooks = (page) => async (dispatch) => {
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
+    }
+}
+
+export const requestItem = (slug, id) => async (dispatch) => {
+    const response = await feedAPI.getItem(slug, id)
+    if(response.status == 200){
+        dispatch(setCurrentItem(response.data))
+    }else{
+        console.log(response);
     }
 }
 

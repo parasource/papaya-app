@@ -1,11 +1,13 @@
 import React from 'react'
-import { View, Text, Button, Linking, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Linking, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { Image } from 'react-native-elements'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 
-export const LookItem = ({item, navigation}) => {
+export const LookItem = ({lookSlug, item, navigation}) => {
+ const urlsArr = item.urls.slice(0,2)
+
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('ItemModal')}>
+    <TouchableOpacity onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
         <View style={styles.wrapper}>
         <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}} 
                 resizeMode = "cover"
@@ -15,15 +17,16 @@ export const LookItem = ({item, navigation}) => {
                 <Text style={styles.title}>{item.name}</Text>
                 <Text style={styles.mute}>Бренды</Text>
                 <View style={styles.linksWrapper}>
-                    <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
-                        <Text style={styles.link}>Zara</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Linking.openURL('https://google.com')} style={styles.linkWrapper}>
-                        <Text style={styles.link}>Pull&Bear</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('Ещё')}>
-                        <Text style={styles.moreBtn}>Ещё</Text>
-                    </TouchableOpacity>
+                    {urlsArr.map(url => (
+                        <TouchableOpacity key={url.id} onPress={() => Linking.openURL(url.url)} style={styles.linkWrapper}>
+                            <Text style={styles.link}>{url.brand.name}</Text>
+                        </TouchableOpacity>
+                    ))}
+                    {(item.urls.length >= 2) && 
+                        <TouchableOpacity onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
+                            <Text style={styles.moreBtn}>Ещё</Text>
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
         </View>

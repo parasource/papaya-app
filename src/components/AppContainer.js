@@ -18,13 +18,12 @@ import ProfilePage from '../pages/ProfilePage';
 import { WardrobePage } from '../pages/WardrobePage';
 import HomePage from '../pages/HomePage';
 import { TopicDetail } from '../pages/TopicDetail';
-import { ItemScreen } from './ItemScreen';
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
 import { ProfileSettings } from '../pages/ProfileSettings';
 
 const Stack = createNativeStackNavigator()
-const Share = createSharedElementStackNavigator()
+const Share = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const TabNaigator = () => {
@@ -152,7 +151,10 @@ const AppContainer = (props) => {
               options={({ route }) => ({ title: route.params.topicName })}
             />
             <Share.Group screenOptions={{ presentation: 'modal' }}>
-                <Share.Screen name="ItemModal" component={ItemScreen} />
+                <Share.Screen name="ItemModal" component={ItemScreen} 
+                options={({ route }) => ({ 
+                  title: route.params.itemName,
+                })}/>
             </Share.Group>
         </Share.Navigator>
       </NavigationContainer>
