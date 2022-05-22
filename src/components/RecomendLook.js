@@ -1,23 +1,26 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import { TEXT_COLOR } from '../theme';
 import Imageui from './UI/ImageUI';
 
-export const RecomendLook = ({look}) => {
+export const RecomendLook = ({look, navigation}) => {
+    const items = look?.items?.slice(0,4)
+
     return (
         <View style={styles.wrapper}>
-            <View style={styles.imgBlock}>
+            <TouchableOpacity style={styles.imgBlock} onPress={() => navigation.navigate('LookPage', { lookSlug: look.slug, item: look})}>
                 <Imageui uri={`https://storage.lightswitch.digital/storage/${look.image}`}/>
-            </View>
+            </TouchableOpacity>
             <View style={styles.imgWrap}>
-                {look?.items?.map((item, index) => (
-                    <View style={styles.itemBlock}>
+                {items?.map((item, index) => (
+                    <TouchableOpacity key={item.id} style={styles.itemBlock} onPress={() => navigation.navigate('LookPage', { lookSlug: look.slug, item: look})}>
                         <Imageui uri={`https://storage.lightswitch.digital/storage/${item.image}`}/>
-                        {index == 3 ? 
+                        {index == 3 && look.items.length > 4 ? 
                             <View style={styles.darkness}>
-                                <Text style={styles.number}>+2</Text>
-                            </View> : null}
-                    </View>
+                                <Text style={styles.number}>+{look.items.length - 4}</Text>
+                            </View> : null
+                        }
+                    </TouchableOpacity>
                 ))}
             </View>
         </View>

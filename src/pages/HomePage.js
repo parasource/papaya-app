@@ -70,13 +70,13 @@ function MyTabBar({ state, descriptors, navigation }) {
               paddingHorizontal: 36,
               borderRadius: 32,
               marginLeft: 8,
-              backgroundColor: isFocused ? GREEN_COLOR : TEXT_COLOR 
+              backgroundColor: isFocused ? GREEN_COLOR : '#1F1F1F' 
              }}
           >
             <Animated.Text style={{
-              color: BG_COLOR,
+              color: isFocused ? BG_COLOR : GRAY_COLOR ,
               textAlign: 'center',
-              fontFamily: 'SFsemibold',
+              fontFamily: 'SFmedium',
               fontSize: 16
               }}>
               {label}

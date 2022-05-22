@@ -87,32 +87,31 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'GilroyMedium',
+    fontFamily: 'SFmedium',
   },
   subtitle: {
     fontSize: 16,
     color: '#fff',
     textAlign: 'center',
-    fontFamily: 'GilroyRegular',
+    fontFamily: 'SFregular',
     marginTop: 8,
     marginBottom: 44
   },
   input: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#fff',
-    paddingVertical: 11,
-    paddingHorizontal: 12,
-    borderColor: GRAY_COLOR,
-    borderWidth: 1,
-    fontFamily: 'GilroyRegular',
-    borderRadius: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 14,
+    backgroundColor: '#1F1F1F',
+    fontFamily: 'SFregular',
+    borderRadius: 12,
     marginTop: 16
   },
   forget: {
     fontSize: 16,
     textAlign: 'center',
     color: GRAY_COLOR,
-    fontFamily: 'GilroyRegular',
+    fontFamily: 'SFregular',
     marginTop: 12
   },
   button: {
@@ -122,13 +121,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: '#5096FF',
-    fontFamily: 'GilroyRegular',
+    fontFamily: 'SFregular',
     marginTop: 4
   },
   error: {
     color: '#F25757',
     marginTop: 8,
-    fontFamily: 'GilroyRegular',
+    fontFamily: 'SFregular',
     fontSize: 14
   },
 });

@@ -51,7 +51,7 @@ const ForYou = ({navigation, isFetching, looks, requestLooks, todayLook}) => {
        >
         <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
           <Text style={styles.title}>Образ на сегодня</Text>
-          <RecomendLook look={todayLook}/>
+          <RecomendLook look={todayLook} navigation={navigation}/>
           <Text style={styles.subtitle}>Образы для вас</Text>
           <View style={styles.row}>
             {looks && looks.map((item,index) => (

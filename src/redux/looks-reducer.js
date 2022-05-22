@@ -76,7 +76,6 @@ export const requestLooks = (page) => async (dispatch) => {
         dispatch(setWatchedTopics(response.data.topics))
         dispatch(setTodayLook(response.data.todayLook))
         dispatch(toggleIsFetching(false))
-        console.log(response.data.todayLook);
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
@@ -96,7 +95,6 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
-        console.log(response.data);
         dispatch(setLook(response.data.look))
         dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleDisliked(response.data.isDisliked))
