@@ -46,7 +46,7 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
                 <Text style={styles.settingsTitle}>Аккаунт</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Изменить логин, пароль, почту и личные данные</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.settingsCard}>
+              <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('Notification')}>
                 <Text style={styles.settingsTitle}>Уведомления</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Включить или выключить</Text>
               </TouchableOpacity>

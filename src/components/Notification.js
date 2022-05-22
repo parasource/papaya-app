@@ -5,9 +5,9 @@ import { GRAY_COLOR, GREEN_COLOR, TEXT_COLOR } from '../theme'
 export const Notification = ({notification}) => {
   return (
     <View style={styles.wrapper}>
-      <Text style={{...styles.from, color: notification.seen ? GRAY_COLOR : GREEN_COLOR}}>{notification.from}</Text>
-      <Text style={{...styles.text, color: notification.seen ? GRAY_COLOR : TEXT_COLOR}}>{notification.text}</Text>
-      <Text style={{...styles.date, color: notification.seen ? GRAY_COLOR : TEXT_COLOR}}>{notification.atCreated}</Text>
+      <Text style={{...styles.from, color: notification?.seen ? GRAY_COLOR : GREEN_COLOR}}>{notification?.from}</Text>
+      <Text style={{...styles.text, color: notification?.seen ? GRAY_COLOR : TEXT_COLOR}}>{notification?.text}</Text>
+      <Text style={{...styles.date, color: notification?.seen ? GRAY_COLOR : TEXT_COLOR}}>{notification?.atCreated}</Text>
     </View>
   )
 }

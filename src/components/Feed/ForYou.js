@@ -11,12 +11,6 @@ const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-  const paddingToBottom = 20;
-  return layoutMeasurement.height + contentOffset.y >=
-    contentSize.height - paddingToBottom;
-};
-
 const ForYou = ({navigation, isFetching, looks, requestLooks, todayLook}) => {
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
