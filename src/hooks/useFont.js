@@ -1,6 +1,6 @@
 import * as Font from "expo-font";
  
-export default useFonts = async () =>
+const useFonts = async () =>
   await Font.loadAsync({
     'GilroyMedium': require('../../assets/fonts/gilroy-medium.ttf'),
     'GilroyRegular': require('../../assets/fonts/Gilroy-Regular.ttf'),
@@ -17,3 +17,5 @@ export default useFonts = async () =>
     'SFheavy': require('../../assets/fonts/SF-Compact-Display-Heavy.otf'),
     'SFblack': require('../../assets/fonts/SF-Compact-Display-Black.otf'),
   });
+
+  export default useFonts

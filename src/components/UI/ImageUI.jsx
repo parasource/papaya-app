@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, Image } from 'react-native';
 
-const Imageui = ({uri}) => {
+const ImageUi = ({uri}) => {
     return (
         <View>
             <Image source={{uri: uri}} resizeMode = "cover" 
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Imageui;
+export default ImageUi;

@@ -1,12 +1,11 @@
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomePage from '../../pages/HomePage';
+import { HomePage } from '../../pages/HomePage';
 import { WardrobePage } from '../../pages/WardrobePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { GREEN_COLOR } from '../../theme';
 import { StyleSheet, Text, View } from 'react-native';
-
 
 const Tab = createBottomTabNavigator()
 

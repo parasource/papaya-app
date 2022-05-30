@@ -3,7 +3,6 @@ import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
     baseURL: 'https://papaya-api.lightswitch.digital/api'
-    // baseURL: 'http://127.0.0.1:8000/api'
 })
 
 instance.interceptors.request.use(
@@ -75,12 +74,6 @@ export const feedAPI = {
     getItem(slug, id) {
         return instance.get(`/looks/${slug}/item/${id}`)
     },
-    getAllTopics() {
-        return instance.get(`/topics`)
-    },
-    getTopic(slug, page) {
-        return instance.get(`/topics/${slug}?page=${page}`)
-    },
     addToFavorited(slug) {
         return instance.put(`/looks/${slug}/favorites`)
     },
@@ -98,11 +91,5 @@ export const feedAPI = {
     },
     undislikeLook(slug) {
         return instance.delete(`/looks/${slug}/dislike`)
-    },
-    watchTopic(slug) {
-        return instance.put(`/topics/${slug}/watch`)
-    },
-    unwatchTopic(slug) {
-        return instance.delete(`/topics/${slug}/unwatch`)
     },
 }

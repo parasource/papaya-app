@@ -8,7 +8,6 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { checkToken } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
-import { TopicDetail } from '../pages/TopicDetail';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
 import { ProfileSettings } from '../pages/ProfileSettings';
@@ -85,11 +84,6 @@ const AppContainer = (props) => {
               component={Notification}
               options={{ title: 'Уведомления'}}
             />
-            <Share.Screen
-              name="TopicPage"
-              component={TopicDetail}
-              options={({ route }) => ({ title: route.params.topicName })}
-            />
             <Share.Group screenOptions={{ presentation: 'modal' }}>
                 <Share.Screen name="ItemModal" component={ItemScreen} 
                 options={({ route }) => ({ 
@@ -101,20 +95,6 @@ const AppContainer = (props) => {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: '#1F1F1F',
-    paddingVertical: 8,
-    minHeight: 60,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
-  }
-})
 
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
