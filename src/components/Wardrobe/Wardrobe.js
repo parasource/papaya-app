@@ -15,8 +15,8 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
     }, [])
 
     return(
-      <View>
-        <Text style={styles.title}>Гардероб</Text>
+      <View style={{paddingHorizontal: 16}}>
+        {/* <Text style={styles.title}>Гардероб</Text> */}
         {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={categories}

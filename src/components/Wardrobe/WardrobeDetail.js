@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       color: TEXT_COLOR,
       fontSize: 14
+  }, 
+  row: {
+    paddingHorizontal: 16
   }
 })
 

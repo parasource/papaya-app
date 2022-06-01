@@ -20,7 +20,7 @@ const WardrobeThingCard = ({item, navigation, selected, onPress}) => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 12, 
-        marginHorizontal: 4, 
+        paddingHorizontal: 4, 
         flex: 0.33
     },
     image: {

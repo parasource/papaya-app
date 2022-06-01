@@ -14,6 +14,9 @@ import { ProfileSettings } from '../pages/ProfileSettings';
 import { TabBottomNavigator } from './Navigation/TabNavigator';
 import { Notification } from './Notification';
 import { BG_COLOR } from '../theme';
+import { WardrobePage } from '../pages/WardrobePage';
+import Wardrobe from './Wardrobe/Wardrobe';
+import WardrobeDetail from './Wardrobe/WardrobeDetail';
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
@@ -89,6 +92,11 @@ const AppContainer = (props) => {
                 options={({ route }) => ({ 
                   title: route.params.itemName,
                 })}/>
+                <Share.Screen name="Wardrobe" component={Wardrobe} 
+                options={{ 
+                  title: "Гардероб",
+                }}/>
+                <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
             </Share.Group>
         </Share.Navigator>
       </NavigationContainer>

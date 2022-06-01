@@ -1,17 +1,17 @@
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, RefreshControl, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native'
 import React, {useEffect, useState, useCallback} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR } from '../../theme';
-import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
-import { requestLooks } from '../../redux/looks-reducer';
+import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { RecommendLook } from '../RecommendLook';
 import { SkeletonFeed } from './SkeletonFeed';
+import { LooksFeed } from './LooksFeed';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd, categories}) => {
+const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd, categories, categoriesLooks, requestCategoriesLooks}) => {
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
   const [isActive, setIsActive] = useState(null);
@@ -36,7 +36,8 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
     }
   }
 
-  const onPress = (index) => {
+  const onPress = (index, slug) => {
+    requestCategoriesLooks(slug)
     setIsActive(index)
   }
 
@@ -70,30 +71,22 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
                   Для вас
                 </Text>
               </TouchableOpacity>
-            {categories && categories.map((category, index) => (
+            {categories && categories.map((category) => (
               <TouchableOpacity
                 key={category.ID}
                 accessibilityRole="button"
-                onPress={index => onPress(index)}
-                style={{...styles.btnWrapper, backgroundColor: isActive == index ? GREEN_COLOR : '#1F1F1F' }}
+                onPress={() => onPress(category.ID, categories.slug)}
+                style={{...styles.btnWrapper, backgroundColor: isActive == category.ID ? GREEN_COLOR : '#1F1F1F' }}
               >
-                <Text style={{...styles.btnAnimated, color: isActive == index ? BG_COLOR : GRAY_COLOR}}>
+                <Text style={{...styles.btnAnimated, color: isActive == category.ID ? BG_COLOR : GRAY_COLOR}}>
                   {category.name}
                 </Text>
               </TouchableOpacity>
             )) }
           </ScrollView>
           <View style={styles.container}>
-            <View style={styles.row}>
-              {looks && looks.map((item,index) => (
-                <FeedCard item={item} key={index} navigation={navigation}/>
-              ))}
-            </View>
-            <View style={styles.footer}>
-              {isListEnd ? 
-              <Text style={styles.footerText}>No more articles at the moment</Text> 
-              : <ActivityIndicator/>}
-            </View>
+            <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
+              navigation={navigation} isListEnd={isListEnd}/>
           </View>
         </View>
       </SkeletonFeed>
@@ -104,13 +97,6 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
 
 
 const styles = StyleSheet.create({
-    row: {
-      flex: 1,
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'flex-start',
-    },
     container: {
       paddingHorizontal: 16,
     },
@@ -120,16 +106,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         marginTop: 0,
         marginBottom: 12
-    },
-    footer: {
-      textAlign: 'center',
-      color: GRAY_COLOR, 
-      paddingTop: 16
-    },
-    footerText: {
-      color: GRAY_COLOR,
-      textAlign: 'center',
-      fontFamily: 'SFregular'
     },
     tabWrapper:{
       marginTop: 20,
@@ -155,6 +131,7 @@ const mapStateToProps = (state) => ({
   todayLook: state.feed.todayLook,
   isListEnd: state.feed.isListEnd,
   categories: state.feed.categories,
+  categoriesLooks: state.feed.categoriesLooks,
 })
 
-export default connect(mapStateToProps, {requestLooks})(Feed)
+export default connect(mapStateToProps, {requestLooks, requestCategoriesLooks})(Feed)

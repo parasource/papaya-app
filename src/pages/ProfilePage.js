@@ -42,6 +42,10 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
             <FullButton label="Пригласить"/>
           </View>
           <View style={styles.settingsWrap}>
+              <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('Wardrobe')}>
+                <Text style={styles.settingsTitle}>Гардероб</Text>
+                <Text style={styles.settingsText} numberOfLines={1}>Изменить вещи в гардеробе</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('ProfileSettings', {email: email})}>
                 <Text style={styles.settingsTitle}>Аккаунт</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Изменить логин, пароль, почту и личные данные</Text>
@@ -49,10 +53,6 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
               <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('Notification')}>
                 <Text style={styles.settingsTitle}>Уведомления</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Включить или выключить</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.settingsCard}>
-                <Text style={styles.settingsTitle}>Справка</Text>
-                <Text style={styles.settingsText} numberOfLines={1}>Что-то там можно</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.settingsCard}>
                 <Text style={styles.settingsTitle}>Поддержка</Text>

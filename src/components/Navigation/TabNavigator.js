@@ -47,10 +47,10 @@ export const TabBottomNavigator = () => {
           name="Home"
           component={HomePage}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Wardrobe"
           component={WardrobePage}
-        />
+        /> */}
         <Tab.Screen
           name="Favorites"
           component={FavoritesPage}

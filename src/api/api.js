@@ -68,6 +68,9 @@ export const feedAPI = {
     getLooks(page) {
         return instance.get(`/feed?page=${page}`)
     },
+    getCategoriesLooks(slug) {
+        return instance.get(`/feed/${slug}`)
+    },
     getLook(slug) {
         return instance.get(`/looks/${slug}`)
     },
