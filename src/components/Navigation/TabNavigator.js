@@ -6,6 +6,7 @@ import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { GREEN_COLOR } from '../../theme';
 import { StyleSheet, Text, View } from 'react-native';
+import SearchPage from '../../pages/SearchPage';
 
 const Tab = createBottomTabNavigator()
 
@@ -19,9 +20,9 @@ export const TabBottomNavigator = () => {
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
             title = "Главная"
-          } else if (route.name === "Wardrobe") {
-            iconName = focused ? "shirt" : "shirt-outline";
-            title = "Гардероб"
+          } else if (route.name === "Search") {
+            iconName = focused ? "search" : "search-outline";
+            title = "Поиск"
           } else if (route.name === "Favorites") {
             iconName = focused ? "bookmark" : "bookmark-outline";
             title = "Закладки"
@@ -47,10 +48,10 @@ export const TabBottomNavigator = () => {
           name="Home"
           component={HomePage}
         />
-        {/* <Tab.Screen
-          name="Wardrobe"
-          component={WardrobePage}
-        /> */}
+        <Tab.Screen
+          name="Search"
+          component={SearchPage}
+        />
         <Tab.Screen
           name="Favorites"
           component={FavoritesPage}
