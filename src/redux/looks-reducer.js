@@ -10,6 +10,7 @@ const TOGGLE_LIKED = 'TOGGLE_LIKED'
 const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
 const TOGGLE_IS_LIST_END = 'TOGGLE_IS_LIST_END'
 const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
+const SET_SEARCH_RESULT_LOOKS = 'SET_SEARCH_RESULT_LOOKS'
 
 let initialState = {
     looks: [],
@@ -22,6 +23,7 @@ let initialState = {
     currentItem: {},
     categoriesLooks: [],
     isListEnd: false,
+    searchResultLooks: []
 }
 
 export const looksReducer = (state = initialState, action) => {
@@ -32,6 +34,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, categories: action.categories}
         case SET_CATEGORIES_LOOKS: 
             return {...state, categoriesLooks: action.categoriesLooks}
+        case SET_SEARCH_RESULT_LOOKS: 
+            return {...state, searchResultLooks: action.searchResultLooks}
         case SET_ITEM: 
             return {...state, currentItem: action.currentItem}
         case TOGGLE_IS_FETCHING: 
@@ -54,6 +58,7 @@ export const looksReducer = (state = initialState, action) => {
 const setLooks = (looks) => ({ type: SET_LOOKS, looks })
 const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
+const setSearchResultLooks = (searchResultLooks) => ({ type: SET_SEARCH_RESULT_LOOKS, searchResultLooks })
 const setCurrentItem = (currentItem) => ({ type: SET_ITEM, currentItem })
 const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
 const setTodayLook = (todayLook) => ({ type: SET_TODAY_LOOK, todayLook })
@@ -85,6 +90,15 @@ export const requestCategoriesLooks = (slug) => async (dispatch) => {
     const response = await feedAPI.getCategoriesLooks(slug)
     if(response.status == 200){
         dispatch(setCategoriesLooks(response.data.looks))
+    }else{
+        console.log(response);
+    }
+}
+
+export const requestSearchResultLooks = (string) => async (dispatch) => {
+    const response = await feedAPI.getSearchResult(string)
+    if(response.status == 200){
+        dispatch(setSearchResultLooks(response.data.looks))
     }else{
         console.log(response);
     }

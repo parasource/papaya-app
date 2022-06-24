@@ -95,4 +95,7 @@ export const feedAPI = {
     undislikeLook(slug) {
         return instance.delete(`/looks/${slug}/dislike`)
     },
+    getSearchResult(string) {
+        return instance.get(`/search?q=${string}&page=0`)
+    }
 }
