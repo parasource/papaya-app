@@ -1,0 +1,1 @@
+export const storage = "http://storage.papaya.parasource.tech/storage"

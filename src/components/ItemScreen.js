@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, Button, TouchableOpacity, StyleSheet, Linking, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { storage } from '../const';
 import { requestItem } from '../redux/looks-reducer';
 import { TEXT_COLOR } from '../theme';
+import FeedCard from './Feed/FeedCard';
 
 const ItemScreen = ({ route, navigation, item, requestItem }) => {
     const { lookSlug, itemId } = route.params;
@@ -17,7 +19,7 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
         <View style={styles.row}>
           {item?.item?.urls?.map(url => (
             <TouchableOpacity key={url.ID} onPress={() => Linking.openURL(url.url)} style={styles.linkWrapper}>
-              <Image style={styles.img} source={{uri: `https://storage.lightswitch.digital/storage/${url.brand.image}`}}/>
+              <Image style={styles.img} source={{uri: `${storage}/${url.brand.image}`}}/>
             </TouchableOpacity>
           ))}
         </View>

@@ -75,7 +75,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
               <TouchableOpacity
                 key={category.ID}
                 accessibilityRole="button"
-                onPress={() => onPress(category.ID, categories.slug)}
+                onPress={() => onPress(category.ID, category.slug)}
                 style={{...styles.btnWrapper, backgroundColor: isActive == category.ID ? GREEN_COLOR : '#1F1F1F' }}
               >
                 <Text style={{...styles.btnAnimated, color: isActive == category.ID ? BG_COLOR : GRAY_COLOR}}>

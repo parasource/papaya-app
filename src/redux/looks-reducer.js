@@ -82,13 +82,11 @@ export const requestLooks = (page) => async (dispatch) => {
 }
 
 export const requestCategoriesLooks = (slug) => async (dispatch) => {
-    dispatch(toggleIsFetching(true))
     const response = await feedAPI.getCategoriesLooks(slug)
     if(response.status == 200){
         dispatch(setCategoriesLooks(response.data.looks))
     }else{
         console.log(response);
-        dispatch(toggleIsFetching(false))
     }
 }
 

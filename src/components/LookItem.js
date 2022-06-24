@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Linking, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { Image } from 'react-native-elements'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
+import { storage } from '../const';
 
 export const LookItem = ({lookSlug, item, navigation}) => {
  const urlsArr = item.urls.slice(0,2)
@@ -9,7 +10,7 @@ export const LookItem = ({lookSlug, item, navigation}) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
         <View style={styles.wrapper}>
-        <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}} 
+        <Image source={{uri: `${storage}/${item.image}`}} 
                 resizeMode = "cover"
                 style = {{height: 95, width: 70, flex: 1, borderRadius: 12}}
                 PlaceholderContent={<ActivityIndicator />}/>

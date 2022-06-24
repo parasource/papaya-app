@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'rea
 import React from 'react'
 import { GREEN_COLOR, TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
+import { storage } from '../../const'
 
 const WardrobeThingCard = ({item, navigation, selected, onPress}) => {
   return (
@@ -9,7 +10,7 @@ const WardrobeThingCard = ({item, navigation, selected, onPress}) => {
         <View style={selected ? styles.wrapperBorder : styles.wrapper}>
             <Image 
             style={styles.image} 
-            source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}
+            source={{uri: `${storage}/${item.image}`}}
             PlaceholderContent={<ActivityIndicator />}/>
         </View>
         <Text style={styles.text}>{item.name}</Text>

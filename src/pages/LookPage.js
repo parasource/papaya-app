@@ -8,6 +8,7 @@ import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
 import { SharedElement } from 'react-navigation-shared-element';
+import { storage } from '../const';
 
 const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook, navigation}) => {
   const { lookSlug } = route.params;
@@ -15,14 +16,14 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
 
   useEffect(() => {
       getCurrentLook(lookSlug)
-  }, [])
+  }, [item])
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.wrapper}>
                 <SharedElement id={`feedCard${lookSlug}`}>
                     <Image style={styles.image} 
-                    source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}/>
+                    source={{uri: `${storage}/${item.image}`}}/>
                 </SharedElement>
             </View>
          <SkeletonContent

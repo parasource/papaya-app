@@ -3,6 +3,7 @@ import React from 'react'
 import { TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
 import { SharedElement } from 'react-navigation-shared-element'
+import { storage } from '../../const';
 
 const FeedCard = ({navigation, item}) => {
   return (
@@ -12,7 +13,7 @@ const FeedCard = ({navigation, item}) => {
         <View> 
           <View style={styles.cardWrapper}> 
             <SharedElement id={`feedCard${item.slug}`}>
-              <Image source={{uri: `https://storage.lightswitch.digital/storage/${item.image}`}}
+              <Image source={{uri: `${storage}/${item.image}`}}
                 resizeMode = "cover"
                 style = {{height: '100%'}}
                 PlaceholderContent={<ActivityIndicator />}/>  

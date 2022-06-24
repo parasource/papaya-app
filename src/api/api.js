@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    baseURL: 'https://papaya-api.lightswitch.digital/api'
+    baseURL: 'http://api.papaya.parasource.tech/api'
 })
 
 instance.interceptors.request.use(

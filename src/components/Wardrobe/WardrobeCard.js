@@ -1,11 +1,12 @@
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { TEXT_COLOR } from '../../theme'
+import { storage } from '../../const'
 
 const WardrobeCard = ({item, navigation}) => {
   return (
     <TouchableOpacity style={styles.wrapper} onPress={() => navigation.navigate('WardrobeDetail', ({categoryId: item.id, categoryName: item.name}))}>
-        <ImageBackground style={styles.background} source={{uri: `https://storage.lightswitch.digital/storage/${item.preview}`}}/>
+        <ImageBackground style={styles.background} source={{uri: `${storage}/${item.preview}`}}/>
         <View style={styles.darkness}></View>
         <Text style={styles.text}>{item.name}</Text>
     </TouchableOpacity>
