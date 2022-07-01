@@ -2,14 +2,29 @@ import React from 'react';
 import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import { GRAY_COLOR } from '../../theme';
 import FeedCard from './FeedCard';
+import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryCard from './MasonryCard';
 
 export const LooksFeed = ({looks, isListEnd, navigation}) => {
+    const renderItem = ({item, index}) => {
+          return (
+            <MasonryCard key={index} item={item} navigation={navigation}/>
+          );
+      };
+
     return (
         <View>
             <View style={styles.row}>
-              {looks && looks.map((item,index) => (
-                <FeedCard item={item} key={index} navigation={navigation}/>
-              ))}
+              {looks && <MasonryList
+                    keyExtractor={(_, index) => toString(index)}
+                    contentContainerStyle={{
+                    alignSelf: 'stretch',
+                    marginHorizontal: -8
+                    }}
+                    numColumns={2}
+                    data={looks}
+                    renderItem={renderItem}
+                />}
             </View>
             <View style={styles.footer}>
               {isListEnd ? 

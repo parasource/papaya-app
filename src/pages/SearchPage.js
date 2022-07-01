@@ -55,14 +55,16 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                     blurOnSubmit={true}
                     ref={hiddenButtonRef}
                 />
-                <ScrollView>
+                <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.container}>
-                        {(isFocus && !isResult) && <SearchFocus feed={history} navigation={navigation} onClick={(prop) => {
-                            setValue(prop)
-                            requestSearchResultLooks(prop)
-                            setIsResult(true)
-                            hiddenButtonRef.current.blur()
-                        }}/>}
+                        {(isFocus && !isResult) && <View>
+                                <SearchFocus feed={history} navigation={navigation} onClick={(prop) => {
+                                    setValue(prop)
+                                    requestSearchResultLooks(prop)
+                                    setIsResult(true)
+                                    hiddenButtonRef.current.blur()
+                                }}/>
+                            </View>}
                         {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation}/>}
                         {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                     </View>
