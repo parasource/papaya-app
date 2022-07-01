@@ -100,5 +100,14 @@ export const feedAPI = {
     },
     getSearchHistory(string) {
         return instance.get(`/search/history`)
-    }
+    },
+    getRecommendedTopics() {
+        return instance.get(`/topics/recommended`)
+    },
+    getPopularTopics() {
+        return instance.get(`/topics/popular`)
+    },
+    getTopic(slug, page) {
+        return instance.get(`/topics/${slug}?page=${page}`)
+    },
 }

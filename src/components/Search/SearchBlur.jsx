@@ -1,21 +1,51 @@
 import React from "react";
 import { Text } from "react-native";
 import { View, StyleSheet } from "react-native";
-import { GRAY_COLOR } from "../../theme";
+import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import TopicCard from "./TopicCard";
+import MasonryList from '@react-native-seoul/masonry-list';
 
-const SearchBlur = ({feed, navigation}) => {
+const SearchBlur = ({recommended, popular, navigation}) => {
+
+  const renderItem = ({item}) => {
+    return <TopicCard key={item.slug} item={item} navigation={navigation} />
+  }
+
   return (
     <View>
-      {feed ? (
+      <Text style={styles.title}>Темы для вас</Text>
+      {recommended ? (
         <View style={styles.row}>
-          {feed.map((item, index) => {
-            if (item.type == "topic") {
-              return (
-                <TopicCard key={index} item={item} navigation={navigation} />
-              );
-            }
-          })}
+          <MasonryList
+            keyExtractor={(_, index) => toString(index)}
+            contentContainerStyle={{
+              alignSelf: 'stretch',
+              marginHorizontal: -8
+            }}
+            numColumns={2}
+            data={recommended}
+            renderItem={renderItem}
+          />
+        </View>
+
+      ) : (
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>No more articles at the moment</Text>
+        </View>
+      )}
+      <Text style={styles.title}>Популярные темы</Text>
+      {popular ? (
+        <View style={styles.row}>
+          <MasonryList
+            keyExtractor={(_, index) => toString(index)}
+            contentContainerStyle={{
+              alignSelf: 'stretch',
+              marginHorizontal: -8
+            }}
+            numColumns={2}
+            data={popular}
+            renderItem={renderItem}
+          />
         </View>
       ) : (
         <View style={styles.footer}>
@@ -29,10 +59,6 @@ const SearchBlur = ({feed, navigation}) => {
 const styles = StyleSheet.create({
   row: {
     flex: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
   },
   footer: {
     textAlign: 'center',
@@ -47,6 +73,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingBottom: 150
+  },
+  title: {
+    fontFamily: 'SFsemibold',
+    fontSize: 17, 
+    marginTop: 20,
+    color: TEXT_COLOR,
   }
 });
 

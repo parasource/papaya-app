@@ -12,6 +12,9 @@ const TOGGLE_IS_LIST_END = 'TOGGLE_IS_LIST_END'
 const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_SEARCH_RESULT_LOOKS = 'SET_SEARCH_RESULT_LOOKS'
 const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
+const SET_TOPIC = 'SET_TOPIC'
+const SET_RECOMMENDED_TOPICS = 'SET_RECOMMENDED_TOPICS'
+const SET_POPULAR_TOPICS = 'SET_POPULAR_TOPICS'
 
 let initialState = {
     looks: [],
@@ -25,6 +28,9 @@ let initialState = {
     categoriesLooks: [],
     isListEnd: false,
     searchResultLooks: [],
+    currentTopic: {},
+    topicsRecommended: [],
+    topicsPopular: [],
     searchHistory: []
 }
 
@@ -54,6 +60,12 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isDisliked: action.isDisliked}
         case TOGGLE_IS_LIST_END: 
             return {...state, isListEnd: action.isListEnd}
+        case SET_POPULAR_TOPICS: 
+            return {...state, topicsPopular: action.topicsPopular}
+        case SET_RECOMMENDED_TOPICS: 
+            return {...state, topicsRecommended: action.topicsRecommended}
+        case SET_TOPIC: 
+            return {...state, currentTopic: action.currentTopic}
         default: 
             return state
     }
@@ -71,6 +83,9 @@ const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
 const toggleDisliked = (isDisliked) => ({ type: TOGGLE_DISLIKED, isDisliked })
 const toggleIsListEnd = (isListEnd) => ({ type: TOGGLE_IS_LIST_END, isListEnd })
+const setCurrentTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
+const setRecommendedTopics = (topicsRecommended) => ({ type: SET_RECOMMENDED_TOPICS, topicsRecommended })
+const setPopularTopics = (topicsPopular) => ({ type: SET_POPULAR_TOPICS, topicsPopular })
 
 
 export const requestLooks = (page) => async (dispatch) => {
@@ -140,6 +155,34 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
+    }
+}
+
+export const getCurrentTopic = (slug, page) => async (dispatch) => {
+    dispatch(toggleIsFetching(true))
+    const response = await feedAPI.getTopic(slug, page)
+    if(response.status == 200){
+        dispatch(setCurrentTopic(response.data))
+        dispatch(toggleIsFetching(false))
+    }else{
+        console.log(response);
+        dispatch(toggleIsFetching(false))
+    }
+}
+
+export const requestTopics = () => async (dispatch) => {
+    const response = await feedAPI.getRecommendedTopics()
+    if(response.status == 200){
+        dispatch(setRecommendedTopics(response.data))
+    }else{
+        console.log(response);
+    }
+    
+    const responsePopular = await feedAPI.getPopularTopics()
+    if(responsePopular.status == 200){
+        dispatch(setPopularTopics(responsePopular.data))
+    }else{
+        console.log(responsePopular);
     }
 }
 

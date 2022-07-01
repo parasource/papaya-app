@@ -7,7 +7,8 @@ import { storage } from '../../const';
 
 const TopicCard = ({navigation, item}) => {
   return (
-    <TouchableHighlight 
+    <TouchableHighlight onPress = {
+      () => navigation.navigate('TopicPage', { topicSlug: item.slug, topicName: item.name })} 
       style = {styles.wrapper}>
           <View style={styles.cardWrapper}> 
             <SharedElement id={`feedCard${item.slug}`}>

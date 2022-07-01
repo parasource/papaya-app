@@ -17,6 +17,7 @@ import { BG_COLOR } from '../theme';
 import { WardrobePage } from '../pages/WardrobePage';
 import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
+import { TopicPage } from '../pages/TopicPage';
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
@@ -76,6 +77,20 @@ const AppContainer = (props) => {
                     },
                   };
                 }, })}
+            />
+            <Share.Screen
+              name="TopicPage"
+              component={TopicPage}
+              options={({ route }) => ({ 
+                title: route.params.topicName,
+                headerBackTitleVisible: false,
+                cardStyleInterpolator: ({ current: { progress } }) => {
+                  return {
+                    cardStyle: {
+                      opacity: progress,
+                    },
+                  };
+                }})}
             />
             <Share.Screen
               name="ProfileSettings"

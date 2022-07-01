@@ -1,0 +1,84 @@
+import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import React, {useEffect, useState} from 'react'
+import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
+import FeedCard from './FeedCard';
+import { connect } from 'react-redux';
+import { getCurrentTopic } from '../../redux/looks-reducer';
+import { storage } from '../../const';
+
+
+const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
+  const [page, setPage] = useState(0)
+  const { topicSlug } = route.params;
+
+  useEffect(() => {
+    getCurrentTopic(topicSlug, page)
+  }, [])
+  
+  return (
+    <ScrollView key={topicSlug}>
+      {isFetching ?
+         <ActivityIndicator/> : 
+            <View style={{paddingBottom: 100, height: '100%'}}>
+            <Image source={{uri: `${storage}/${currentTopic?.topic?.image}`}} 
+             resizeMode = "cover"
+             style = {{height: 358, flex: 1}}
+             PlaceholderContent={<ActivityIndicator />}/>
+             <View style={{paddingHorizontal: 16}}>
+               <Text style={styles.title}>{currentTopic?.topic?.name}</Text>
+               <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
+            </View>
+            <View style={styles.row}>
+              {currentTopic?.looks?.map(item => (
+                <FeedCard item={item} key={item.ID} navigation={navigation}/>
+              ))}
+              {console.log(currentTopic)}
+            </View>
+          </View>
+      }
+    </ScrollView>
+  )
+}
+
+
+
+const styles = StyleSheet.create({
+    row: {
+      flex: 1,
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+      marginTop: 10,
+      paddingHorizontal: 16
+    },
+    container: {
+        paddingHorizontal: 16
+    },
+    title: {
+        color: TEXT_COLOR,
+        fontFamily: 'SFsemibold',
+        fontSize: 24,
+        marginTop: 10,
+    },
+    desc: {
+        color: GRAY_COLOR,
+        fontFamily: 'SFregular',
+        fontSize: 13,
+        marginTop:8,
+        marginBottom: 16
+    },
+    image: {
+        width: '100%',
+        height: 300,
+        resizeMode: 'cover',
+        borderRadius: 8,
+    }
+})
+
+const mapStateToProps = (state) => ({
+  currentTopic: state.feed.currentTopic,
+  isFetching: state.feed.isFetching
+})
+
+export default connect(mapStateToProps, {getCurrentTopic})(Topic)

@@ -11,11 +11,11 @@ const SearchResult = ({feed, navigation}) => {
   const renderItem = ({item}) => {
     if (item.type == "look") {
       return (
-        <MasonryCard key={item.id} item={item} navigation={navigation}/>
+        <MasonryCard key={item.slug} item={item} navigation={navigation}/>
       );
     } else {
       return (
-        <TopicCard key={item.id} item={item} navigation={navigation}/>
+        <TopicCard key={item.slug} item={item} navigation={navigation}/>
       );
     }
   };
@@ -24,15 +24,15 @@ const SearchResult = ({feed, navigation}) => {
     <View>
       {feed ? (
         <MasonryList
-        keyExtractor={(_, index) => toString(index)}
-          contentContainerStyle={{
-            alignSelf: 'stretch',
-            marginHorizontal: -8
-          }}
-          numColumns={2}
-          data={feed}
-          renderItem={renderItem}
-      />
+          keyExtractor={(_, index) => toString(index)}
+            contentContainerStyle={{
+              alignSelf: 'stretch',
+              marginHorizontal: -8
+            }}
+            numColumns={2}
+            data={feed}
+            renderItem={renderItem}
+        />
       ) : (
         <View style={styles.footer}>
           <Text style={styles.footerText}>No more articles at the moment</Text>

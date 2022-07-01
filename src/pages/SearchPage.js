@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, ScrollView, Text, Keyboard} from 'react-native';
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR } from '../theme';
-import { requestSearchResultLooks, requestSearchHistory } from '../redux/looks-reducer';
+import { requestSearchResultLooks, requestSearchHistory, requestTopics } from '../redux/looks-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 
 
-const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory}) => {
+const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory, requestTopics, topicsRecommended, topicsPopular}) => {
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
@@ -18,6 +18,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
 
     useEffect(() => {
         requestSearchHistory()
+        requestTopics()
     }, [])
 
     const onSubmit = () => {
@@ -63,7 +64,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                             hiddenButtonRef.current.blur()
                         }}/>}
                         {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation}/>}
-                        {(!isFocus && !isResult) && <SearchBlur feed={feed} navigation={navigation}/>}
+                        {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                     </View>
                 </ScrollView>
         </SafeAreaView>
@@ -97,7 +98,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     feed: state.feed.searchResultLooks,
-    history: state.feed.searchHistory
+    history: state.feed.searchHistory,
+    topicsRecommended: state.feed.topicsRecommended,
+    topicsPopular: state.feed.topicsPopular
 })
 
-export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory})(SearchPage);
+export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestTopics})(SearchPage);
