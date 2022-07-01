@@ -1,47 +1,69 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {View, StyleSheet, SafeAreaView, ScrollView, Text, Keyboard} from 'react-native';
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR } from '../theme';
-import { LooksFeed } from '../components/Feed/LooksFeed';
-import { requestSearchResultLooks } from '../redux/looks-reducer';
+import { requestSearchResultLooks, requestSearchHistory } from '../redux/looks-reducer';
 import { connect } from 'react-redux';
-import FeedCard from '../components/Feed/FeedCard';
+import SearchResult from '../components/Search/SearchResult';
+import SearchBlur from '../components/Search/SearchBlur';
+import SearchFocus from '../components/Search/SearchFocus';
 
-const SearchPage = ({navigation, looks, requestSearchResultLooks}) => {
-    const [value, setValue] = React.useState("");
+
+const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory}) => {
+    const hiddenButtonRef = useRef(null)
+    
+    const [value, setValue] = useState("");
+    const [isResult, setIsResult] = useState(false);
+    const [isFocus, setIsFocus] = useState(false);
+
+    useEffect(() => {
+        requestSearchHistory()
+    }, [])
 
     const onSubmit = () => {
-        console.log(value);
         requestSearchResultLooks(value)
+        setIsResult(true)
     }
 
     return (
         <SafeAreaView>
-            <SearchBar
-                platform="ios"
-                containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
-                inputContainerStyle={{backgroundColor: '#1F1F1F'}}
-                inputStyle={{backgroundColor: '#1F1F1F', color: GRAY_COLOR}}
-                onChangeText={newVal => setValue(newVal)}
-                onClearText={() => console.log(onClearText())}
-                placeholder="Искать"
-                placeholderTextColor="#888"
-                cancelButtonTitle="Отмена"
-                value={value}
-                onSubmitEditing={onSubmit}
+                <SearchBar
+                    platform="ios"
+                    containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
+                    inputContainerStyle={{backgroundColor: '#1F1F1F'}}
+                    inputStyle={{backgroundColor: '#1F1F1F', color: GRAY_COLOR}}
+                    onChangeText={newVal => {
+                        if(isResult){
+                            setIsResult(false)
+                        }
+                        setValue(newVal)
+                    }}
+                    placeholder="Искать"
+                    placeholderTextColor="#888"
+                    cancelButtonTitle="Отмена"
+                    value={value}
+                    onSubmitEditing={onSubmit}
+                    onFocus={() => {
+                        setIsFocus(true)
+                        setIsResult(false)
+                        requestSearchHistory()
+                    }}
+                    onBlur={() => {
+                        setIsFocus(false)
+                    }}
+                    blurOnSubmit={true}
+                    ref={hiddenButtonRef}
                 />
                 <ScrollView>
                     <View style={styles.container}>
-                        <View>
-                            {looks ? <View style={styles.row}>
-                                {looks.map((item,index) => (
-                                    <FeedCard item={item} key={index} navigation={navigation}/>
-                                ))}
-                            </View>:
-                            <View style={styles.footer}>
-                                <Text style={styles.footerText}>No more articles at the moment</Text> 
-                            </View>}
-                        </View>
+                        {(isFocus && !isResult) && <SearchFocus feed={history} navigation={navigation} onClick={(prop) => {
+                            setValue(prop)
+                            requestSearchResultLooks(prop)
+                            setIsResult(true)
+                            hiddenButtonRef.current.blur()
+                        }}/>}
+                        {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation}/>}
+                        {(!isFocus && !isResult) && <SearchBlur feed={feed} navigation={navigation}/>}
                     </View>
                 </ScrollView>
         </SafeAreaView>
@@ -74,7 +96,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-    looks: state.feed.searchResultLooks
+    feed: state.feed.searchResultLooks,
+    history: state.feed.searchHistory
 })
 
-export default connect(mapStateToProps, {requestSearchResultLooks})(SearchPage);
+export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory})(SearchPage);

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image } from 'react-native'
 import React, {useEffect, useState, useCallback} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR } from '../../theme';
 import { connect } from 'react-redux';
@@ -51,12 +51,14 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
   
   return (
     <ScrollView 
+      style={{width: '100%'}}
       showsVerticalScrollIndicator={false}
       refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
       onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
       scrollEventThrottle={16}>
-      <SkeletonFeed secondFetch={secondFetch} isFetching={isFetching}>
-        <View style={{paddingBottom: 100, height: '100%'}}>
+      <Image source={require('../../../assets/img/papaya.png')} style={styles.logo}/>
+        <SkeletonFeed secondFetch={secondFetch} isFetching={isFetching}>
+        <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
           <View style={{paddingHorizontal: 16}}>
             <Text style={styles.title}>Образ на сегодня</Text>
             <RecommendLook look={todayLook} navigation={navigation}/>
@@ -99,6 +101,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
 const styles = StyleSheet.create({
     container: {
       paddingHorizontal: 16,
+      paddingRight: 16
     },
     title: {
         color: TEXT_COLOR,
@@ -122,6 +125,15 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontFamily: 'SFmedium',
       fontSize: 16
+    },
+
+    logo: {
+      width: 135,
+      height: 30,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+      marginBottom: 20,
+      marginTop: 20
     }
 })
 

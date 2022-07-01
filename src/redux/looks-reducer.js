@@ -11,6 +11,7 @@ const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
 const TOGGLE_IS_LIST_END = 'TOGGLE_IS_LIST_END'
 const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_SEARCH_RESULT_LOOKS = 'SET_SEARCH_RESULT_LOOKS'
+const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
 
 let initialState = {
     looks: [],
@@ -23,7 +24,8 @@ let initialState = {
     currentItem: {},
     categoriesLooks: [],
     isListEnd: false,
-    searchResultLooks: []
+    searchResultLooks: [],
+    searchHistory: []
 }
 
 export const looksReducer = (state = initialState, action) => {
@@ -36,6 +38,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, categoriesLooks: action.categoriesLooks}
         case SET_SEARCH_RESULT_LOOKS: 
             return {...state, searchResultLooks: action.searchResultLooks}
+        case SET_SEARCH_HISTORY: 
+            return {...state, searchHistory: action.searchHistory}
         case SET_ITEM: 
             return {...state, currentItem: action.currentItem}
         case TOGGLE_IS_FETCHING: 
@@ -59,6 +63,7 @@ const setLooks = (looks) => ({ type: SET_LOOKS, looks })
 const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
 const setSearchResultLooks = (searchResultLooks) => ({ type: SET_SEARCH_RESULT_LOOKS, searchResultLooks })
+const setSearchHistory = (searchHistory) => ({ type: SET_SEARCH_HISTORY, searchHistory })
 const setCurrentItem = (currentItem) => ({ type: SET_ITEM, currentItem })
 const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
 const setTodayLook = (todayLook) => ({ type: SET_TODAY_LOOK, todayLook })
@@ -95,10 +100,21 @@ export const requestCategoriesLooks = (slug) => async (dispatch) => {
     }
 }
 
+export const requestSearchHistory = () => async (dispatch) => {
+    const response = await feedAPI.getSearchHistory()
+    if(response.status == 200){
+        dispatch(setSearchHistory(response.data))
+    }else{
+        console.log(response);
+    }
+}
+
 export const requestSearchResultLooks = (string) => async (dispatch) => {
     const response = await feedAPI.getSearchResult(string)
     if(response.status == 200){
-        dispatch(setSearchResultLooks(response.data.looks))
+        dispatch(setSearchResultLooks(
+            response.data.looks.map(el => ({...el, type: 'look'})).concat(response.data.topics.map(el => ({...el, type: 'topic'}))).sort((a, b) => a.rank - b.rank)
+        ))
     }else{
         console.log(response);
     }

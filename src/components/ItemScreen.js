@@ -26,7 +26,7 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
         <Text style={styles.title}>Образы с этим элементом</Text>
         <View style={styles.feed}>
             {item.looks && item.looks.map((item,index) => (
-              <FeedCard item={item} key={index} navigation={navigation}/>
+              <FeedCard item={item} key={index} navigation={navigation} withPop={true}/>
             ))}
           </View>
       </View>

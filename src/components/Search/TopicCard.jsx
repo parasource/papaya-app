@@ -5,17 +5,10 @@ import { Image } from 'react-native-elements'
 import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
 
-const FeedCard = ({navigation, item, withPop}) => {
+const TopicCard = ({navigation, item}) => {
   return (
-    <TouchableHighlight onPress = {
-      () => {
-        if(withPop){
-          navigation.pop(1) 
-        }
-        navigation.push('LookPage', { lookSlug: item.slug, lookName: item.name, item: item })
-      }}
+    <TouchableHighlight 
       style = {styles.wrapper}>
-        <View> 
           <View style={styles.cardWrapper}> 
             <SharedElement id={`feedCard${item.slug}`}>
               <Image source={{uri: `${storage}/${item.image}`}}
@@ -23,29 +16,40 @@ const FeedCard = ({navigation, item, withPop}) => {
                 style = {{height: '100%'}}
                 PlaceholderContent={<ActivityIndicator />}/>  
             </SharedElement>
+            <View style={styles.dark}>
+              <Text style={styles.text}>{item.name}</Text>
+            </View>
           </View>
-          <Text style={styles.text}>{item.name}</Text>
-        </View>
     </TouchableHighlight>
   )
 }
 
 const styles = StyleSheet.create({
     cardWrapper: {
-      height: 220,
+      height: 80,
       overflow: 'hidden',
-      borderRadius: 8
+      borderRadius: 8,
+      position: 'relative'
     },
     wrapper: {
-        marginTop: 16,
-        width: '48%',
+        marginTop: 12,
+        marginHorizontal: 8
+    },
+    dark: {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(17, 17, 17, .6)'
     },
     text: {
         color: TEXT_COLOR,
-        fontSize: 13,
+        fontSize: 17,
         fontFamily: 'SFregular',
-        marginTop: 4
     }
 })
 
-export default FeedCard
+export default TopicCard

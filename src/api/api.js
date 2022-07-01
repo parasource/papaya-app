@@ -97,5 +97,8 @@ export const feedAPI = {
     },
     getSearchResult(string) {
         return instance.get(`/search?q=${string}&page=0`)
+    },
+    getSearchHistory(string) {
+        return instance.get(`/search/history`)
     }
 }

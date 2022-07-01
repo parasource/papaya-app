@@ -19,7 +19,9 @@ export const LookItem = ({lookSlug, item, navigation}) => {
                 <Text style={styles.mute}>Бренды</Text>
                 <View style={styles.linksWrapper}>
                     {urlsArr.map(url => (
-                        <TouchableOpacity key={url.ID} onPress={() => Linking.openURL(url.url)} style={styles.linkWrapper}>
+                        <TouchableOpacity key={url.ID} 
+                        onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}
+                        style={styles.linkWrapper}>
                             <Text style={styles.link}>{url.brand.name}</Text>
                         </TouchableOpacity>
                     ))}
