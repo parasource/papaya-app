@@ -4,12 +4,20 @@ import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import TopicCard from "./TopicCard";
 import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryCard from "../Feed/MasonryCard";
 
 const SearchBlur = ({recommended, popular, navigation}) => {
-
   const renderItem = ({item}) => {
-    return <TopicCard key={item.slug} item={item} navigation={navigation} />
-  }
+    if (item.type == "look") {
+      return (
+        <MasonryCard key={item.slug} item={item} navigation={navigation}/>
+      );
+    } else {
+      return (
+        <TopicCard key={item.slug} item={item} navigation={navigation}/>
+      );
+    }
+  };
 
   return (
     <View>
@@ -25,6 +33,7 @@ const SearchBlur = ({recommended, popular, navigation}) => {
             numColumns={2}
             data={recommended}
             renderItem={renderItem}
+            scrollEnabled={false}
           />
         </View>
 
@@ -45,6 +54,7 @@ const SearchBlur = ({recommended, popular, navigation}) => {
             numColumns={2}
             data={popular}
             renderItem={renderItem}
+            scrollEnabled={false}
           />
         </View>
       ) : (

@@ -17,7 +17,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
     const [isFocus, setIsFocus] = useState(false);
 
     useEffect(() => {
-        requestSearchHistory()
+        requestSearchHistory(value)
         requestTopics()
     }, [])
 
@@ -38,6 +38,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                             setIsResult(false)
                         }
                         setValue(newVal)
+                        requestSearchHistory(value)
                     }}
                     placeholder="Искать"
                     placeholderTextColor="#888"
@@ -47,7 +48,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                     onFocus={() => {
                         setIsFocus(true)
                         setIsResult(false)
-                        requestSearchHistory()
+                        requestSearchHistory(value)
                     }}
                     onBlur={() => {
                         setIsFocus(false)

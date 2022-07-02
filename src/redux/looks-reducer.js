@@ -115,8 +115,8 @@ export const requestCategoriesLooks = (slug) => async (dispatch) => {
     }
 }
 
-export const requestSearchHistory = () => async (dispatch) => {
-    const response = await feedAPI.getSearchHistory()
+export const requestSearchHistory = (string) => async (dispatch) => {
+    const response = await feedAPI.getSearchHistory(string)
     if(response.status == 200){
         dispatch(setSearchHistory(response.data))
     }else{
@@ -180,7 +180,12 @@ export const requestTopics = () => async (dispatch) => {
     
     const responsePopular = await feedAPI.getPopularTopics()
     if(responsePopular.status == 200){
-        dispatch(setPopularTopics(responsePopular.data))
+        dispatch(setPopularTopics(
+            responsePopular.data.looks.map(el => ({...el, type: 'look'}))
+            .concat(responsePopular.data.topics.map(el => ({...el, type: 'topic'})))
+            .map(el => ({...el, sort: Math.random()}))
+            .sort((a, b) => a.sort - b.sort)
+        ))
     }else{
         console.log(responsePopular);
     }

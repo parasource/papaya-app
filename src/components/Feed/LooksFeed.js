@@ -1,14 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import { GRAY_COLOR } from '../../theme';
-import FeedCard from './FeedCard';
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
 export const LooksFeed = ({looks, isListEnd, navigation}) => {
     const renderItem = ({item, index}) => {
           return (
-            <MasonryCard key={index} item={item} navigation={navigation}/>
+            <MasonryCard key={item.slug+index} item={item} navigation={navigation}/>
           );
       };
 
@@ -24,6 +23,7 @@ export const LooksFeed = ({looks, isListEnd, navigation}) => {
                     numColumns={2}
                     data={looks}
                     renderItem={renderItem}
+                    scrollEnabled={false}
                 />}
             </View>
             <View style={styles.footer}>

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, Share } from 'react-native'
 import React, { useEffect } from 'react'
 import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -17,6 +17,19 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
   useEffect(() => {
       getCurrentLook(lookSlug)
   }, [item])
+
+  const shareHamdler = async () => {
+    const options={
+        message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
+    }
+
+    try{
+        const result = await Share.share(options)
+    }catch(err){
+        console.log(err);
+    }
+
+  }
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -40,7 +53,7 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
             ]}
        >
             <View style={styles.bar}>
-                <BounceAnimation component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+                <BounceAnimation onPress={shareHamdler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
                 <BounceAnimation onPress={() => {
                         if(isLiked){
                             unlikeLook(lookSlug)

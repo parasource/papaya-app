@@ -22,7 +22,7 @@ const SearchResult = ({feed, navigation}) => {
 
   return (
     <View>
-      {feed ? (
+      {feed.length > 0 ? (
         <MasonryList
           keyExtractor={(_, index) => toString(index)}
             contentContainerStyle={{
@@ -32,6 +32,7 @@ const SearchResult = ({feed, navigation}) => {
             numColumns={2}
             data={feed}
             renderItem={renderItem}
+            scrollEnabled={false}
         />
       ) : (
         <View style={styles.footer}>
