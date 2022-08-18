@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
     baseURL: 'http://api.papaya.parasource.tech/api'
+    // baseURL: 'http://62.113.102.18/api'
 })
 
 instance.interceptors.request.use(

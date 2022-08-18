@@ -5,9 +5,9 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
 export const LooksFeed = ({looks, isListEnd, navigation}) => {
-    const renderItem = ({item, index}) => {
+    const renderItem = ({item}) => {
           return (
-            <MasonryCard key={item.slug+index} item={item} navigation={navigation}/>
+            <MasonryCard key={item.slug} item={item} navigation={navigation}/>
           );
       };
 

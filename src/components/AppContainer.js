@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, StatusBar, Button } from 'react-native';
+import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
@@ -14,7 +14,6 @@ import { ProfileSettings } from '../pages/ProfileSettings';
 import { TabBottomNavigator } from './Navigation/TabNavigator';
 import { Notification } from './Notification';
 import { BG_COLOR } from '../theme';
-import { WardrobePage } from '../pages/WardrobePage';
 import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
@@ -92,16 +91,7 @@ const AppContainer = (props) => {
                   };
                 }})}
             />
-            <Share.Screen
-              name="ProfileSettings"
-              component={ProfileSettings}
-              options={{ title: 'Аккаунт'}}
-            />
-            <Share.Screen
-              name="Notification"
-              component={Notification}
-              options={{ title: 'Уведомления'}}
-            />
+            
             <Share.Group screenOptions={{ presentation: 'modal' }}>
                 <Share.Screen name="ItemModal" component={ItemScreen} 
                 options={({ route }) => ({ 
@@ -111,6 +101,16 @@ const AppContainer = (props) => {
                 options={{ 
                   title: "Гардероб",
                 }}/>
+                <Share.Screen
+                  name="ProfileSettings"
+                  component={ProfileSettings}
+                  options={{ title: 'Аккаунт'}}
+                />
+                <Share.Screen
+                  name="Notification"
+                  component={Notification}
+                  options={{ title: 'Уведомления'}}
+                />
                 <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
             </Share.Group>
         </Share.Navigator>

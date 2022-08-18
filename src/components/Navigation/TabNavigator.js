@@ -1,12 +1,15 @@
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomePage } from '../../pages/HomePage';
-import { WardrobePage } from '../../pages/WardrobePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
-import { GREEN_COLOR } from '../../theme';
-import { StyleSheet, Text, View } from 'react-native';
+import { TEXT_COLOR } from '../../theme';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
+import homeIcon from '../../../assets/img/icons/outline/home.png';
+import searchIcon from '../../../assets/img/icons/outline/search.png';
+import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
+import userIcon from '../../../assets/img/icons/outline/user.png';
+
 
 const Tab = createBottomTabNavigator()
 
@@ -18,27 +21,27 @@ export const TabBottomNavigator = () => {
           let iconName;
           let title;
           if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
+            iconName = homeIcon;
             title = "Главная"
           } else if (route.name === "Search") {
-            iconName = focused ? "search" : "search-outline";
+            iconName = searchIcon;
             title = "Поиск"
           } else if (route.name === "Favorites") {
-            iconName = focused ? "bookmark" : "bookmark-outline";
+            iconName = favoriteIcon;
             title = "Закладки"
           } else if (route.name === "Profile") {
-            iconName = focused ? "person" : "person-outline";
+            iconName = userIcon;
             title = "Профиль"
           }
           return (
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Ionicons name={iconName} size={size} color={color} />
+              <Image source={{uri: Image.resolveAssetSource(iconName).uri}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
               <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
             </View>
           )
         },
-        tabBarActiveTintColor: GREEN_COLOR,
-        tabBarInactiveTintColor: "#fff",
+        tabBarActiveTintColor: TEXT_COLOR,
+        tabBarInactiveTintColor: "rgba(255, 255,255, .5)",
         tabBarStyle: styles.tab,
         tabBarLabel: () => {return null},
         headerShown: false,
