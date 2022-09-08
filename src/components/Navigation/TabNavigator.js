@@ -1,4 +1,4 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
@@ -9,6 +9,8 @@ import homeIcon from '../../../assets/img/icons/outline/home.png';
 import searchIcon from '../../../assets/img/icons/outline/search.png';
 import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
 import userIcon from '../../../assets/img/icons/outline/user.png';
+import { BlurView } from 'expo-blur';
+
 
 
 const Tab = createBottomTabNavigator()
@@ -42,9 +44,13 @@ export const TabBottomNavigator = () => {
         },
         tabBarActiveTintColor: TEXT_COLOR,
         tabBarInactiveTintColor: "rgba(255, 255,255, .5)",
+        backgroundColor: 'transparent',
         tabBarStyle: styles.tab,
         tabBarLabel: () => {return null},
         headerShown: false,
+        tabBarBackground: () => (
+          <BlurView tint="dark" intensity={100} style={StyleSheet.absoluteFill} />
+        ),
       })}
     >
         <Tab.Screen
@@ -69,7 +75,7 @@ export const TabBottomNavigator = () => {
 
 const styles = StyleSheet.create({
   tab: {
-    backgroundColor: '#1F1F1F',
+    // backgroundColor: '#1F1F1F',
     paddingVertical: 8,
     minHeight: 60,
     borderTopLeftRadius: 8,
@@ -77,6 +83,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    right: 0
+    right: 0,
+    borderTopColor: '#666666',
+    backgroundColor: 'transparent'
   }
 })

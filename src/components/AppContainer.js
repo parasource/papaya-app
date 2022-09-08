@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
@@ -17,6 +17,7 @@ import { BG_COLOR } from '../theme';
 import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
+import { BlurView } from 'expo-blur';
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
@@ -67,6 +68,8 @@ const AppContainer = (props) => {
               name="LookPage"
               component={LookPage}
               options={({ route }) => ({ 
+                headerTransparent: true,
+                headerBlurEffect: 'dark',
                 title: route.params.lookName,
                 headerBackTitleVisible: false,
                 cardStyleInterpolator: ({ current: { progress } }) => {
@@ -75,7 +78,11 @@ const AppContainer = (props) => {
                       opacity: progress,
                     },
                   };
-                }, })}
+                },
+                headerTintColor: '#fff',
+               })
+              }
+
             />
             <Share.Screen
               name="TopicPage"
@@ -118,6 +125,8 @@ const AppContainer = (props) => {
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({})
 
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,

@@ -88,7 +88,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
           </ScrollView>
           <View style={styles.container}>
             <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
-              navigation={navigation} isListEnd={isListEnd}/>
+              navigation={navigation} isListEnd={isListEnd} page={page}/>
           </View>
         </View>
       </SkeletonFeed>

@@ -33,12 +33,13 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <View style={styles.space}></View>
         <View style={styles.wrapper}>
-                <SharedElement id={`feedCard${lookSlug}`}>
-                    <Image style={styles.image} 
-                    source={{uri: `${storage}/${item.image}`}}/>
-                </SharedElement>
-            </View>
+            <SharedElement id={`feedCard${lookSlug}`}>
+                <Image style={styles.image} 
+                source={{uri: `${storage}/${item.image}`}}/>
+            </SharedElement>
+        </View>
          <SkeletonContent
             containerStyle={{ flex: 1, width: '100%' }}
             boneColor="#121212"
@@ -100,13 +101,18 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
         paddingVertical: 20,
-        position: 'relative'
+        position: 'relative',
     },
     wrapper: {
         width: '100%',
         height: 500,
         overflow: 'hidden',
         borderRadius: 12,
+        // marginTop: 100
+    },
+    space: {
+        height: 100,
+        
     },
     image: {
         height: '100%',
