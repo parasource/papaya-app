@@ -2,6 +2,7 @@ import { feedAPI } from "../api/api"
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_LOOKS = 'SET_LOOKS'
+const SET_BOOKMARKED = 'SET_BOOKMARKED'
 const SET_CATEGORIES = 'SET_CATEGORIES'
 const SET_ITEM = 'SET_ITEM'
 const SET_LOOK = 'SET_LOOK'
@@ -15,6 +16,8 @@ const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
 const SET_TOPIC = 'SET_TOPIC'
 const SET_RECOMMENDED_TOPICS = 'SET_RECOMMENDED_TOPICS'
 const SET_POPULAR_TOPICS = 'SET_POPULAR_TOPICS'
+const TOGGLE_IS_SAVE = 'TOGGLE_IS_SAVE'
+
 
 let initialState = {
     looks: [],
@@ -31,13 +34,17 @@ let initialState = {
     currentTopic: {},
     topicsRecommended: [],
     topicsPopular: [],
-    searchHistory: []
+    searchHistory: [],
+    isSaved: false,
+    bookmarked: []
 }
 
 export const looksReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_LOOKS: 
             return {...state, looks: [...state.looks, ...action.looks]}
+        case SET_BOOKMARKED: 
+            return {...state, bookmarked: action.bookmarked}
         case SET_CATEGORIES: 
             return {...state, categories: action.categories}
         case SET_CATEGORIES_LOOKS: 
@@ -60,6 +67,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isDisliked: action.isDisliked}
         case TOGGLE_IS_LIST_END: 
             return {...state, isListEnd: action.isListEnd}
+        case TOGGLE_IS_SAVE: 
+            return {...state, isSaved: action.isSaved}
         case SET_POPULAR_TOPICS: 
             return {...state, topicsPopular: action.topicsPopular}
         case SET_RECOMMENDED_TOPICS: 
@@ -83,9 +92,11 @@ const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
 const toggleDisliked = (isDisliked) => ({ type: TOGGLE_DISLIKED, isDisliked })
 const toggleIsListEnd = (isListEnd) => ({ type: TOGGLE_IS_LIST_END, isListEnd })
+const toggleIsSaved = (isSaved) => ({ type: TOGGLE_IS_SAVE, isSaved })
 const setCurrentTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const setRecommendedTopics = (topicsRecommended) => ({ type: SET_RECOMMENDED_TOPICS, topicsRecommended })
 const setPopularTopics = (topicsPopular) => ({ type: SET_POPULAR_TOPICS, topicsPopular })
+const setBookmarked = (bookmarked) => ({ type: SET_BOOKMARKED, bookmarked })
 
 
 export const requestLooks = (page) => async (dispatch) => {
@@ -151,6 +162,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
         dispatch(setLook(response.data.look))
         dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleDisliked(response.data.isDisliked))
+        dispatch(toggleIsSaved(response.data.isSaved))
         dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
@@ -212,5 +224,23 @@ export const unlikeLook = (slug) => async (dispatch) => {
 export const undislikeLook = (slug) => async (dispatch) => {
     await feedAPI.undislikeLook(slug).then(res => {
         dispatch(toggleDisliked(false))
+    })
+}
+
+export const saveLook = (slug) => async (dispatch) => {
+    await feedAPI.saveLook(slug).then(res => {
+        dispatch(toggleIsSaved(true))
+    })
+}
+
+export const unsaveLook = (slug) => async (dispatch) => {
+    await feedAPI.unsaveLook(slug).then(res => {
+        dispatch(toggleIsSaved(false))
+    })
+}
+
+export const requestBookmarked = () => async (dispatch) => {
+    await feedAPI.getSaved().then(res => {
+        dispatch(setBookmarked(res.data))
     })
 }

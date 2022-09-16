@@ -112,7 +112,13 @@ export const feedAPI = {
     getPopularTopics() {
         return instance.get(`/search/popular`)
     },
-    getTopic(slug, page) {
-        return instance.get(`/topics/${slug}?page=${page}`)
+    getSaved(){
+        return instance.get(`/saved`)
+    },
+    saveLook(slug) {
+        return instance.post(`/saved/${slug}`)
+    },
+    unsaveLook(slug) {
+        return instance.delete(`/saved/${slug}`)
     },
 }

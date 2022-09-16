@@ -1,16 +1,31 @@
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Image, Share } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, Share } from 'react-native'
 import React, { useEffect } from 'react'
 import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
-import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook } from '../redux/looks-reducer';
+import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
 import { SharedElement } from 'react-navigation-shared-element';
 import { storage } from '../const';
 
-const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDisliked,likeLook,dislikeLook,unlikeLook,undislikeLook, navigation}) => {
+const LookPage = ({
+        route,
+        isFetching,
+        currentLook,
+        getCurrentLook,
+        isLiked,
+        isDisliked,
+        likeLook,
+        dislikeLook,
+        unlikeLook,
+        undislikeLook,
+        navigation,
+        saveLook, 
+        unsaveLook,
+        isSaved = false
+    }) => {
   const { lookSlug } = route.params;
   const { item } = route.params;
 
@@ -82,8 +97,14 @@ const LookPage = ({route,isFetching,currentLook,getCurrentLook,isLiked,isDislike
                     <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
                     style = {styles.icon}/>
                 }/>
-                <BounceAnimation component={
-                    <Icon name="bookmark-outline" style={styles.iconSM}/>
+                <BounceAnimation onPress={() => {
+                        if(isSaved){
+                            unsaveLook(lookSlug)
+                        }else{
+                            saveLook(lookSlug)
+                        }
+                    }} component={
+                    <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.iconSM}/>
                 }/>
             </View>
             <View style={{paddingBottom: 100}}>
@@ -157,6 +178,7 @@ const mapStateToProps = (state) => ({
     isFetching: state.feed.isFetching,
     isLiked: state.feed.isLiked,
     isDisliked: state.feed.isDisliked,
+    isSaved: state.feed.isSaved
 })
 
 LookPage.sharedElements = route => {
@@ -170,4 +192,4 @@ LookPage.sharedElements = route => {
     ];
 };
 
-export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook, unlikeLook, undislikeLook})(LookPage)
+export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook, unlikeLook, undislikeLook, saveLook, unsaveLook})(LookPage)
