@@ -230,12 +230,18 @@ export const undislikeLook = (slug) => async (dispatch) => {
 export const saveLook = (slug) => async (dispatch) => {
     await feedAPI.saveLook(slug).then(res => {
         dispatch(toggleIsSaved(true))
+        feedAPI.getSaved().then(response => {
+            dispatch(setBookmarked(response.data))
+        })
     })
 }
 
 export const unsaveLook = (slug) => async (dispatch) => {
     await feedAPI.unsaveLook(slug).then(res => {
         dispatch(toggleIsSaved(false))
+        feedAPI.getSaved().then(response => {
+            dispatch(setBookmarked(response.data))
+        })
     })
 }
 
