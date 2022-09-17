@@ -151,6 +151,20 @@ export const requestSearchResultLooks = (string) => async (dispatch) => {
     }
 }
 
+export const clearHistoryHandler = () => async (dispatch) => {
+    const response = await feedAPI.clearHistory()
+    if(response.status == 200){
+        const responseHistory = await feedAPI.getSearchHistory()
+        if(responseHistory.status == 200){
+            dispatch(setSearchHistory(responseHistory.data.search))
+        }else{
+            console.log(responseHistory);
+        }
+    }else{
+        console.log(response);
+    }
+}
+
 export const requestItem = (slug, id) => async (dispatch) => {
     const response = await feedAPI.getItem(slug, id)
     if(response.status == 200){

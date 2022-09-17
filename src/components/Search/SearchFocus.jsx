@@ -1,12 +1,12 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
 import searchIcon from '../../../assets/img/icons/outline/search.png';
 import trendIcon from '../../../assets/img/icons/outline/trending-up.png';
 
-const SearchFocus = ({feed, onClick}) => {
+const SearchFocus = ({feed, onClick, onClear}) => {
   const setHistory = feed.history.filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
@@ -21,7 +21,18 @@ const SearchFocus = ({feed, onClick}) => {
         <View>
           {feed.history.length > 0 && 
           <View style={styles.row}>
-            <Text style={styles.title}>Недавние</Text>
+            <View style={{
+              width: '100%',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              alignItems: 'center'
+              }}>
+                  <Text style={styles.title}>Недавние</Text>
+                  <TouchableOpacity onPress={() => onClear()}>
+                    <Text style={styles.clear}>Очистить</Text>
+                  </TouchableOpacity>
+              </View>
+            
             {setHistory.map((item, index) => {
               if(item.query ){
                 return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={searchIcon}/>
@@ -72,6 +83,11 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'SFsemibold',
     fontSize: 24,
+    color: TEXT_COLOR
+  },
+  clear: {
+    fontFamily: 'SFregular',
+    fontSize: 17,
     color: TEXT_COLOR
   }
 });

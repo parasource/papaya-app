@@ -117,4 +117,7 @@ export const feedAPI = {
     unsaveLook(slug) {
         return instance.delete(`/saved/${slug}`)
     },
+    clearHistory() {
+        return instance.post('/search/clear-history')
+    }
 }

@@ -1,15 +1,15 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, StyleSheet, SafeAreaView, ScrollView, Text, Keyboard} from 'react-native';
+import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR } from '../theme';
-import { requestSearchResultLooks, requestSearchHistory, requestTopics } from '../redux/looks-reducer';
+import { requestSearchResultLooks, requestSearchHistory, clearHistoryHandler } from '../redux/looks-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 
 
-const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory, requestTopics, topicsRecommended, topicsPopular}) => {
+const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory, clearHistoryHandler, topicsRecommended, topicsPopular}) => {
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
@@ -58,7 +58,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                 <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.container}>
                         {(isFocus && !isResult) && <View>
-                                <SearchFocus feed={history} navigation={navigation} onClick={(prop) => {
+                                <SearchFocus feed={history} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
                                     setValue(prop)
                                     requestSearchResultLooks(prop)
                                     setIsResult(true)
@@ -105,4 +105,4 @@ const mapStateToProps = (state) => ({
     topicsPopular: state.feed.topicsPopular
 })
 
-export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestTopics})(SearchPage);
+export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, clearHistoryHandler})(SearchPage);
