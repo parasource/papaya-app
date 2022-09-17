@@ -21,7 +21,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    requestLooks(page);
+    requestLooks(page, true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
@@ -48,7 +48,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
   }
   
   useEffect(() => {
-    requestLooks(page)
+    requestLooks(page, false)
   }, [page])
   
   return (

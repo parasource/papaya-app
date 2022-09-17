@@ -2,6 +2,7 @@ import { feedAPI } from "../api/api"
 
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const SET_LOOKS = 'SET_LOOKS'
+const SET_LOOKS_PAGE = 'SET_LOOKS_PAGE'
 const SET_BOOKMARKED = 'SET_BOOKMARKED'
 const SET_CATEGORIES = 'SET_CATEGORIES'
 const SET_ITEM = 'SET_ITEM'
@@ -41,8 +42,10 @@ let initialState = {
 
 export const looksReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_LOOKS: 
+        case SET_LOOKS_PAGE: 
             return {...state, looks: [...state.looks, ...action.looks]}
+        case SET_LOOKS: 
+            return {...state, looks: action.looks}
         case SET_BOOKMARKED: 
             return {...state, bookmarked: action.bookmarked}
         case SET_CATEGORIES: 
@@ -81,6 +84,7 @@ export const looksReducer = (state = initialState, action) => {
 }
 
 const setLooks = (looks) => ({ type: SET_LOOKS, looks })
+const setLooksPage = (looks) => ({ type: SET_LOOKS_PAGE, looks })
 const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
 const setSearchResultLooks = (searchResultLooks) => ({ type: SET_SEARCH_RESULT_LOOKS, searchResultLooks })
@@ -99,11 +103,15 @@ const setPopularTopics = (topicsPopular) => ({ type: SET_POPULAR_TOPICS, topicsP
 const setBookmarked = (bookmarked) => ({ type: SET_BOOKMARKED, bookmarked })
 
 
-export const requestLooks = (page) => async (dispatch) => {
+export const requestLooks = (page, onrefresh) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLooks(page)
     if(response.status == 200){
-        dispatch(setLooks(response.data.looks))
+        if(onrefresh){
+            dispatch(setLooks(response.data.looks))
+        }else{
+            dispatch(setLooksPage(response.data.looks))
+        }
         if(!response.data.looks.length){
             dispatch(toggleIsListEnd(true))
         }else{
@@ -118,11 +126,13 @@ export const requestLooks = (page) => async (dispatch) => {
 }
 
 export const requestCategoriesLooks = (slug) => async (dispatch) => {
-    const response = await feedAPI.getCategoriesLooks(slug)
-    if(response.status == 200){
-        dispatch(setCategoriesLooks(response.data.looks))
-    }else{
-        console.log(response);
+    if(slug){
+        const response = await feedAPI.getCategoriesLooks(slug)
+        if(response.status == 200){
+            dispatch(setCategoriesLooks(response.data.looks))
+        }else{
+            console.log(response);
+        }
     }
 }
 
