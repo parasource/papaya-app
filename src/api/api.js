@@ -99,12 +99,8 @@ export const feedAPI = {
     getSearchResult(string) {
         return instance.get(`/search?q=${string}&page=0`)
     },
-    getSearchHistory(string) {
-        if(string){
-            return instance.get('/search/suggest?q=' + string)
-        }else{
-            return instance.get(`/search/history`)
-        }
+    getSearchHistory() {
+        return instance.get(`/search/suggestions`)
     },
     getRecommendedTopics() {
         return instance.get(`/topics/recommended`)

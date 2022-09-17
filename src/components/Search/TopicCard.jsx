@@ -5,12 +5,12 @@ import { Image } from 'react-native-elements'
 import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
 
-const TopicCard = ({navigation, item}) => {
+const TopicCard = ({navigation, item, small}) => {
   return (
     <TouchableHighlight onPress = {
       () => navigation.navigate('TopicPage', { topicSlug: item.slug, topicName: item.name })} 
-      style = {styles.wrapper}>
-          <View style={styles.cardWrapper}> 
+      style = {{...styles.wrapper, marginHorizontal: small ? 6 : 8}}>
+          <View style={{...styles.cardWrapper, width: small ? 120 : 'auto'}}> 
             <SharedElement id={`feedCard${item.slug}`}>
               <Image source={{uri: `${storage}/${item.image}`}}
                 resizeMode = "cover"
@@ -27,14 +27,13 @@ const TopicCard = ({navigation, item}) => {
 
 const styles = StyleSheet.create({
     cardWrapper: {
-      height: 80,
+      height: 120,
       overflow: 'hidden',
       borderRadius: 8,
       position: 'relative'
     },
     wrapper: {
         marginTop: 12,
-        marginHorizontal: 8
     },
     dark: {
       width: '100%',
@@ -44,12 +43,12 @@ const styles = StyleSheet.create({
       left: 0,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(17, 17, 17, .6)'
+      backgroundColor: 'rgba(0, 0, 0, .45)'
     },
     text: {
         color: TEXT_COLOR,
-        fontSize: 17,
-        fontFamily: 'SFregular',
+        fontSize: 13,
+        fontFamily: 'SFsemibold',
     }
 })
 

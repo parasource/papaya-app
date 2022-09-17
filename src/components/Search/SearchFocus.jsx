@@ -1,23 +1,41 @@
 import React from "react";
 import { Text } from "react-native";
 import { View, StyleSheet } from "react-native";
-import { GRAY_COLOR } from "../../theme";
+import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
+import searchIcon from '../../../assets/img/icons/outline/search.png';
+import trendIcon from '../../../assets/img/icons/outline/trending-up.png';
 
 const SearchFocus = ({feed, onClick}) => {
-  const set = feed.filter((value, index, self) => {
+  const setHistory = feed.history.filter((value, index, self) => {
+    return self.findIndex(v => v.query === value.query) === index;
+  })
+
+  const setPopular = feed.suggestions.filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
 
   return (
     <View>
       {feed ? (
-        <View style={styles.row}>
-          {set.map((item, index) => {
-            if(item.query ){
-              return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)}/>
-            }
-          })}
+        <View>
+          {feed.history.length > 0 && 
+          <View style={styles.row}>
+            <Text style={styles.title}>Недавние</Text>
+            {setHistory.map((item, index) => {
+              if(item.query ){
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={searchIcon}/>
+              }
+            })}
+          </View>}
+          <View style={styles.row}>
+            <Text style={styles.title}>Также ищут</Text>
+            {setPopular.map((item, index) => {
+              if(item.query ){
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={trendIcon}/>
+              }
+            })}
+          </View>
         </View>
       ) : (
         <View style={styles.footer}>
@@ -35,6 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
+    marginBottom: 40
   },
   footer: {
       textAlign: 'center',
@@ -49,6 +68,11 @@ const styles = StyleSheet.create({
   container: {
       paddingHorizontal: 16,
       paddingBottom: 150
+  },
+  title: {
+    fontFamily: 'SFsemibold',
+    fontSize: 24,
+    color: TEXT_COLOR
   }
 });
 

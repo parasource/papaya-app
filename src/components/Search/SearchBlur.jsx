@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { ScrollView, Text } from "react-native";
 import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import TopicCard from "./TopicCard";
@@ -21,28 +21,20 @@ const SearchBlur = ({recommended, popular, navigation}) => {
 
   return (
     <View>
-      <Text style={styles.title}>Темы для вас</Text>
       {recommended ? (
-        <View style={styles.row}>
-          <MasonryList
-            keyExtractor={(_, index) => toString(index)}
-            contentContainerStyle={{
-              alignSelf: 'stretch',
-              marginHorizontal: -8
-            }}
-            numColumns={2}
-            data={recommended}
-            renderItem={renderItem}
-            scrollEnabled={false}
-          />
-        </View>
-
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.scrollRow}>
+            {recommended.map(card => (
+                <TopicCard key={card.slug} item={card} navigation={navigation} small={true}/>
+            ))}
+          </View>
+        </ScrollView>
       ) : (
         <View style={styles.footer}>
           <Text style={styles.footerText}>No more articles at the moment</Text>
         </View>
       )}
-      <Text style={styles.title}>Популярные темы</Text>
+      <Text style={styles.title}>Популярное</Text>
       {popular ? (
         <View style={styles.row}>
           <MasonryList
@@ -69,6 +61,12 @@ const SearchBlur = ({recommended, popular, navigation}) => {
 const styles = StyleSheet.create({
   row: {
     flex: 1,
+  },
+  scrollRow: {
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    width: 'auto',
+    maxHeight: 270,
   },
   footer: {
     textAlign: 'center',

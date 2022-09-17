@@ -36,7 +36,7 @@ let initialState = {
     topicsPopular: [],
     searchHistory: [],
     isSaved: false,
-    bookmarked: []
+    bookmarked: [],
 }
 
 export const looksReducer = (state = initialState, action) => {
@@ -126,12 +126,17 @@ export const requestCategoriesLooks = (slug) => async (dispatch) => {
     }
 }
 
-export const requestSearchHistory = (string) => async (dispatch) => {
-    const response = await feedAPI.getSearchHistory(string)
+export const requestSearchHistory = () => async (dispatch) => {
+    dispatch(toggleIsFetching(true))
+    const response = await feedAPI.getSearchHistory()
     if(response.status == 200){
-        dispatch(setSearchHistory(response.data))
+        dispatch(setSearchHistory(response.data.search))
+        dispatch(setPopularTopics(response.data.looks))
+        dispatch(setRecommendedTopics(response.data.topics))
+        dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 
@@ -179,27 +184,6 @@ export const getCurrentTopic = (slug, page) => async (dispatch) => {
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
-    }
-}
-
-export const requestTopics = () => async (dispatch) => {
-    const response = await feedAPI.getRecommendedTopics()
-    if(response.status == 200){
-        dispatch(setRecommendedTopics(response.data))
-    }else{
-        console.log(response);
-    }
-    
-    const responsePopular = await feedAPI.getPopularTopics()
-    if(responsePopular.status == 200){
-        dispatch(setPopularTopics(
-            responsePopular.data.looks.map(el => ({...el, type: 'look'}))
-            .concat(responsePopular.data.topics.map(el => ({...el, type: 'topic'})))
-            .map(el => ({...el, sort: Math.random()}))
-            .sort((a, b) => a.sort - b.sort)
-        ))
-    }else{
-        console.log(responsePopular);
     }
 }
 

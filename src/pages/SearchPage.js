@@ -17,8 +17,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
     const [isFocus, setIsFocus] = useState(false);
 
     useEffect(() => {
-        requestSearchHistory(value)
-        requestTopics()
+        requestSearchHistory()
     }, [])
 
     const onSubmit = () => {

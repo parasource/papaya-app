@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native';
 import {View, StyleSheet} from 'react-native';
 import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
 
-const SearchItem = ({item, onClick}) => {
+const SearchItem = ({item, onClick, icon}) => {
     return (
         <TouchableOpacity style={{
             width: '100%',
-            paddingVertical: 12,
+            paddingVertical: 8,
             borderBottomColor: GRAY_COLOR,
             borderBottomWidth: 1,
             alignItems: 'center',
@@ -15,9 +15,16 @@ const SearchItem = ({item, onClick}) => {
             flexDirection: 'row'
         }}
         onPress={() => onClick(item.query)}>
+            <Image source={{uri: Image.resolveAssetSource(icon).uri}} 
+            style={{
+            width: 24, 
+            height: 24,
+            marginRight: 16,
+            opacity: .5
+            }}/>
             <Text style={{
                 fontFamily: 'SFregular',
-                fontSize: 20,
+                fontSize: 17,
                 color: TEXT_COLOR
             }}
             >{item.query}</Text>

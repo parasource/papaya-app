@@ -11,8 +11,6 @@ import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
 import userIcon from '../../../assets/img/icons/outline/user.png';
 import { BlurView } from 'expo-blur';
 
-
-
 const Tab = createBottomTabNavigator()
 
 export const TabBottomNavigator = () => {
