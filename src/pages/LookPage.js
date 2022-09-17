@@ -37,7 +37,6 @@ const LookPage = ({
     const options={
         message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
     }
-
     try{
         const result = await Share.share(options)
     }catch(err){

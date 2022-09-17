@@ -17,6 +17,8 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
   const [isActive, setIsActive] = useState(null);
   const [secondFetch, setSecondFetch] = useState(false);
 
+
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     requestLooks(page);

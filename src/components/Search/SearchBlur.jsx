@@ -7,17 +7,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from "../Feed/MasonryCard";
 
 const SearchBlur = ({recommended, popular, navigation}) => {
-  const renderItem = ({item}) => {
-    if (item.type == "look") {
-      return (
-        <MasonryCard key={item.slug} item={item} navigation={navigation}/>
-      );
-    } else {
-      return (
-        <TopicCard key={item.slug} item={item} navigation={navigation}/>
-      );
-    }
-  };
+  const renderItem = ({item}) => (<MasonryCard key={item.slug} item={item} navigation={navigation}/>);
 
   return (
     <View>

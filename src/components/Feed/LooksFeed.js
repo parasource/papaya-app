@@ -5,11 +5,18 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
 export const LooksFeed = ({looks, isListEnd, navigation, page}) => {
+    const keyGenerator = () => '_' + Math.random().toString(36).substr(2, 9)
+
     const renderItem = ({item}) => {
+        const key = keyGenerator()
           return (
-            <MasonryCard key={item.slug + page} item={item} navigation={navigation}/>
+            <MasonryCard key={'_' + Math.random().toString(36).substr(2, 9)} item={item} navigation={navigation}/>
           );
       };
+
+      function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
 
     return (
         <View>
@@ -17,11 +24,11 @@ export const LooksFeed = ({looks, isListEnd, navigation, page}) => {
               {looks && <MasonryList
                     keyExtractor={(_, index) => toString(index)}
                     contentContainerStyle={{
-                    alignSelf: 'stretch',
-                    marginHorizontal: -8
+                        alignSelf: 'stretch',
+                        marginHorizontal: -8
                     }}
                     numColumns={2}
-                    data={looks}
+                    data={looks.filter(onlyUnique)}
                     renderItem={renderItem}
                     scrollEnabled={false}
                 />}
