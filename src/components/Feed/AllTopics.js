@@ -1,15 +1,12 @@
-import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { TEXT_COLOR } from '../../theme';
-import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { requestTopics } from '../../redux/looks-reducer';
 import { TopicCard } from './TopicCard';
 
 
 const AllTopics = ({navigation, isFetching, topics, requestTopics}) => {
-  const [page, setPage] = useState(0)
-
   useEffect(() => {
     requestTopics()
   }, [])

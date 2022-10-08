@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
@@ -17,10 +17,26 @@ import { BG_COLOR } from '../theme';
 import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
-import { BlurView } from 'expo-blur';
+import * as Notifications from 'expo-notifications';
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
+
+
+Notifications.scheduleNotificationAsync({
+  content: {
+    title: "🔔 Мы собрали вам образ на сегодня",
+    body: "посмотреть в приложении",
+    data: {
+      data: "goes here"
+    },
+  },
+  trigger: {
+    hour: 5,
+    minute: 45,
+    repeats: true,
+  },
+});
 
 const AppContainer = (props) => {
   useEffect(() => {
@@ -125,8 +141,6 @@ const AppContainer = (props) => {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({})
 
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,

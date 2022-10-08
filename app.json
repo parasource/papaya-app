@@ -4,12 +4,21 @@
     "slug": "papaya",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/img/logoPapaya.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#111111"
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/img/logoPapaya.png",
+          "color": "#ffffff"
+        }
+      ]
+  ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,7 +32,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#111111"
-      }
+      },
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

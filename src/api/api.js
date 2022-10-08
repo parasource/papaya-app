@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
     baseURL: 'http://api.papaya.parasource.tech/api'
-    // baseURL: 'http://62.113.102.18/api'
+    // baseURL: 'http://api.dev1.papaya.parasource.tech/api'
 })
 
 instance.interceptors.request.use(
@@ -102,6 +102,9 @@ export const feedAPI = {
     getSearchHistory() {
         return instance.get(`/search/suggestions`)
     },
+    getAutofill(string) {
+        return instance.get(`/search/autofill?q=${string}`)
+    },
     getRecommendedTopics() {
         return instance.get(`/topics/recommended`)
     },
@@ -119,5 +122,8 @@ export const feedAPI = {
     },
     clearHistory() {
         return instance.post('/search/clear-history')
-    }
+    },
+    getTopic(slug, page) {
+        return instance.get(`/topics/${slug}?page=${page}`)
+    },
 }

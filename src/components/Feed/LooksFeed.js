@@ -4,13 +4,10 @@ import { GRAY_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
-export const LooksFeed = ({looks, isListEnd, navigation, page}) => {
-    const keyGenerator = () => '_' + Math.random().toString(36).substr(2, 9)
-
-    const renderItem = ({item}) => {
-        const key = keyGenerator()
+export const LooksFeed = ({looks, isListEnd, navigation}) => {
+    const renderItem = ({item, index}) => {
           return (
-            <MasonryCard key={'_' + Math.random().toString(36).substr(2, 9)} item={item} navigation={navigation}/>
+            <MasonryCard key={index} item={item} navigation={navigation}/>
           );
       };
 

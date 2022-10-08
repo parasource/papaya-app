@@ -3,7 +3,6 @@ import { View, StyleSheet, ImageBackground, Text } from 'react-native';
 import {  } from 'react-native-web';
 import { BG_COLOR } from '../theme';
 import { FullButton } from '../components/UI/FullButton';
-import useFonts from '../hooks/useFont';
 
 export const FirstScreen = ({navigation}) => {
   return (
@@ -13,6 +12,7 @@ export const FirstScreen = ({navigation}) => {
       <View style={styles.wrapper}> 
         <Text style={styles.h1}>Добро пожаловать</Text>
         <Text style={styles.text}>Войди в аккаунт, чтобы преобразиться вместе с нами</Text>
+
         <FullButton label="Войти в аккаунт" style={{marginTop: 24}} to={'Login'} navigation={navigation}/>
         <FullButton label="У меня нет аккаунта" style={{marginTop: 11}} theme={'light'} to={'Register'} navigation={navigation}/>
       </View>

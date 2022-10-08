@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR } from '../theme';
-import { requestSearchResultLooks, requestSearchHistory, clearHistoryHandler } from '../redux/looks-reducer';
+import { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler } from '../redux/looks-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 
 
-const SearchPage = ({navigation, feed, history, requestSearchResultLooks, requestSearchHistory, clearHistoryHandler, topicsRecommended, topicsPopular}) => {
+const SearchPage = ({navigation, requestAutofill, autofill, feed, history, requestSearchResultLooks, requestSearchHistory, clearHistoryHandler, topicsRecommended, topicsPopular}) => {
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
@@ -47,7 +47,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                     onFocus={() => {
                         setIsFocus(true)
                         setIsResult(false)
-                        requestSearchHistory(value)
+                        requestAutofill(value)
                     }}
                     onBlur={() => {
                         setIsFocus(false)
@@ -58,7 +58,7 @@ const SearchPage = ({navigation, feed, history, requestSearchResultLooks, reques
                 <ScrollView keyboardShouldPersistTaps='handled'>
                     <View style={styles.container}>
                         {(isFocus && !isResult) && <View>
-                                <SearchFocus feed={history} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
+                                <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
                                     setValue(prop)
                                     requestSearchResultLooks(prop)
                                     setIsResult(true)
@@ -102,7 +102,8 @@ const mapStateToProps = (state) => ({
     feed: state.feed.searchResultLooks,
     history: state.feed.searchHistory,
     topicsRecommended: state.feed.topicsRecommended,
-    topicsPopular: state.feed.topicsPopular
+    topicsPopular: state.feed.topicsPopular,
+    autofill: state.feed.autofill
 })
 
-export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, clearHistoryHandler})(SearchPage);
+export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);

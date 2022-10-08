@@ -6,7 +6,7 @@ import SearchItem from "./SearchItem";
 import searchIcon from '../../../assets/img/icons/outline/search.png';
 import trendIcon from '../../../assets/img/icons/outline/trending-up.png';
 
-const SearchFocus = ({feed, onClick, onClear}) => {
+const SearchFocus = ({feed, onClick, onClear, autofill}) => {
   const setHistory = feed.history.filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
@@ -19,6 +19,15 @@ const SearchFocus = ({feed, onClick, onClear}) => {
     <View>
       {feed ? (
         <View>
+          {autofill.length ?  
+          <View>
+            {autofill.map((item, index) => {
+              if(item.query ){
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={searchIcon}/>
+              }
+            })}
+          </View>
+          : <View>
           {feed.history.length > 0 && 
           <View style={styles.row}>
             <View style={{
@@ -47,6 +56,7 @@ const SearchFocus = ({feed, onClick, onClear}) => {
               }
             })}
           </View>
+          </View>}
         </View>
       ) : (
         <View style={styles.footer}>

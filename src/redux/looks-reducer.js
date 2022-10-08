@@ -15,6 +15,7 @@ const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_SEARCH_RESULT_LOOKS = 'SET_SEARCH_RESULT_LOOKS'
 const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
 const SET_TOPIC = 'SET_TOPIC'
+const SET_AUTOFILL = 'SET_AUTOFILL'
 const SET_RECOMMENDED_TOPICS = 'SET_RECOMMENDED_TOPICS'
 const SET_POPULAR_TOPICS = 'SET_POPULAR_TOPICS'
 const TOGGLE_IS_SAVE = 'TOGGLE_IS_SAVE'
@@ -38,6 +39,7 @@ let initialState = {
     searchHistory: [],
     isSaved: false,
     bookmarked: [],
+    autofill: []
 }
 
 export const looksReducer = (state = initialState, action) => {
@@ -78,6 +80,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, topicsRecommended: action.topicsRecommended}
         case SET_TOPIC: 
             return {...state, currentTopic: action.currentTopic}
+        case SET_AUTOFILL: 
+            return {...state, autofill: action.autofill}
         default: 
             return state
     }
@@ -100,6 +104,7 @@ const toggleIsSaved = (isSaved) => ({ type: TOGGLE_IS_SAVE, isSaved })
 const setCurrentTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const setRecommendedTopics = (topicsRecommended) => ({ type: SET_RECOMMENDED_TOPICS, topicsRecommended })
 const setPopularTopics = (topicsPopular) => ({ type: SET_POPULAR_TOPICS, topicsPopular })
+const setAutofill = (autofill) => ({ type: SET_AUTOFILL, autofill })
 const setBookmarked = (bookmarked) => ({ type: SET_BOOKMARKED, bookmarked })
 
 
@@ -147,6 +152,15 @@ export const requestSearchHistory = () => async (dispatch) => {
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
+    }
+}
+
+export const requestAutofill = (string) => async (dispatch) => {
+    const response = await feedAPI.getAutofill(string)
+    if(response.status == 200){
+        dispatch(setAutofill(response.data))
+    }else{
+        console.log(response);
     }
 }
 
