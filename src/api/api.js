@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    baseURL: 'http://api.papaya.parasource.tech/api'
+    baseURL: 'https://api.papaya.parasource.tech/api'
     // baseURL: 'http://api.dev1.papaya.parasource.tech/api'
 })
 
