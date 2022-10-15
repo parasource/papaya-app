@@ -50,6 +50,9 @@ export const authAPI = {
             })
         }
         return response
+    },
+    googleLogin(token) {
+        return instance.post(`auth/login/google`, {accessToken: token})
     }
 }
 

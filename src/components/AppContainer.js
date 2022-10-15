@@ -6,7 +6,7 @@ import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
-import { checkToken } from '../redux/auth-reducer';
+import { checkToken, googleLogin } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
@@ -18,6 +18,10 @@ import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
 import * as Notifications from 'expo-notifications';
+import * as Linking from 'expo-linking';
+import { useState } from 'react';
+
+const prefix = Linking.createURL('/');
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
@@ -40,8 +44,17 @@ Notifications.scheduleNotificationAsync({
 
 const AppContainer = (props) => {
   useEffect(() => {
-    props.checkToken()
+    props.checkToken() 
   }, [])
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        LookPage: 'look'
+      }
+    }
+  };
 
   const MyTheme = {
     ...DarkTheme,
@@ -55,9 +68,9 @@ const AppContainer = (props) => {
   if(!props.isAuth){
     return(<>
       <StatusBar barStyle="light-content"/>
-      <NavigationContainer >
+      <NavigationContainer linking={linking}>
           <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="FirstScreen" component={FirstScreen} />
+            <Stack.Screen name="FirstScreen" component={() => <FirstScreen googleLogin={props.googleLogin}/>} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Register" component={RegisterPage} />
           </Stack.Navigator>
@@ -69,7 +82,7 @@ const AppContainer = (props) => {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content"/>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer theme={MyTheme} linking={linking}>
         <Share.Navigator screenOptions={{  
           headerShown: true, 
           headerBackTitleVisible: false  }}>
@@ -147,4 +160,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 })
 
-export default connect(mapStateToProps, {checkToken})(AppContainer)
+export default connect(mapStateToProps, {checkToken, googleLogin})(AppContainer)

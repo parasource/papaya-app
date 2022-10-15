@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Image, Share } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
 import { SharedElement } from 'react-navigation-shared-element';
 import { storage } from '../const';
+import * as Linking from 'expo-linking';
 
 const LookPage = ({
         route,
@@ -29,13 +30,22 @@ const LookPage = ({
   const { lookSlug } = route.params;
   const { item } = route.params;
 
+  const [link, setLink] = useState('')
+
   useEffect(() => {
       getCurrentLook(lookSlug)
+      Linking.getInitialURL().then((url) => {
+        if (url) {
+          console.log('Initial url is: ' + url);
+          setLink(url)
+        }
+      }).catch(err => console.error('An error occurred', err));
   }, [item])
 
   const shareHamdler = async () => {
     const options={
         message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
+        url: link
     }
     try{
         const result = await Share.share(options)
@@ -131,8 +141,7 @@ const styles = StyleSheet.create({
         // marginTop: 100
     },
     space: {
-        height: 100,
-        
+        height: 60,
     },
     image: {
         height: '100%',

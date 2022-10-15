@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, ImageBackground, Text } from 'react-native';
-import {  } from 'react-native-web';
 import { BG_COLOR } from '../theme';
 import { FullButton } from '../components/UI/FullButton';
+import * as Google from 'expo-auth-session/providers/google'
 
-export const FirstScreen = ({navigation}) => {
+export const FirstScreen = ({navigation, googleLogin}) => {
+  const [_, __, promptAsync] = Google.useAuthRequest({
+    expoClientId: '514770009692-qjgk66iibo568l92bn4c0qo6hppjh5gl.apps.googleusercontent.com',
+    iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    useProxy: true
+  })
+
+  const googleHandler = useCallback(async () => {
+    const response = await promptAsync()
+    const { access_token } = response.params
+
+    await googleLogin(access_token)
+  })
+
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.img} source={require('../../assets/img/zack.jpg')}/>
@@ -12,7 +26,7 @@ export const FirstScreen = ({navigation}) => {
       <View style={styles.wrapper}> 
         <Text style={styles.h1}>Добро пожаловать</Text>
         <Text style={styles.text}>Войди в аккаунт, чтобы преобразиться вместе с нами</Text>
-
+        <FullButton label="Google" style={{marginTop: 24}} pressHandler={() => googleHandler()}/>
         <FullButton label="Войти в аккаунт" style={{marginTop: 24}} to={'Login'} navigation={navigation}/>
         <FullButton label="У меня нет аккаунта" style={{marginTop: 11}} theme={'light'} to={'Register'} navigation={navigation}/>
       </View>
