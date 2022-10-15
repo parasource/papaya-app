@@ -70,7 +70,6 @@ export const requestCategories = () => async (dispatch) => {
     let response = await wardrobeAPI.getAllWardrobe()
     if(response.status == 200){
         const categories = response.data.map(category => ({name: category.name, id: category.ID, preview: category.preview}))
-        console.log(categories[0].preview);
         dispatch(getCategories(categories))
         dispatch(toggleIsFetching(false))
     }else{

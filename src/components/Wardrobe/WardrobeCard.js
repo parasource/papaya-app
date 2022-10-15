@@ -4,10 +4,6 @@ import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../../theme'
 import { storage } from '../../const'
 
 const WardrobeCard = ({item, navigation}) => {
-useEffect(() => {
-    console.log(item.preview);
-}, []);
-
   return (
     <TouchableOpacity style={styles.wrapper} onPress={() => navigation.navigate('WardrobeDetail', ({categoryId: item.id, categoryName: item.name}))}>
         <Image style={styles.image} source={{uri: `${storage}/${item.preview}`}}/>

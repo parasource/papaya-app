@@ -94,13 +94,9 @@ const AppContainer = (props) => {
                 headerShown: false
               }}
             />
-            <Share.Screen
-              name="LookPage"
-              component={LookPage}
-              options={({ route }) => ({ 
+            <Share.Group screenOptions={{ 
                 headerTransparent: true,
                 headerBlurEffect: 'dark',
-                title: route.params.lookName,
                 headerBackTitleVisible: false,
                 cardStyleInterpolator: ({ current: { progress } }) => {
                   return {
@@ -110,29 +106,32 @@ const AppContainer = (props) => {
                   };
                 },
                 headerTintColor: '#fff',
-               })
-              }
-
-            />
-            <Share.Screen
-              name="TopicPage"
-              component={TopicPage}
-              options={({ route }) => ({ 
-                title: route.params.topicName,
-                headerBackTitleVisible: false,
-                cardStyleInterpolator: ({ current: { progress } }) => {
-                  return {
-                    cardStyle: {
-                      opacity: progress,
-                    },
-                  };
-                }})}
-            />
-            <Share.Screen name="Wardrobe" component={Wardrobe} 
-            options={{ 
-              title: "Гардероб",
-            }}/>
-            <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+             }}>
+              <Share.Screen
+                name="LookPage"
+                component={LookPage}
+                options={({ route }) => ({ title: route.params.lookName,})}
+              />
+              <Share.Screen
+                name="TopicPage"
+                component={TopicPage}
+                options={({ route }) => ({ 
+                  title: route.params.topicName,
+                  headerBackTitleVisible: false,
+                  cardStyleInterpolator: ({ current: { progress } }) => {
+                    return {
+                      cardStyle: {
+                        opacity: progress,
+                      },
+                    };
+                  }})}
+              />
+              <Share.Screen name="Wardrobe" component={Wardrobe} 
+              options={{ 
+                title: "Гардероб",
+              }}/>
+              <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+            </Share.Group>
             
             <Share.Group screenOptions={{ presentation: 'modal' }}>
                 <Share.Screen name="ItemModal" component={ItemScreen} 

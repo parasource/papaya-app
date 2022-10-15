@@ -4,9 +4,9 @@ import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
 import { storage } from '../../const'
 
-export const WardrobeThingCard = ({item, navigation, selected, onPress}) => {
+export const WardrobeThingCard = ({item, selected, onPress}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
         <View style={styles.wrapper}>
             <Image 
             style={styles.image} 

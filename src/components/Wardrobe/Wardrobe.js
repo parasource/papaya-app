@@ -15,7 +15,8 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
     }, [])
 
     return(
-      <View style={{paddingHorizontal: 16}}>
+      <View style={{paddingHorizontal: 16, flex: 1}}>
+        <View style={{height: 70}}></View>
         {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={categories}
@@ -23,7 +24,7 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
                 renderItem={({item, index}) => <WardrobeCard 
                 item={item}
                 key={index} 
-                navigation={navigation}/>}
+                navigation={navigation} />}
             />
         }
       </View>
