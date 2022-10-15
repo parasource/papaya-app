@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from "react-redux"
 import { requestCategories, requestSelectedWardrobe } from '../../redux/wardrobe-reducer';
-import { View, StyleSheet, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
 import { TEXT_COLOR } from '../../theme';
 
@@ -16,12 +16,9 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
 
     return(
       <View style={{paddingHorizontal: 16}}>
-        {/* <Text style={styles.title}>Гардероб</Text> */}
         {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={categories}
-                numColumns={2}
-                columnWrapperStyle={styles.row}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({item, index}) => <WardrobeCard 
                 item={item}

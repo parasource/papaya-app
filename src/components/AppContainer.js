@@ -128,16 +128,17 @@ const AppContainer = (props) => {
                   };
                 }})}
             />
+            <Share.Screen name="Wardrobe" component={Wardrobe} 
+            options={{ 
+              title: "Гардероб",
+            }}/>
+            <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
             
             <Share.Group screenOptions={{ presentation: 'modal' }}>
                 <Share.Screen name="ItemModal" component={ItemScreen} 
                 options={({ route }) => ({ 
                   title: route.params.itemName,
                 })}/>
-                <Share.Screen name="Wardrobe" component={Wardrobe} 
-                options={{ 
-                  title: "Гардероб",
-                }}/>
                 <Share.Screen
                   name="ProfileSettings"
                   component={ProfileSettings}
@@ -148,7 +149,6 @@ const AppContainer = (props) => {
                   component={Notification}
                   options={{ title: 'Уведомления'}}
                 />
-                <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
             </Share.Group>
         </Share.Navigator>
       </NavigationContainer>

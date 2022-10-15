@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { requestAllWardrobe, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
-import WardrobeThingCard from './WardrobeThingCard';
+import { WardrobeThingCard } from './WardrobeThingCard';
 
 const WardrobeDetail = ({
     route,
@@ -27,9 +27,9 @@ const WardrobeDetail = ({
           <>
             <FlatList
                 data={wardrobeThings[0]}
-                numColumns={3}
+                numColumns={2}
                 renderItem={({item}) => (
-                <WardrobeThingCard 
+                <WardrobeThingCard
                   item={item} 
                   key={item.id}
                   selected={selectedWardrobeId.includes(item.id)}

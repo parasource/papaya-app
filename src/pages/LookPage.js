@@ -4,12 +4,13 @@ import { TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
-import { BounceAnimation } from '../components/UI/BounceAnimation';
+
 import { LookItem } from '../components/LookItem';
 import SkeletonContent from 'react-native-skeleton-content';
 import { SharedElement } from 'react-navigation-shared-element';
 import { storage } from '../const';
 import * as Linking from 'expo-linking';
+import { BounceAnimation } from '../components/UI/BounceAnimation';
 
 const LookPage = ({
         route,
@@ -42,7 +43,7 @@ const LookPage = ({
       }).catch(err => console.error('An error occurred', err));
   }, [item])
 
-  const shareHamdler = async () => {
+  const shareHandler = async () => {
     const options={
         message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
         url: link
@@ -78,7 +79,7 @@ const LookPage = ({
             ]}
        >
             <View style={styles.bar}>
-                <BounceAnimation onPress={shareHamdler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+                <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
                 <BounceAnimation onPress={() => {
                         if(isLiked){
                             unlikeLook(lookSlug)
