@@ -53,6 +53,9 @@ export const authAPI = {
     },
     googleLogin(token) {
         return instance.post(`auth/login/google`, {accessToken: token})
+    },
+    appleLogin(token) {
+        return instance.post(`auth/login/apple`, {identityToken: token})
     }
 }
 

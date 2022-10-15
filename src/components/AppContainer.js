@@ -6,7 +6,7 @@ import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
-import { checkToken, googleLogin } from '../redux/auth-reducer';
+import { checkToken, googleLogin, appleLogin } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
@@ -70,7 +70,7 @@ const AppContainer = (props) => {
       <StatusBar barStyle="light-content"/>
       <NavigationContainer linking={linking}>
           <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="FirstScreen" component={() => <FirstScreen googleLogin={props.googleLogin}/>} />
+            <Stack.Screen name="FirstScreen" component={() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>} />
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Register" component={RegisterPage} />
           </Stack.Navigator>
@@ -160,4 +160,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 })
 
-export default connect(mapStateToProps, {checkToken, googleLogin})(AppContainer)
+export default connect(mapStateToProps, {checkToken, googleLogin, appleLogin})(AppContainer)

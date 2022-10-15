@@ -159,3 +159,22 @@ export const googleLogin = (token) => async (dispatch) => {
         dispatch(setLoginError(response))
     }
 }
+
+export const appleLogin = (token) => async (dispatch) => {
+    let response = await authAPI.appleLogin(token)
+    if(response.status == 200){
+        const accessToken = response.data.token;
+        await SecureStore.setItemAsync('token', accessToken)
+        let userResponse = await authAPI.me()
+        let {
+            ID,
+            email,
+            name
+        } = userResponse.data
+        dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setLoginError(''))
+    }else{
+        console.log(response);
+        dispatch(setLoginError(response))
+    }
+}
