@@ -1,10 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { BG_COLOR } from '../theme';
+import { BG_COLOR, GRAY_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
+import { Video } from 'expo-av';
 
 export const FirstScreen = ({navigation, googleLogin, appleLogin}) => {
+  const video = useRef(null)
+
   const [_, __, promptAsync] = Google.useAuthRequest({
     expoClientId: '514770009692-qjgk66iibo568l92bn4c0qo6hppjh5gl.apps.googleusercontent.com',
     iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
@@ -32,11 +35,20 @@ export const FirstScreen = ({navigation, googleLogin, appleLogin}) => {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.wrapper}> 
-      {/* <Video source={require('../../assets/video/slider.mov')} style={styles.video}/> */}
-        <Text style={styles.h1}>Добро пожаловать</Text>
-        <Text style={styles.text}>Войди в аккаунт, чтобы преобразиться вместе с нами</Text>
+        <Video 
+          ref={video}
+          source={require('../../assets/video/slider.mov')}
+          repeat={true}
+          resizeMode={"contain"}
+          isLooping
+          style={styles.video}
+          shouldPlay
+          rate={1}/>
+        <View style={styles.textBlock}>
+          <Text style={styles.h1}>Начни стильно одеваться</Text>
+          <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
+        </View>
         <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
             <Image source={require('../../assets/img/icons/apple.png')} style={styles.appleIcon}/>
             <Text style={styles.appleBtnText}>
@@ -105,23 +117,29 @@ const styles = StyleSheet.create({
    h1: {
      fontSize: 32,
      color: '#fff',
-     fontFamily: 'GilroyMedium'
+     fontFamily: 'SFbold',
+     textAlign: 'center',
+     textTransform: 'uppercase'
    },
    text: {
     fontSize: 16,
-    color: '#fff',
+    color: GRAY_COLOR,
     marginTop: 8,
-    maxWidth: 280,
-    fontFamily: 'GilroyRegular'
+    width: 175,
+    fontFamily: 'SFregular',
+    textAlign: 'center'
    },
    wrapper: {
     flex: 1,
     justifyContent: 'flex-end',
     paddingBottom: 62,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
    },
    video: {
-    width: '100%',
-    height: 375
+    flex: 1,
+    marginHorizontal: -16,
+   },
+   textBlock: {
+    alignItems: 'center'
    }
 })

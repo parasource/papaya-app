@@ -19,7 +19,6 @@ import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
-import { useState } from 'react';
 
 const prefix = Linking.createURL('/');
 
@@ -70,7 +69,9 @@ const AppContainer = (props) => {
       <StatusBar barStyle="light-content"/>
       <NavigationContainer linking={linking}>
           <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="FirstScreen" component={() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>} />
+            <Stack.Screen name="FirstScreen">
+                {() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>}
+            </Stack.Screen> 
             <Stack.Screen name="Login" component={LoginPage} />
             <Stack.Screen name="Register" component={RegisterPage} />
           </Stack.Navigator>
