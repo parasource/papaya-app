@@ -5,6 +5,7 @@ import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
+import { LinearGradient } from 'react-native-skeleton-content/node_modules/expo-linear-gradient';
 
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
@@ -24,6 +25,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
              resizeMode = "cover"
              style = {{height: 358, flex: 1}}
              PlaceholderContent={<ActivityIndicator />}/>
+             <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}/>
              <View style={{paddingHorizontal: 16}}>
                <Text style={styles.title}>{currentTopic?.topic?.name}</Text>
                <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
@@ -32,7 +34,6 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
               {currentTopic?.looks?.map(item => (
                 <FeedCard item={item} key={item.ID} navigation={navigation}/>
               ))}
-              {console.log(currentTopic)}
             </View>
           </View>
       }
@@ -57,14 +58,14 @@ const styles = StyleSheet.create({
     },
     title: {
         color: TEXT_COLOR,
-        fontFamily: 'SFsemibold',
-        fontSize: 24,
+        fontFamily: 'SFbold',
+        fontSize: 34,
         marginTop: 10,
     },
     desc: {
         color: GRAY_COLOR,
         fontFamily: 'SFregular',
-        fontSize: 13,
+        fontSize: 17,
         marginTop:8,
         marginBottom: 16
     },
@@ -73,6 +74,11 @@ const styles = StyleSheet.create({
         height: 300,
         resizeMode: 'cover',
         borderRadius: 8,
+    },
+    gradient: {
+      width: '100%',
+      height: 118,
+      marginTop: -118
     }
 })
 
