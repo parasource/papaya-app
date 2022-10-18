@@ -2,6 +2,7 @@ import { wardrobeAPI } from "../api/api"
 
 const GET_ALL_WARDROBE = 'GET_ALL_WARDROBE'
 const GET_SELECTED_WARDROBE = 'GET_SELECTED_WARDROBE'
+const GET_SELECTED_WARDROBE_THINGS = 'GET_SELECTED_WARDROBE_THINGS'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_FETCHING_ID = 'TOGGLE_IS_FETCHING_ID'
 const ADD_THING = 'ADD_THING'
@@ -22,6 +23,8 @@ export const wardrobeReducer = (state = initialState, action) => {
         case GET_ALL_WARDROBE:
             return {...state, ...action.payload}
         case GET_SELECTED_WARDROBE:
+            return {...state, ...action.payload}
+        case GET_SELECTED_WARDROBE_THINGS:
             return {...state, ...action.payload}
         case TOGGLE_IS_FETCHING: 
             return {...state, isFetching: action.isFetching}
@@ -45,6 +48,7 @@ export const wardrobeReducer = (state = initialState, action) => {
 
 const getAllWardrobe = (wardrobeThings) => ({type: GET_ALL_WARDROBE, payload: {wardrobeThings}})
 const getSelectedWardrobe = (selectedWardrobeId) => ({type: GET_SELECTED_WARDROBE, payload: {selectedWardrobeId}})
+const getSelectedWardrobeThings = (selectedWardrobe) => ({type: GET_SELECTED_WARDROBE_THINGS, payload: {selectedWardrobe}})
 const getCategories = (categories) => ({type: GET_ALL_WARDROBE, payload: {categories}})
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 const removeThing = (id) => ({type: REMOVE_THING, payload: {id}})
@@ -98,6 +102,19 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
     let response = await wardrobeAPI.getSelectedWardrobe()
     if(response.status == 200){
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
+        dispatch(toggleIsFetching(false))
+    }else{
+        console.log("Wardrobe error: ", response.data.message);
+        dispatch(toggleIsFetching(false))
+    }
+}
+
+export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
+    dispatch(toggleIsFetching(true))
+    let response = await wardrobeAPI.getSelectedWardrobe()
+    if(response.status == 200){
+        let wardrobeThings = response.data.filter(item => item.category_id === id)
+        dispatch(getSelectedWardrobeThings(wardrobeThings))
         dispatch(toggleIsFetching(false))
     }else{
         console.log("Wardrobe error: ", response.data.message);

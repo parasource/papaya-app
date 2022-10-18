@@ -19,6 +19,7 @@ import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
+import MyWardrobe from './Wardrobe/MyWardrobe';
 
 const prefix = Linking.createURL('/');
 
@@ -129,6 +130,10 @@ const AppContainer = (props) => {
               <Share.Screen name="Wardrobe" component={Wardrobe} 
               options={{ 
                 title: "Гардероб",
+              }}/>
+              <Share.Screen name="MyWardrobe" component={MyWardrobe} 
+              options={{ 
+                title: "Мой гародероб",
               }}/>
               <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
             </Share.Group>

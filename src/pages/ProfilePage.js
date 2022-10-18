@@ -42,7 +42,7 @@ const ProfilePage = ({navigation, logout, login, id, email}) => {
             <FullButton label="Пригласить"/>
           </View>
           <View style={styles.settingsWrap}>
-              <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('Wardrobe')}>
+              <TouchableOpacity style={styles.settingsCard} onPress={() => navigation.navigate('MyWardrobe')}>
                 <Text style={styles.settingsTitle}>Гардероб</Text>
                 <Text style={styles.settingsText} numberOfLines={1}>Изменить вещи в гардеробе</Text>
               </TouchableOpacity>

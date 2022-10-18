@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image } from 'react-native'
 import React, {useEffect, useState, useCallback} from 'react'
-import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR } from '../../theme';
+import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { RecommendLook } from '../RecommendLook';
@@ -67,7 +67,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
             <TouchableOpacity
                 accessibilityRole="button"
                 onPress={() => onPress(null)}
-                style={{...styles.btnWrapper, backgroundColor: isActive == null ? GREEN_COLOR : '#1F1F1F' }}
+                style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG }}
               >
                 <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
                   Для вас
@@ -78,7 +78,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
                 key={category.ID}
                 accessibilityRole="button"
                 onPress={() => onPress(category.ID, category.slug)}
-                style={{...styles.btnWrapper, backgroundColor: isActive == category.ID ? GREEN_COLOR : '#1F1F1F' }}
+                style={{...styles.btnWrapper, backgroundColor: isActive == category.ID ? TEXT_COLOR : INPUTS_BG }}
               >
                 <Text style={{...styles.btnAnimated, color: isActive == category.ID ? BG_COLOR : GRAY_COLOR}}>
                   {category.name}
@@ -117,16 +117,17 @@ const styles = StyleSheet.create({
     btnWrapper: { 
       minWidth: 120,
       paddingVertical: 8,
-      paddingHorizontal: 36,
-      borderRadius: 32,
+      paddingHorizontal: 28,
+      borderRadius: 12,
       marginLeft: 8,
+      height: 34
     },
     btnAnimated: {
       textAlign: 'center',
       fontFamily: 'SFmedium',
-      fontSize: 16
+      fontSize: 16,
+      height: 34
     },
-
     logo: {
       width: 135,
       height: 30,
