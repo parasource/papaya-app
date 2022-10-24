@@ -28,7 +28,6 @@ const SearchBlur = ({recommended, popular, navigation}) => {
       {popular ? (
         <View style={styles.row}>
           <MasonryList
-            keyExtractor={(_, index) => toString(index)}
             contentContainerStyle={{
               alignSelf: 'stretch',
               marginHorizontal: -8

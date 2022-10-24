@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Animated, Image as ReactImage } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Animated, Image } from 'react-native'
 import React, { useRef } from 'react'
 import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
-import { Image } from 'react-native-elements'
 import { storage } from '../../const'
 
 export const WardrobeThingCard = ({item, selected, onPress}) => {
@@ -18,19 +17,16 @@ export const WardrobeThingCard = ({item, selected, onPress}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={pressHandler}>
         <View style={styles.wrapper}>
-            <Image 
-            style={styles.image} 
-            source={{uri: `${storage}/${item.image}`}}
-            PlaceholderContent={<ActivityIndicator />}/>
+            <Image style={styles.image} source={{uri: `${storage}/${item.image}`}}/>
         </View>
         <View style={styles.textBlock}>
             <Text style={styles.text}>{item.name}</Text>
-            <TouchableOpacity onPress={pressHandler} >
+            <TouchableOpacity>
                     <Animated.View style={{
                         ...styles.button,
                         backgroundColor:  selected ? GREEN_COLOR : INPUTS_BG
                         }}>
-                        <ReactImage source={selected ? 
+                        <Image source={selected ? 
                         require("../../../assets/img/icons/outline/plusBlack.png") :
                         require("../../../assets/img/icons/outline/plus.png")}
                         style={{

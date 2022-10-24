@@ -56,6 +56,9 @@ export const authAPI = {
     },
     appleLogin(token) {
         return instance.post(`auth/login/apple`, {identityToken: token})
+    },
+    updateSettings(data) {
+        return instance.post('profile/update-settings', {data})
     }
 }
 
@@ -64,6 +67,7 @@ export const wardrobeAPI = {
         return instance.get(`/get-wardrobe-items`)
     },
     setWardrobe(interests) {
+        console.log(interests);
         return instance.post(`/profile/set-wardrobe`, interests)
     },
     getSelectedWardrobe() {

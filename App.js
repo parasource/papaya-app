@@ -5,7 +5,6 @@ import AppLoading from 'expo-app-loading';
 import useFonts from './src/hooks/useFont';
 import AppContainer from './src/components/AppContainer';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {
@@ -17,6 +16,23 @@ Notifications.setNotificationHandler({
   }
 })
 
+Notifications.cancelAllScheduledNotificationsAsync(localNotifications)
+
+const localNotifications = Notifications.scheduleNotificationAsync({
+  content: {
+    title: "🔔 Мы собрали вам образ на сегодня",
+    body: "посмотреть в приложении",
+    data: {
+      data: "goes here"
+    },
+  },
+  trigger: {
+    hour: 5,
+    minute: 45,
+    repeats: true,
+  },
+});
+
 export default function App() {
   const [IsReady, SetIsReady] = useState(false);
 
@@ -25,16 +41,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    Permissions.getAsync(Permissions.NOTIFICATIONS).then((statusObj) => {
-      if (statusObj.status !== 'granted') {
-        return Permissions.askAsync(Permissions.NOTIFICATIONS)
-      }
-      return statusObj;
-    }).then((statusObj) => {
-      if (statusObj.status !== 'granted') {
-        return;
-      }
-    })
+    Notifications.getPermissionsAsync()
   }, [])
 
   if (!IsReady) {

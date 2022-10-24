@@ -11,6 +11,7 @@ let initialState = {
     id: null,
     email: null,
     login: null,
+    sex: null,
     accessToken: null,
     isAuth: false,
     loginError: '', 
@@ -40,13 +41,14 @@ export const authReducer = (state = initialState, action) => {
 }
 
 
-export const setAuthUserData = (id, email, login, accessToken, isAuth) =>
+export const setAuthUserData = (id, email, login, sex, accessToken, isAuth) =>
     ({
         type: SET_USER_DATA,
         payload: {
             id,
             email,
-            login,
+            login, 
+            sex,
             accessToken,
             isAuth
         }
@@ -77,9 +79,10 @@ export const login = (data) => async (dispatch) => {
         let {
             ID,
             email,
-            name
+            name,
+            sex
         } = userResponse.data
-        dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, sex, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))
@@ -95,9 +98,10 @@ export const register = (data) => async (dispatch) => {
         let {
             ID,
             email,
-            name
+            name,
+            sex
         } = userResponse.data
-        dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, sex, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))
@@ -110,9 +114,10 @@ export const requestUser = () => async (dispatch) => {
         let {
             ID,
             email,
-            name
+            name,
+            sex
         } = response.data
-        dispatch(setAuthUserData(ID, email, name))
+        dispatch(setAuthUserData(ID, email, name, sex))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))
@@ -133,10 +138,28 @@ export const checkToken = () => async (dispatch) => {
             let {
                 ID,
                 email,
-                name
+                name,
+                sex
             } = userResponse.data
-            dispatch(setAuthUserData(ID, email, name, token, true))
+            dispatch(setAuthUserData(ID, email, name, sex, token, true))
         }
+    }
+}
+
+export const updateUser = (data) => async (dispatch) => {
+    let response = await authAPI.updateSettings(data)
+    if(response.status == 200){
+        let userResponse = await authAPI.me()
+        let {
+            ID,
+            email,
+            name,
+            sex
+        } = userResponse.data
+        dispatch(setAuthUserData(ID, email, name, sex))
+        dispatch(setLoginError(''))
+    }else{
+        dispatch(setLoginError(response))
     }
 }
 
@@ -150,9 +173,10 @@ export const googleLogin = (token) => async (dispatch) => {
         let {
             ID,
             email,
-            name
+            name,
+            sex
         } = userResponse.data
-        dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, sex, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         console.log(response);
@@ -169,9 +193,10 @@ export const appleLogin = (token) => async (dispatch) => {
         let {
             ID,
             email,
-            name
+            name,
+            sex
         } = userResponse.data
-        dispatch(setAuthUserData(ID, email, name, accessToken, true))
+        dispatch(setAuthUserData(ID, email, name, sex, accessToken, true))
         dispatch(setLoginError(''))
     }else{
         console.log(response);

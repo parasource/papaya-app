@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
    wrapper: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingBottom: 62,
     paddingHorizontal: 16,
+    paddingBottom: 16
    },
    video: {
     flex: 1,

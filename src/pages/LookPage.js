@@ -118,6 +118,7 @@ const LookPage = ({
                 }/>
             </View>
             <View style={{paddingBottom: 100}}>
+                <Text style={styles.text}>{currentLook.desc}</Text>
                 <Text style={styles.title}>Элементы образа</Text>
                 {currentLook?.items?.map(item => (
                     <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
@@ -139,7 +140,6 @@ const styles = StyleSheet.create({
         height: 500,
         overflow: 'hidden',
         borderRadius: 12,
-        // marginTop: 100
     },
     space: {
         height: 60,
@@ -172,13 +172,13 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR,
         fontFamily: 'SFsemibold',
         fontSize: 24,
-        marginTop: 24
+        marginTop: 12
     },
     text: {
         color: TEXT_COLOR,
         fontFamily: 'SFregular',
         fontSize: 16,
-        marginTop: 8
+        marginTop: 24
     }
 })
 

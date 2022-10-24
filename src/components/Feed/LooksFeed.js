@@ -5,28 +5,19 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
 export const LooksFeed = ({looks, isListEnd, navigation}) => {
-    const renderItem = ({item, index}) => {
-          return (
-            <MasonryCard key={index} item={item} navigation={navigation}/>
-          );
-      };
-
-      function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-      }
-
     return (
         <View>
             <View style={styles.row}>
               {looks && <MasonryList
-                    keyExtractor={(_, index) => toString(index)}
                     contentContainerStyle={{
                         alignSelf: 'stretch',
                         marginHorizontal: -8
                     }}
                     numColumns={2}
-                    data={looks.filter(onlyUnique)}
-                    renderItem={renderItem}
+                    data={looks}
+                    renderItem={({item}) => {
+                        return item ? <MasonryCard key={'looks-item' + item.ID} item={item} navigation={navigation}/> : <></>
+                    }}
                     scrollEnabled={false}
                 />}
             </View>

@@ -24,7 +24,6 @@ const SearchResult = ({feed, navigation}) => {
     <View>
       {feed.length > 0 ? (
         <MasonryList
-          keyExtractor={(_, index) => toString(index)}
             contentContainerStyle={{
               alignSelf: 'stretch',
               marginHorizontal: -8
