@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { requestSelectedWardrobeThings, requestCategories, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
-import { LinearGradient } from 'react-native-skeleton-content/node_modules/expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MyWardrobe = ({
     isFetching,
@@ -16,37 +16,60 @@ const MyWardrobe = ({
     setInterests,
     categories, 
     requestCategories, 
-    requestSelectedWardrobe,
     navigation
   }) => {
+  const wardrobeRef = useRef(null)
 
   const [categoryId, setCategoryId] = useState(1);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     requestCategories()
-    requestSelectedWardrobe()
   }, [])
 
   useEffect(() => {
     requestSelectedWardrobeThings(categoryId)
-  }, [categoryId])
+    wardrobeRef?.current?.scrollToIndex({
+      index: index, 
+      animated: true, 
+      viewOffset: 16
+    })
+  }, [categoryId, index])
 
-  const categoriesList = () => (
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabWrapper}>
-        {categories && categories.map((category) => (
+  const categoriesList = () => {
+    if(categories.length){
+        return (<FlatList
+        ref={wardrobeRef}
+        data={categories}
+        horizontal 
+        initialScrollIndex={index}
+        renderItem={({item, index}) => (
           <TouchableOpacity
-            key={category.id}
+            key={'category-wardrobe-'+item.id}
             accessibilityRole="button"
-            onPress={() => setCategoryId(category.id)}
-            style={{...styles.btnWrapper, backgroundColor: categoryId == category.id ? TEXT_COLOR : INPUTS_BG }}
+            onPress={() => {
+              setIndex(index)
+              setCategoryId(item.id)
+            }}
+            style={{...styles.btnWrapper, backgroundColor: categoryId == item.id ? TEXT_COLOR : INPUTS_BG }}
           >
-            <Text style={{...styles.btnAnimated, color: categoryId == category.id ? BG_COLOR : GRAY_COLOR}}>
-              {category.name}
+            <Text style={{...styles.btnAnimated, color: categoryId == item.id ? BG_COLOR : GRAY_COLOR}}>
+              {item.name}
             </Text>
           </TouchableOpacity>
-        )) }
-      </ScrollView>
-  )
+        )}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            wardrobeRef.current?.scrollToIndex({ index: info.index, animated: true });
+          });
+        }}
+        showsHorizontalScrollIndicator={false} 
+        style={styles.tabWrapper}
+      />)
+    }else{
+      return null
+    }}
 
   return (
     <View style={styles.row}>
@@ -54,10 +77,11 @@ const MyWardrobe = ({
         <FlatList
             data={selectedWardrobe}
             numColumns={2}
+            keyExtractor={(item) => item.id + "wardrobe-thing"}
             renderItem={({item}) => (
             <WardrobeThingCard
+              isFetching={isFetching}
               item={item} 
-              key={item.id}
               selected={selectedWardrobeId.includes(item.id)}
               onPress={() => {
                 if(selectedWardrobeId.includes(item.id)){
@@ -70,14 +94,6 @@ const MyWardrobe = ({
               }}
               />
             )}
-            // ListEmptyComponent={()=>{
-            //     return  isFetching ? 
-            //     <ActivityIndicator animating size="large"/> : <Text>data is empty</Text>
-            //   }}
-            //   refreshControl={<RefreshControl
-            //                      colors={["#9Bd35A", "#689F38"]}
-            //                      refreshing={isFetching}
-            //                    />}
             ListHeaderComponent={categoriesList}
             ListFooterComponent={() => <View style={{height: 128}}></View>}
         />
@@ -157,4 +173,4 @@ const mapStateToProps = (state) => ({
   categories: state.wardrobe.categories
 })
 
-export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, setInterests, removeThingWardrobe, addThingWardrobe, requestSelectedWardrobe})(MyWardrobe)
+export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, setInterests, removeThingWardrobe, addThingWardrobe})(MyWardrobe)

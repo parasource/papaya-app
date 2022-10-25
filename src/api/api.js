@@ -1,4 +1,5 @@
 import axios from "axios";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
@@ -27,29 +28,24 @@ const setInterseptors = (response) => {
     )
 }
 
+const refreshAuthLogic = async failedRequest => {
+    const refresh = await SecureStore.getItemAsync("refresh_token")
+    instance.post('/auth/refresh', {"refresh_token": refresh}).then(async (tokenRefreshResponse) => {
+        await SecureStore.setItemAsync('token', tokenRefreshResponse.data.token)
+        failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
+        console.log(tokenRefreshResponse);
+        return Promise.resolve();
+    }).catch(err => {
+        console.log('err', err);
+    })
+};
+
+createAuthRefreshInterceptor(instance, refreshAuthLogic);
+
+
 export const authAPI = {
     me() {
         return instance.get(`auth/user`)
-    },
-    login(values) {
-        let response = instance.post(`auth/login`, values)
-        .catch(error => {return error = error?.response?.data?.message});
-        if(response.status == 200){
-            response.then((res) => {
-                setInterseptors(res)
-            })
-        }
-        return response
-    },
-    register(values) {
-        let response =  instance.post(`auth/register`, {...values, "sex": "male"})
-        .catch(error => {return error?.response?.data?.message});
-        if(response.status == 200){
-            response.then((res) => {
-                setInterseptors(res)
-            })
-        }
-        return response
     },
     googleLogin(token) {
         return instance.post(`auth/login/google`, {accessToken: token})
@@ -58,7 +54,7 @@ export const authAPI = {
         return instance.post(`auth/login/apple`, {identityToken: token})
     },
     updateSettings(data) {
-        return instance.post('profile/update-settings', {data})
+        return instance.post('profile/update-settings', data)
     }
 }
 
@@ -80,7 +76,9 @@ export const feedAPI = {
         return instance.get(`/feed?page=${page}`)
     },
     getCategoriesLooks(slug) {
-        return instance.get(`/feed/${slug}`)
+        let res = instance.get(`/feed/${slug}`)
+        res.then(req => console.log(req.data.looks.length))
+        return res
     },
     getLook(slug) {
         return instance.get(`/looks/${slug}`)

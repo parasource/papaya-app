@@ -5,11 +5,15 @@ import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { updateUser } from '../redux/auth-reducer';
 import { connect } from 'react-redux';
 
-const ProfileSettingsContainer = ({ login, sex, updateUser }) => {
+const ProfileSettingsContainer = ({ name, sex, updateUser }) => {
     const [stateSex, setSex] = useState(sex)
-    const [name, setName] = useState(login)
+    const [stateName, setName] = useState(name)
 
-    const BUTTONS = ['male', 'female', 'Отмена']
+    const BUTTONS = [
+      "Mужской", 
+      "Женский", 
+      "Отмена"
+    ]
 
       const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions({
@@ -18,16 +22,16 @@ const ProfileSettingsContainer = ({ login, sex, updateUser }) => {
         },
         (buttonIndex) => {
           if(buttonIndex !== 2){
-            setSex(BUTTONS[buttonIndex]);
-            updateUser({"sex": stateSex})
+            setSex(buttonIndex === 0 ? "male" : "female");
+            updateUser({"sex": (buttonIndex === 0 ? "male" : "female"), "name": stateName})
           }
         });
       }
 
-      const handleChange = (text) => {
-        if(text.trim().length > 0){
-          setName(text.trim())
-          updateUser({"login": name})
+      const handleChange = () => {
+        let str = stateName.trim()
+        if(str.length > 0){
+          updateUser({"sex": stateSex, "name": str})
         }else{
           setName(name)
         }
@@ -42,14 +46,15 @@ const ProfileSettingsContainer = ({ login, sex, updateUser }) => {
                 style={styles.listItem}
                 placeholder="Имя"
                 placeholderTextColor={GRAY_COLOR}
-                onChangeText={text => handleChange(text)}
-                value={name}
+                onBlur={handleChange}
+                onChangeText={text => setName(text)}
+                value={stateName}
               />
             <Text style={styles.label}>Учетные данные</Text>
             <TouchableOpacity style={styles.listItem} onPress={showActionSheet}>
               <Text style={styles.listItemLabel}>Ваш пол</Text>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.mute}>{stateSex}</Text>
+                <Text style={styles.mute}>{sex === "male" ? "Муж." : "Жен."}</Text>
                 <Chevron style={styles.chevron}/>
               </View>
             </TouchableOpacity>
@@ -126,7 +131,7 @@ const ProfileSettingsContainer = ({ login, sex, updateUser }) => {
   })
 
 const mapStateToProps = (state) => ({
-  login: state.auth.login, 
+  name: state.auth.name, 
   sex: state.auth.sex
 })
 

@@ -18,7 +18,7 @@ const AllTopics = ({navigation, isFetching, topics, requestTopics}) => {
          <View style={{paddingBottom: 100, paddingHorizontal: 16, height: '100%'}}>
             <View style={styles.row}>
               {topics?.map(item => (
-                <TopicCard item={item} key={item.slug} navigation={navigation}/>
+                <TopicCard item={item} key={item.slug + 'topic-card'} navigation={navigation}/>
               ))}
             </View>
           </View>

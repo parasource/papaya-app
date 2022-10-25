@@ -31,8 +31,7 @@ export const wardrobeReducer = (state = initialState, action) => {
         case TOGGLE_IS_FETCHING_ID: 
             return {...state, fetchingId: action.fetchingId}
         case ADD_THING: 
-            let addWardrobe = [...state.selectedWardrobeId]
-            addWardrobe.push(action.payload.id)
+            let addWardrobe = [...state.selectedWardrobeId, action.payload.id]
             return {...state, selectedWardrobeId: addWardrobe}
         case REMOVE_THING: 
             let removeWardrobe = [...state.selectedWardrobeId]
@@ -87,11 +86,11 @@ export const setInterests = (interests) => async (dispatch) => {
     await wardrobeAPI.setWardrobe(interests)
 }
 
-export const removeThingWardrobe = (id) => async (dispatch) => {
+export const removeThingWardrobe = (id) => (dispatch) => {
     dispatch(removeThing(id))
 }
 
-export const addThingWardrobe = (id) => async (dispatch) => {
+export const addThingWardrobe = (id) => (dispatch) => {
     dispatch(addThing(id))
 }
 
@@ -115,6 +114,7 @@ export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
     if(response.status == 200){
         let wardrobeThings = response.data.filter(item => item.category_id === id)
         dispatch(getSelectedWardrobeThings(wardrobeThings))
+        dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
         dispatch(toggleIsFetching(false))
     }else{
         console.log("Wardrobe error: ", response.data.message);

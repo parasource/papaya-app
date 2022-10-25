@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image } from 'react-native'
-import React, {useEffect, useState, useCallback} from 'react'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image, FlatList } from 'react-native'
+import React, {useEffect, useState, useCallback, useRef} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
@@ -12,9 +12,12 @@ const wait = timeout => {
 };
 
 const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd, categories, categoriesLooks, requestCategoriesLooks}) => {
+  const categoriesRef = useRef(null)
+  
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
   const [isActive, setIsActive] = useState(null);
+  const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
 
   const onRefresh = useCallback(() => {
@@ -36,14 +39,22 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
     }
   }
 
-  const onPress = (index, slug) => {
+  const onPress = (id, slug, index) => {
     requestCategoriesLooks(slug)
-    setIsActive(index)
+    setIsActive(id)
+    index ? setIndex(index) : setIndex(0)
   }
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
    return layoutMeasurement.height + contentOffset.y  >= contentSize.height - 50
   }
+  
+  useEffect(() => {
+    categoriesRef.current?.scrollToIndex({
+      index: index, 
+      animated: true, 
+      viewOffset: 16})
+  }, [index])
   
   useEffect(() => {
     requestLooks(page, false)
@@ -63,29 +74,46 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
             <Text style={styles.title}>Образ на сегодня</Text>
             <RecommendLook look={todayLook} navigation={navigation}/>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabWrapper}>
-            <TouchableOpacity
-                accessibilityRole="button"
-                onPress={() => onPress(null)}
-                style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG }}
-              >
-                <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
-                  Для вас
-                </Text>
-              </TouchableOpacity>
-            {categories && categories.map((category) => (
-              <TouchableOpacity
-                key={'category' + category.ID}
-                accessibilityRole="button"
-                onPress={() => onPress(category.ID, category.slug)}
-                style={{...styles.btnWrapper, backgroundColor: isActive == category.ID ? TEXT_COLOR : INPUTS_BG }}
-              >
-                <Text style={{...styles.btnAnimated, color: isActive == category.ID ? BG_COLOR : GRAY_COLOR}}>
-                  {category.name}
-                </Text>
-              </TouchableOpacity>
-            )) }
-          </ScrollView>
+          <FlatList
+            ref={categoriesRef}
+            data={[{ID: null}, ...categories]}
+            horizontal 
+            keyExtractor={(item,index) => 'category'+item.ID}
+            initialScrollIndex={index}
+            onScrollToIndexFailed={info => {
+              const wait = new Promise(resolve => setTimeout(resolve, 500));
+              wait.then(() => {
+                categoriesRef.current?.scrollToIndex({ index: info.index, animated: true });
+              });
+            }}
+            renderItem={({item, index}) => {
+              if(item.ID === null){
+                return (
+                  <TouchableOpacity
+                  accessibilityRole="button"
+                  onPress={() => onPress(null)}
+                  style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG }}
+                >
+                  <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
+                    Для вас
+                  </Text>
+                </TouchableOpacity>
+                )
+              }
+              return(
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  onPress={() => onPress(item.ID, item.slug, index)}
+                  style={{...styles.btnWrapper, backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG }}
+                >
+                  <Text style={{...styles.btnAnimated, color: isActive == item.ID ? BG_COLOR : GRAY_COLOR}}>
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}}
+            showsHorizontalScrollIndicator={false} 
+            style={styles.tabWrapper}
+          />
           <View style={styles.container}>
             <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
               navigation={navigation} isListEnd={isListEnd} page={page}/>

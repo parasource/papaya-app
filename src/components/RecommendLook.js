@@ -9,7 +9,7 @@ export const RecommendLook = ({look, navigation}) => {
 
     return (
         <View style={styles.wrapper}>
-            <TouchableOpacity style={styles.imgBlock} onPress={() => navigation.navigate('LookPage', { lookSlug: look.slug, item: look})}>
+            <TouchableOpacity style={styles.imgBlock} onPress={() => navigation.navigate('LookPage', { lookSlug: look.slug, item: look, lookName: 'Образ на сегодня'})}>
                 <ImageUi uri={`${storage}/${look.image}`}/>
             </TouchableOpacity>
             <View style={styles.imgWrap}>

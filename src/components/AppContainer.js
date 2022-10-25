@@ -77,13 +77,6 @@ const AppContainer = (props) => {
                 headerTransparent: true,
                 headerBlurEffect: 'dark',
                 headerBackTitleVisible: false,
-                cardStyleInterpolator: ({ current: { progress } }) => {
-                  return {
-                    cardStyle: {
-                      opacity: progress,
-                    },
-                  };
-                },
                 headerTintColor: '#fff',
              }}>
               <Share.Screen

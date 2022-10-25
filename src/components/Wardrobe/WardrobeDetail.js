@@ -1,6 +1,6 @@
 import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { requestAllWardrobe, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe } from '../../redux/wardrobe-reducer';
+import { requestAllWardrobe, requestSelectedWardrobe, addThingWardrobe, setInterests, removeThingWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';

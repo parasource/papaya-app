@@ -108,22 +108,23 @@ const setAutofill = (autofill) => ({ type: SET_AUTOFILL, autofill })
 const setBookmarked = (bookmarked) => ({ type: SET_BOOKMARKED, bookmarked })
 
 
-export const requestLooks = (page, onrefresh) => async (dispatch) => {
+export const requestLooks = (page, onRefresh) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLooks(page)
     if(response.status == 200){
-        if(onrefresh){
+        if(onRefresh){
             dispatch(setLooks(response.data.looks))
         }else{
-            dispatch(setLooksPage(response.data.looks))
+            if(!response.data.looks){
+                dispatch(toggleIsListEnd(true))
+                dispatch(toggleIsFetching(false))
+            }else{
+                dispatch(setLooksPage(response.data.looks))
+                dispatch(setCategories(response.data.categories))
+                dispatch(setTodayLook(response.data.todayLook))
+                dispatch(toggleIsFetching(false))
+            }
         }
-        if(!response.data.looks.length){
-            dispatch(toggleIsListEnd(true))
-        }else{
-            dispatch(setCategories(response.data.categories))
-            dispatch(setTodayLook(response.data.todayLook))
-        }
-        dispatch(toggleIsFetching(false))
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
@@ -132,11 +133,15 @@ export const requestLooks = (page, onrefresh) => async (dispatch) => {
 
 export const requestCategoriesLooks = (slug) => async (dispatch) => {
     if(slug){
+        dispatch(toggleIsFetching(true))
+        dispatch(toggleIsListEnd(false))
         const response = await feedAPI.getCategoriesLooks(slug)
         if(response.status == 200){
             dispatch(setCategoriesLooks(response.data.looks))
+            dispatch(toggleIsFetching(false))
         }else{
             console.log(response);
+            dispatch(toggleIsFetching(false))
         }
     }
 }

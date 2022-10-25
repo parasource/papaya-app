@@ -5,7 +5,7 @@ import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
-import { LinearGradient } from 'react-native-skeleton-content/node_modules/expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {

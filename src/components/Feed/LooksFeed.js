@@ -15,8 +15,8 @@ export const LooksFeed = ({looks, isListEnd, navigation}) => {
                     }}
                     numColumns={2}
                     data={looks}
-                    renderItem={({item}) => {
-                        return item ? <MasonryCard key={'looks-item' + item.ID} item={item} navigation={navigation}/> : <></>
+                    renderItem={({item, index}) => {
+                        return item ? <MasonryCard key={'looks-item' + item.slug + index} item={item} navigation={navigation}/> : <></>
                     }}
                     scrollEnabled={false}
                 />}
