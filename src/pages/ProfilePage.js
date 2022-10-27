@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { logout } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
-import { useEffect } from 'react';
 
 const ProfilePage = ({navigation, logout, name}) => {
   const [isActive, setIsActive] = useState(true)
@@ -36,7 +35,7 @@ const ProfilePage = ({navigation, logout, name}) => {
           <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('ProfileSettings')}>
             <View>
               <Text style={styles.profileName}>{name}</Text>
-              <Text style={styles.muteText}>Изменить логин, пароль и электронную почту</Text>
+              <Text style={styles.muteText}>Изменить логин и пол</Text>
             </View>
             <Chevron style={styles.chevron}/>
           </TouchableOpacity>

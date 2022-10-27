@@ -33,7 +33,6 @@ const refreshAuthLogic = async failedRequest => {
     instance.post('/auth/refresh', {"refresh_token": refresh}).then(async (tokenRefreshResponse) => {
         await SecureStore.setItemAsync('token', tokenRefreshResponse.data.token)
         failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
-        console.log(tokenRefreshResponse);
         return Promise.resolve();
     }).catch(err => {
         console.log('err', err);
@@ -63,7 +62,6 @@ export const wardrobeAPI = {
         return instance.get(`/get-wardrobe-items`)
     },
     setWardrobe(interests) {
-        console.log(interests);
         return instance.post(`/profile/set-wardrobe`, interests)
     },
     getSelectedWardrobe() {
@@ -76,9 +74,7 @@ export const feedAPI = {
         return instance.get(`/feed?page=${page}`)
     },
     getCategoriesLooks(slug) {
-        let res = instance.get(`/feed/${slug}`)
-        res.then(req => console.log(req.data.looks.length))
-        return res
+        return instance.get(`/feed/${slug}`)
     },
     getLook(slug) {
         return instance.get(`/looks/${slug}`)

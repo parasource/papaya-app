@@ -45,15 +45,30 @@ const AppContainer = (props) => {
     },
   };
 
-  if(!props.isAuth){
+  if(!props.isAuth || props.isFirstTime){
     return(<>
       <StatusBar barStyle="light-content"/>
-      <NavigationContainer linking={linking}>
-          <Stack.Navigator screenOptions={{headerShown: false}}>
+      <NavigationContainer theme={MyTheme} linking={linking}>
+          {!props.isAuth ? <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="FirstScreen">
                 {() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>}
             </Stack.Screen> 
           </Stack.Navigator>
+          :
+          <Stack.Navigator screenOptions={{ 
+            headerTransparent: true,
+            headerBlurEffect: 'dark',
+            headerBackTitleVisible: false,
+            headerTintColor: '#fff',
+         }}>
+              <Stack.Screen name="Wardrobe" 
+              options={{ 
+                title: "Гардероб",
+              }}>
+                {({navigation}) => <Wardrobe firstTime={true} navigation={navigation}/>}
+              </Stack.Screen>
+              <Stack.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+          </Stack.Navigator>}
       </NavigationContainer>
     </>
     )
@@ -128,6 +143,7 @@ const AppContainer = (props) => {
 
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
+  isFirstTime: state.auth.isFirstTime,
   auth: state.auth
 })
 

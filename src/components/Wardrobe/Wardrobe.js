@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { connect } from "react-redux"
+import { checkToken } from '../../redux/auth-reducer';
 import { requestCategories, requestSelectedWardrobe } from '../../redux/wardrobe-reducer';
-import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
-import { TEXT_COLOR } from '../../theme';
+import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const Wardrobe = ({navigation, categories, requestCategories, isFetching, requestSelectedWardrobe, selectedWardrobe}) => {
+const Wardrobe = ({navigation, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, requestSelectedWardrobe, firstTime}) => {
     useEffect(() => {
         requestCategories()
     }, [])
@@ -20,13 +22,28 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
         {isFetching ? <ActivityIndicator /> :
             <FlatList
                 data={categories}
-                keyExtractor={(item, index) => index.toString()}
                 renderItem={({item, index}) => <WardrobeCard 
                 item={item}
-                key={index} 
+                key={index + 'wardrobe-card'} 
                 navigation={navigation} />}
+                ListHeaderComponent={() => {
+                    if(firstTime){
+                    return <TouchableOpacity style={styles.wrapper}>
+                        <Text style={styles.text}>Вы выбрали {selectedWardrobeId.length} вещей из 5</Text>
+                    </TouchableOpacity>
+                    }else{
+                        return <></>
+                    }
+                }}
             />
         }
+        {selectedWardrobeId.length >= 5 && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
+              <TouchableOpacity style={styles.addBtn} onPress={checkToken}>
+                <Text style={{fontFamily: 'SFsemibold', fontSize: 16, lineHeight: 20}}>
+                    Продолжить
+                </Text>
+              </TouchableOpacity>
+        </LinearGradient>}
       </View>
     )
   }
@@ -48,14 +65,48 @@ const Wardrobe = ({navigation, categories, requestCategories, isFetching, reques
         row: {
             flex: 1,
             marginHorizontal: -4
-        }
+        },
+        gradient: {
+            height: 128,
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute', 
+            left: 0, 
+            right: 0, 
+            bottom: 0
+        },
+        addBtn: {
+            paddingHorizontal: 20,
+            paddingVertical: 8,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: GREEN_COLOR,
+            borderRadius: 12,
+        },
+        text: {
+            fontSize: 16,
+            fontFamily: 'SFregular',
+            marginLeft: 8,
+            color: TEXT_COLOR
+        },
+        wrapper: {
+            width: '100%',
+            marginTop: 8,
+            marginBottom: 12,
+            borderRadius: 12,
+            flexDirection: 'row',
+            backgroundColor: INPUTS_BG,
+            paddingHorizontal: 12,
+            paddingVertical: 16
+        },
     })
 
 
     const mapStateToProps = (state) => ({
         categories: state.wardrobe.categories,
         isFetching: state.wardrobe.isFetching,
-        selectedWardrobe: state.wardrobe.selectedWardrobe
+        selectedWardrobe: state.wardrobe.selectedWardrobe,
+        selectedWardrobeId: state.wardrobe.selectedWardrobeId
     })
 
-    export default connect(mapStateToProps, {requestCategories, requestSelectedWardrobe})(Wardrobe)
+    export default connect(mapStateToProps, {requestCategories, requestSelectedWardrobe, checkToken})(Wardrobe)

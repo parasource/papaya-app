@@ -41,6 +41,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
 
   const onPress = (id, slug, index) => {
     requestCategoriesLooks(slug)
+    setSecondFetch(true)
     setIsActive(id)
     index ? setIndex(index) : setIndex(0)
   }

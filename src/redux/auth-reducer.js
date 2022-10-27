@@ -15,6 +15,7 @@ let initialState = {
     accessToken: null,
     refreshToken: null,
     isAuth: false,
+    isFirstTime: true,
     loginError: '', 
     registerError: ''
 }
@@ -42,7 +43,7 @@ export const authReducer = (state = initialState, action) => {
 }
 
 
-export const setAuthUserData = (id, email, name, sex, accessToken, refreshToken, isAuth) =>
+export const setAuthUserData = (id, email, name, sex) =>
     ({
         type: SET_USER_DATA,
         payload: {
@@ -53,13 +54,14 @@ export const setAuthUserData = (id, email, name, sex, accessToken, refreshToken,
         }
     })
 
-export const setAuthUserToken = (accessToken, refreshToken, isAuth) =>
+export const setAuthUserToken = (accessToken, refreshToken, isAuth, isFirstTime) =>
     ({
         type: SET_TOKEN,
         payload: {
             refreshToken,
             accessToken,
-            isAuth
+            isAuth,
+            isFirstTime
         }
     })
 export const setLoginError = (loginError) =>
@@ -87,7 +89,8 @@ export const requestUser = () => async (dispatch) => {
 }
 
 export const logout = () => async (dispatch) => {
-    dispatch(setAuthUserData(null, null, null, null, null, false))
+    dispatch(setAuthUserData(null, null, null, null))
+    dispatch(setAuthUserToken(null, null, false))
     await SecureStore.deleteItemAsync('token', null)
     await SecureStore.deleteItemAsync('refresh_token', null)
 }
@@ -135,7 +138,7 @@ export const googleLogin = (token) => async (dispatch) => {
         const refreshToken = response.data.refresh_token;
         await SecureStore.setItemAsync('token', accessToken)
         await SecureStore.setItemAsync('refresh_token', refreshToken)
-        dispatch(setAuthUserToken(accessToken, refreshToken, true))
+        dispatch(setAuthUserToken(accessToken, refreshToken, true, response.data.first_time))
         let userResponse = await authAPI.me()
         let {
             ID,
@@ -158,7 +161,7 @@ export const appleLogin = (token) => async (dispatch) => {
         const refreshToken = response.data.refresh_token;
         await SecureStore.setItemAsync('token', accessToken)
         await SecureStore.setItemAsync('refresh_token', refreshToken)
-        dispatch(setAuthUserToken(accessToken, refreshToken, true))
+        dispatch(setAuthUserToken(accessToken, refreshToken, true, response.data.first_time))
         let userResponse = await authAPI.me()
         let {
             ID,
