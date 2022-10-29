@@ -92,7 +92,7 @@ export const requestCategories = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getCategories()
     if(response.status == 200){
-        const categories = response.data.map(category => ({name: category.name, id: category.ID, preview: category.preview, parent_category: category.parent_category}))
+        const categories = response.data.map(category => ({name: category.name, id: category.ID, preview: category.preview, parent_category: category.parent_category, items_count: category.items_count}))
         const parentCategories = [...new Set(categories.map(item => item.parent_category))];
         dispatch(getCategories(categories))
         dispatch(setParentCategories(parentCategories))

@@ -56,7 +56,6 @@ const AppContainer = (props) => {
           </Stack.Navigator>
           :
           <Stack.Navigator screenOptions={{ 
-            headerTransparent: true,
             headerBlurEffect: 'dark',
             headerBackTitleVisible: false,
             headerTintColor: '#fff',

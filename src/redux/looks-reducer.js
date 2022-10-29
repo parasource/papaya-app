@@ -114,6 +114,9 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
     if(response.status == 200){
         if(onRefresh){
             dispatch(setLooks(response.data.looks))
+            dispatch(setCategories(response.data.categories))
+            dispatch(setTodayLook(response.data.todayLook))
+            dispatch(toggleIsFetching(false))
         }else{
             if(!response.data.looks){
                 dispatch(toggleIsListEnd(true))

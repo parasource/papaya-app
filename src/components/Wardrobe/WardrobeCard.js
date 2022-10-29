@@ -9,7 +9,7 @@ const WardrobeCard = ({item, navigation}) => {
         <Image style={styles.image} source={{uri: `${storage}/${item.preview}`}}/>
         <View>
             <Text style={styles.text}>{item.name}</Text>
-            <Text style={styles.mute}>214 вещей</Text>
+            <Text style={styles.mute}>{item.items_count} вещей</Text>
         </View>
     </TouchableOpacity>
   )

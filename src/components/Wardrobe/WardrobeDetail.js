@@ -26,7 +26,7 @@ const WardrobeDetail = ({
       {isFetching ? <ActivityIndicator /> :
           <>
             <FlatList
-                data={wardrobeThings[0]}
+                data={wardrobeThings}
                 numColumns={2}
                 renderItem={({item}) => (
                 <WardrobeThingCard

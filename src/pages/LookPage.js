@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         width: '100%',
-        height: 500,
+        height: 600,
         overflow: 'hidden',
         borderRadius: 12,
     },
