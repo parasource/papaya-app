@@ -58,7 +58,6 @@ const LookPage = ({
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.space}></View>
         <View style={styles.wrapper}>
             <SharedElement id={`feedCard${lookSlug}`}>
                 <Image style={styles.image} 
@@ -140,9 +139,6 @@ const styles = StyleSheet.create({
         height: 500,
         overflow: 'hidden',
         borderRadius: 12,
-    },
-    space: {
-        height: 60,
     },
     image: {
         height: '100%',

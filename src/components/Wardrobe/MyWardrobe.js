@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { requestSelectedWardrobeThings, requestCategories, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe } from '../../redux/wardrobe-reducer';
+import { requestSelectedWardrobeThings, requestCategories, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe, requestWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
@@ -11,6 +11,7 @@ const MyWardrobe = ({
     selectedWardrobeId,
     selectedWardrobe,
     addThingWardrobe,
+    requestWardrobe,
     removeThingWardrobe,
     requestSelectedWardrobeThings,
     setInterests,
@@ -24,6 +25,7 @@ const MyWardrobe = ({
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    requestWardrobe(categoryId)
     requestCategories()
   }, [])
 
@@ -73,7 +75,6 @@ const MyWardrobe = ({
 
   return (
     <View style={styles.row}>
-      <View style={{height: 70}}></View>
         <FlatList
             data={selectedWardrobe}
             numColumns={2}
@@ -173,4 +174,4 @@ const mapStateToProps = (state) => ({
   categories: state.wardrobe.categories
 })
 
-export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, setInterests, removeThingWardrobe, addThingWardrobe})(MyWardrobe)
+export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, setInterests, removeThingWardrobe, addThingWardrobe, requestWardrobe})(MyWardrobe)

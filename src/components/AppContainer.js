@@ -89,7 +89,6 @@ const AppContainer = (props) => {
               }}
             />
             <Share.Group screenOptions={{ 
-                headerTransparent: true,
                 headerBlurEffect: 'dark',
                 headerBackTitleVisible: false,
                 headerTintColor: '#fff',

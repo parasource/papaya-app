@@ -40,7 +40,6 @@ const ProfileSettingsContainer = ({ name, sex, updateUser }) => {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <View style={{height: 70}}></View>
             <Text style={styles.label}>Имя пользователя</Text>
             <TextInput
                 style={styles.listItem}

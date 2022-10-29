@@ -1,6 +1,6 @@
 import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { requestAllWardrobe, requestSelectedWardrobe, addThingWardrobe, setInterests, removeThingWardrobe } from '../../redux/wardrobe-reducer';
+import { requestWardrobe, requestSelectedWardrobe, addThingWardrobe, setInterests, removeThingWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
@@ -8,7 +8,7 @@ import { WardrobeThingCard } from './WardrobeThingCard';
 const WardrobeDetail = ({
     route,
     wardrobeThings,
-    requestAllWardrobe,
+    requestWardrobe,
     isFetching,
     selectedWardrobeId,
     addThingWardrobe,
@@ -18,14 +18,13 @@ const WardrobeDetail = ({
   const { categoryId } = route.params;
 
   useEffect(() => {
-    requestAllWardrobe(categoryId)
+    requestWardrobe(categoryId)
   }, [])
 
   return (
     <View style={styles.row}>
       {isFetching ? <ActivityIndicator /> :
           <>
-          <View style={{height: 70}}></View>
             <FlatList
                 data={wardrobeThings[0]}
                 numColumns={2}
@@ -73,4 +72,4 @@ const mapStateToProps = (state) => ({
   selectedWardrobeId: state.wardrobe.selectedWardrobeId,
 })
 
-export default connect(mapStateToProps, {requestAllWardrobe, requestSelectedWardrobe, setInterests, removeThingWardrobe, addThingWardrobe})(WardrobeDetail)
+export default connect(mapStateToProps, {requestWardrobe, requestSelectedWardrobe, setInterests, removeThingWardrobe, addThingWardrobe})(WardrobeDetail)

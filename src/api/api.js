@@ -61,6 +61,12 @@ export const wardrobeAPI = {
     getAllWardrobe() {
         return instance.get(`/get-wardrobe-items`)
     },
+    getCategories() {
+        return instance.get(`/wardrobe`)
+    },
+    getWardrobeById(id) {
+        return instance.get(`/wardrobe/${id}`)
+    },
     setWardrobe(interests) {
         return instance.post(`/profile/set-wardrobe`, interests)
     },
