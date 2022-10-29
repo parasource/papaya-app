@@ -117,7 +117,6 @@ const LookPage = ({
                 }/>
             </View>
             <View style={{paddingBottom: 100}}>
-                <Text style={styles.text}>{currentLook.desc}</Text>
                 <Text style={styles.title}>Элементы образа</Text>
                 {currentLook?.items?.map(item => (
                     <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>

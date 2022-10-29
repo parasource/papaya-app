@@ -19,6 +19,11 @@ const SearchPage = ({navigation, requestAutofill, autofill, feed, history, reque
     useEffect(() => {
         requestSearchHistory()
     }, [])
+    
+    useEffect(() => {
+        const timeOutId = setTimeout(() => requestAutofill(value), 600);
+        return () => clearTimeout(timeOutId);
+    }, [value])
 
     const onSubmit = () => {
         requestSearchResultLooks(value)
@@ -37,6 +42,7 @@ const SearchPage = ({navigation, requestAutofill, autofill, feed, history, reque
                             setIsResult(false)
                         }
                         setValue(newVal)
+                        requestAutofill(value)
                         requestSearchHistory(value)
                     }}
                     placeholder="Искать"
@@ -47,7 +53,6 @@ const SearchPage = ({navigation, requestAutofill, autofill, feed, history, reque
                     onFocus={() => {
                         setIsFocus(true)
                         setIsResult(false)
-                        requestAutofill(value)
                     }}
                     onBlur={() => {
                         setIsFocus(false)
