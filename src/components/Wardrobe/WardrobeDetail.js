@@ -26,6 +26,7 @@ const WardrobeDetail = ({
       {isFetching ? <ActivityIndicator /> :
           <>
             <FlatList
+                style={{flex: 1}}
                 data={wardrobeThings}
                 numColumns={2}
                 renderItem={({item}) => (
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   }, 
   row: {
     paddingHorizontal: 16,
-    paddingBottom: 100
+    flex: 1
   }
 })
 

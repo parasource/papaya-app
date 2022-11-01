@@ -5,6 +5,7 @@ const SET_PARENT_CATEGORIES = 'SET_PARENT_CATEGORIES'
 const SET_CATEGORIES_WARDROBE = 'SET_CATEGORIES_WARDROBE'
 const GET_SELECTED_WARDROBE = 'GET_SELECTED_WARDROBE'
 const GET_SELECTED_WARDROBE_THINGS = 'GET_SELECTED_WARDROBE_THINGS'
+const GET_SELECTED_WARDROBE_CATEGORIES = 'GET_SELECTED_WARDROBE_CATEGORIES'
 const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 const TOGGLE_IS_FETCHING_ID = 'TOGGLE_IS_FETCHING_ID'
 const ADD_THING = 'ADD_THING'
@@ -17,6 +18,7 @@ let initialState = {
     userInterests: [],
     isFetching: false,
     selectedWardrobe: [],
+    selectedWardrobeCategories: [],
     selectedWardrobeId: [],
     fetchingId: 0
 }
@@ -33,6 +35,8 @@ export const wardrobeReducer = (state = initialState, action) => {
             return {...state, selectedWardrobeId: action.selectedWardrobeId}
         case GET_SELECTED_WARDROBE_THINGS:
             return {...state, selectedWardrobe: action.selectedWardrobe}
+        case GET_SELECTED_WARDROBE_CATEGORIES:
+            return {...state, selectedWardrobeCategories: action.selectedWardrobeCategories}
         case TOGGLE_IS_FETCHING: 
             return {...state, isFetching: action.isFetching}
         case TOGGLE_IS_FETCHING_ID: 
@@ -55,6 +59,7 @@ export const wardrobeReducer = (state = initialState, action) => {
 const getAllWardrobe = (wardrobeThings) => ({type: GET_ALL_WARDROBE, wardrobeThings})
 const getSelectedWardrobe = (selectedWardrobeId) => ({type: GET_SELECTED_WARDROBE, selectedWardrobeId})
 const getSelectedWardrobeThings = (selectedWardrobe) => ({type: GET_SELECTED_WARDROBE_THINGS, selectedWardrobe})
+const getSelectedWardrobeCategories = (selectedWardrobeCategories) => ({type: GET_SELECTED_WARDROBE_CATEGORIES, selectedWardrobeCategories})
 const getCategories = (categories) => ({type: SET_CATEGORIES_WARDROBE, categories})
 const setParentCategories = (parentCategories) => ({type: SET_PARENT_CATEGORIES, parentCategories})
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
@@ -136,6 +141,7 @@ export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
     if(response.status == 200){
         let wardrobeThings = response.data.filter(item => item.category_id === id)
         dispatch(getSelectedWardrobeThings(wardrobeThings))
+        dispatch(getSelectedWardrobeCategories([...new Set(response.data.map(item => item.category_id))]))
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
         dispatch(toggleIsFetching(false))
     }else{

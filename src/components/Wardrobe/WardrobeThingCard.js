@@ -16,7 +16,7 @@ export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
             </View>
             <View style={styles.textBlock}>
                 <Text style={styles.text}>{item.name}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onPress}>
                         <View style={{
                             ...styles.button,
                             backgroundColor:  selected ? GREEN_COLOR : INPUTS_BG
@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: -16,
-        marginRight: 16
+        marginRight: 16,
+        marginLeft: 12
     },
     image: {
         height: 195,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'nowrap',
         justifyContent: 'space-between',
+        maxWidth: '100%'
     },
     text: {
         marginTop: 4,

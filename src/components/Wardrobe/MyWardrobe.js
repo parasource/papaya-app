@@ -10,6 +10,7 @@ const MyWardrobe = ({
     isFetching,
     selectedWardrobeId,
     selectedWardrobe,
+    selectedWardrobeCategories,
     addThingWardrobe,
     requestWardrobe,
     removeThingWardrobe,
@@ -22,9 +23,10 @@ const MyWardrobe = ({
   const wardrobeRef = useRef(null)
 
   const [categoryId, setCategoryId] = useState(1);
-  const [index, setIndex] = useState(0);
+  const [scrollIndex, setIndex] = useState(0);
 
   useEffect(() => {
+    setCategoryId(selectedWardrobeCategories[0])
     requestWardrobe(categoryId)
     requestCategories()
   }, [])
@@ -32,19 +34,19 @@ const MyWardrobe = ({
   useEffect(() => {
     requestSelectedWardrobeThings(categoryId)
     wardrobeRef?.current?.scrollToIndex({
-      index: index, 
+      index: scrollIndex, 
       animated: true, 
       viewOffset: 16
     })
-  }, [categoryId, index])
+  }, [categoryId, scrollIndex])
 
   const categoriesList = () => {
     if(categories.length){
         return (<FlatList
         ref={wardrobeRef}
-        data={categories}
+        data={categories.filter(category => selectedWardrobeCategories.includes(category.id))}
         horizontal 
-        initialScrollIndex={index}
+        initialScrollIndex={scrollIndex}
         renderItem={({item, index}) => (
           <TouchableOpacity
             key={'category-wardrobe-'+item.id}
@@ -171,7 +173,8 @@ const mapStateToProps = (state) => ({
   isFetching: state.wardrobe.isFetching,
   selectedWardrobeId: state.wardrobe.selectedWardrobeId,
   selectedWardrobe: state.wardrobe.selectedWardrobe,
-  categories: state.wardrobe.categories
+  categories: state.wardrobe.categories,
+  selectedWardrobeCategories: state.wardrobe.selectedWardrobeCategories
 })
 
 export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, setInterests, removeThingWardrobe, addThingWardrobe, requestWardrobe})(MyWardrobe)

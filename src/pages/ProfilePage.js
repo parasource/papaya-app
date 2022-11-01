@@ -1,14 +1,32 @@
 import {  View, Text,Image, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';
 import { logout } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfilePage = ({navigation, logout, name}) => {
   const [isActive, setIsActive] = useState(true)
+
+  useEffect(() => {
+    AsyncStorage.getItem('notification').then(res => {
+      res === 'on' ? setIsActive(true) : setIsActive(false)
+    })
+  }, [])
+
+  const pushHandler = async () => {
+    if(isActive){
+      AsyncStorage.setItem('notification', 'off')
+      setIsActive(false)
+    }else{
+      AsyncStorage.setItem('notification', 'on')
+      setIsActive(true)
+    }
+  }
+
   const logoutAlert = () => {  
       Alert.alert(  
           'Вы уверены?',  
@@ -46,7 +64,7 @@ const ProfilePage = ({navigation, logout, name}) => {
           <Text style={{...styles.muteText, marginLeft: 16}}>Редактируй гардероб, чтобы улучшить рекомендации</Text>
           <TouchableOpacity style={styles.listItemWithSwitch}>
             <Text style={styles.listItemLabel}>Push-уведомления</Text>
-            <Switch value={isActive} onValueChange={setIsActive} color={'#34C759'}/>
+            <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
           </TouchableOpacity>
           <Text style={styles.logout} onPress={logoutAlert}>Выйти из аккаунта</Text>
       </View>

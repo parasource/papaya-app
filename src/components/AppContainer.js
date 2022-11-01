@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { checkToken, googleLogin, appleLogin } from '../redux/auth-reducer';
+import { checkToken, googleLogin, appleLogin, toggleNotification } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
@@ -16,6 +16,8 @@ import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
 import * as Linking from 'expo-linking';
 import MyWardrobe from './Wardrobe/MyWardrobe';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const prefix = Linking.createURL('/');
 
@@ -25,6 +27,29 @@ const Share = createNativeStackNavigator()
 const AppContainer = (props) => {
   useEffect(() => {
     props.checkToken() 
+
+    Notifications.cancelAllScheduledNotificationsAsync()
+
+    AsyncStorage.getItem('notification').then(res => {
+      if(res === 'on'){
+        Notifications.scheduleNotificationAsync({
+          content: {
+            title: "🔔 Мы собрали вам образ на сегодня",
+            body: "посмотреть в приложении",
+            data: {
+              data: "goes here"
+            },
+          },
+          trigger: {
+            hour: 5,
+            minute: 45,
+            repeats: true,
+          },
+        });
+      }
+    })
+
+    
   }, [])
 
   const linking = {
@@ -142,7 +167,7 @@ const AppContainer = (props) => {
 const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
   isFirstTime: state.auth.isFirstTime,
-  auth: state.auth
+  auth: state.auth,
 })
 
 export default connect(mapStateToProps, {checkToken, googleLogin, appleLogin})(AppContainer)

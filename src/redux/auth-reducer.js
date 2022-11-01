@@ -2,10 +2,12 @@ import {
     authAPI
 } from "../api/api"
 import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const SET_TOKEN = 'SET_TOKEN'
 const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR'
+const TOGGLE_NOTIFICATION = 'TOGGLE_NOTIFICATION'
 
 let initialState = {
     id: null,
@@ -17,7 +19,8 @@ let initialState = {
     isAuth: false,
     isFirstTime: true,
     loginError: '', 
-    registerError: ''
+    registerError: '',
+    toggleNotification: true
 }
 
 export const authReducer = (state = initialState, action) => {
@@ -37,6 +40,11 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload
             }
+        case TOGGLE_NOTIFICATION: 
+            return {
+                ...state,
+                toggleNotification: action.toggleNotification
+            }
         default:
             return state;
     }
@@ -52,6 +60,12 @@ export const setAuthUserData = (id, email, name, sex) =>
             name, 
             sex,
         }
+    })
+    
+export const toggleNotification = (toggleNotification) =>
+    ({
+        type: TOGGLE_NOTIFICATION,
+        toggleNotification
     })
 
 export const setAuthUserToken = (accessToken, refreshToken, isAuth, isFirstTime) =>
@@ -148,6 +162,7 @@ export const googleLogin = (token) => async (dispatch) => {
         } = userResponse.data
         dispatch(setAuthUserData(ID, email, name, sex))
         dispatch(setLoginError(''))
+        await AsyncStorage.setItem('notification', 'on')
     }else{
         console.log(response);
         dispatch(setLoginError(response))
@@ -171,6 +186,7 @@ export const appleLogin = (token) => async (dispatch) => {
         } = userResponse.data
         dispatch(setAuthUserData(ID, email, name, sex))
         dispatch(setLoginError(''))
+        await AsyncStorage.setItem('notification', 'on')
     }else{
         console.log(response);
         dispatch(setLoginError(response))

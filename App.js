@@ -16,23 +16,6 @@ Notifications.setNotificationHandler({
   }
 })
 
-Notifications.cancelAllScheduledNotificationsAsync(localNotifications)
-
-const localNotifications = Notifications.scheduleNotificationAsync({
-  content: {
-    title: "🔔 Мы собрали вам образ на сегодня",
-    body: "посмотреть в приложении",
-    data: {
-      data: "goes here"
-    },
-  },
-  trigger: {
-    hour: 5,
-    minute: 45,
-    repeats: true,
-  },
-});
-
 export default function App() {
   const [IsReady, SetIsReady] = useState(false);
 
