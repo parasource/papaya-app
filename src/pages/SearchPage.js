@@ -60,7 +60,7 @@ const SearchPage = ({navigation, requestAutofill, autofill, feed, history, reque
                     blurOnSubmit={true}
                     ref={hiddenButtonRef}
                 />
-                <ScrollView keyboardShouldPersistTaps='handled'>
+                <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
                     <View style={styles.container}>
                         {(isFocus && !isResult) && <View>
                                 <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {

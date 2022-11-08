@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image, Platform } from 'react-native';
 import { BG_COLOR, GRAY_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
@@ -49,12 +49,12 @@ export const FirstScreen = ({navigation, googleLogin, appleLogin}) => {
           <Text style={styles.h1}>Начни стильно одеваться</Text>
           <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
         </View>
-        <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
+       {Platform.OS === 'ios' && <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
             <Image source={require('../../assets/img/icons/apple.png')} style={styles.appleIcon}/>
             <Text style={styles.appleBtnText}>
               Sign in with Apple
             </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
          <TouchableOpacity style={styles.googleBtn} onPress={googleHandler}>
             <Image source={require('../../assets/img/icons/google.png')} style={styles.googleIcon}/>
             <Text style={styles.googleBtnText}>

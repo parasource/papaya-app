@@ -19,7 +19,7 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
     return(
       <View style={{paddingHorizontal: 16, flex: 1}}>
         {isFetching ? <ActivityIndicator /> :
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
             {firstTime && 
             <TouchableOpacity style={styles.wrapper}>
                 <Text style={styles.text}>Вы выбрали {selectedWardrobeId.length} вещей из 5</Text>

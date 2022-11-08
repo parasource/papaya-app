@@ -1,9 +1,9 @@
-import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
 import homeIcon from '../../../assets/img/icons/outline/home.png';
 import searchIcon from '../../../assets/img/icons/outline/search.png';
@@ -47,7 +47,7 @@ export const TabBottomNavigator = () => {
         tabBarLabel: () => {return null},
         headerShown: false,
         tabBarBackground: () => (
-          <BlurView tint="dark" intensity={100} style={StyleSheet.absoluteFill} />
+          <BlurView tint="dark" intensity={Platform.OS === 'ios' ? 100 : 150} style={StyleSheet.absoluteFill} />
         ),
       })}
     >

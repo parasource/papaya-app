@@ -46,12 +46,11 @@ const styles = StyleSheet.create({
     button: {
         width: 32, 
         height: 32, 
-        borderRadius: 12,
+        borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: -16,
         marginRight: 16,
-        marginLeft: 12
     },
     image: {
         height: 195,
@@ -61,13 +60,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'nowrap',
         justifyContent: 'space-between',
-        maxWidth: '100%'
+        flex: 1
     },
     text: {
         marginTop: 4,
         fontSize: 12,
         fontFamily: 'SFsemibold',
-        color: TEXT_COLOR
+        flex: 1,
+        color: TEXT_COLOR,
     },
     wrapper: {
         flex: 1,

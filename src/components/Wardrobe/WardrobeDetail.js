@@ -28,6 +28,7 @@ const WardrobeDetail = ({
             <FlatList
                 style={{flex: 1}}
                 data={wardrobeThings}
+                showsVerticalScrollIndicator={false}
                 numColumns={2}
                 renderItem={({item}) => (
                 <WardrobeThingCard

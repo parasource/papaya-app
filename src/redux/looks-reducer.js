@@ -117,8 +117,9 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
             dispatch(setCategories(response.data.categories))
             dispatch(setTodayLook(response.data.todayLook))
             dispatch(toggleIsFetching(false))
+            dispatch(toggleIsListEnd(false))
         }else{
-            if(!response.data.looks){
+            if(!response.data.looks || !response.data.looks.length){
                 dispatch(toggleIsListEnd(true))
                 dispatch(toggleIsFetching(false))
             }else{
@@ -277,6 +278,7 @@ export const unsaveLook = (slug) => async (dispatch) => {
 
 export const requestBookmarked = () => async (dispatch) => {
     await feedAPI.getSaved().then(res => {
+        dispatch(toggleIsListEnd(false))
         dispatch(setBookmarked(res.data))
     })
 }

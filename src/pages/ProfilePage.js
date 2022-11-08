@@ -1,4 +1,4 @@
-import {  View, Text,Image, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native'
+import {  View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -7,6 +7,7 @@ import { logout } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 
 const ProfilePage = ({navigation, logout, name}) => {
   const [isActive, setIsActive] = useState(true)
@@ -21,9 +22,24 @@ const ProfilePage = ({navigation, logout, name}) => {
     if(isActive){
       AsyncStorage.setItem('notification', 'off')
       setIsActive(false)
+      Notifications.cancelAllScheduledNotificationsAsync()
     }else{
       AsyncStorage.setItem('notification', 'on')
       setIsActive(true)
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: "🔔 Мы собрали вам образ на сегодня",
+          body: "посмотреть в приложении",
+          data: {
+            data: "goes here"
+          },
+        },
+        trigger: {
+          hour: 5,
+          minute: 45,
+          repeats: true,
+        },
+      });
     }
   }
 

@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl } from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl, Platform, ScrollView, VirtualizedList, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { requestSelectedWardrobeThings, requestCategories, requestSelectedWardrobe, setInterests, addThingWardrobe, removeThingWardrobe, requestWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
 import { LinearGradient } from 'expo-linear-gradient';
+import MasonryList from '@react-native-seoul/masonry-list';
 
 const MyWardrobe = ({
     isFetching,
@@ -22,62 +23,34 @@ const MyWardrobe = ({
   }) => {
   const wardrobeRef = useRef(null)
 
-  const [categoryId, setCategoryId] = useState(1);
+  const [categoryId, setCategoryId] = useState();
   const [scrollIndex, setIndex] = useState(0);
+  const [localCategories, setLocalCategories] = useState([])
 
   useEffect(() => {
-    setCategoryId(selectedWardrobeCategories[0])
-    requestWardrobe(categoryId)
     requestCategories()
+    requestWardrobe(categoryId)
   }, [])
 
   useEffect(() => {
+    categories != localCategories ? setLocalCategories(categories) : null
     requestSelectedWardrobeThings(categoryId)
-    wardrobeRef?.current?.scrollToIndex({
-      index: scrollIndex, 
-      animated: true, 
-      viewOffset: 16
-    })
-  }, [categoryId, scrollIndex])
+  }, [categoryId])
 
-  const categoriesList = () => {
-    if(categories.length){
-        return (<FlatList
-        ref={wardrobeRef}
-        data={categories.filter(category => selectedWardrobeCategories.includes(category.id))}
-        horizontal 
-        initialScrollIndex={scrollIndex}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            key={'category-wardrobe-'+item.id}
-            accessibilityRole="button"
-            onPress={() => {
-              setIndex(index)
-              setCategoryId(item.id)
-            }}
-            style={{...styles.btnWrapper, backgroundColor: categoryId == item.id ? TEXT_COLOR : INPUTS_BG }}
-          >
-            <Text style={{...styles.btnAnimated, color: categoryId == item.id ? BG_COLOR : GRAY_COLOR}}>
-              {item.name}
-            </Text>
-          </TouchableOpacity>
-        )}
-        onScrollToIndexFailed={info => {
-          const wait = new Promise(resolve => setTimeout(resolve, 500));
-          wait.then(() => {
-            wardrobeRef.current?.scrollToIndex({ index: info.index, animated: true });
-          });
-        }}
-        showsHorizontalScrollIndicator={false} 
-        style={styles.tabWrapper}
-      />)
-    }else{
-      return null
-    }}
+  useEffect(() => {
+    categories != localCategories ? setLocalCategories(categories) : null
+    if(localCategories.length){
+      wardrobeRef?.current?.scrollToIndex({
+        index: scrollIndex, 
+        animated: true, 
+        viewOffset: 16
+      })
+    }
+  }, [scrollIndex])
 
-  return (
-    <View style={styles.row}>
-        <FlatList
+    const MapWardrobe = () => {
+      if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+      return <MasonryList
             data={selectedWardrobe}
             numColumns={2}
             keyExtractor={(item) => item.id + "wardrobe-thing"}
@@ -97,22 +70,60 @@ const MyWardrobe = ({
               }}
               />
             )}
-            ListHeaderComponent={categoriesList}
+            nestedScrollEnabled
             ListFooterComponent={() => <View style={{height: 128}}></View>}
         />
-        <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
-                <Image source={require("../../../assets/img/icons/outline/plusBlack.png")} style={{
-                  width: 16,
-                  height: 16,
-                  transform: [{rotate: '45deg'}],
-                  marginRight: 4
-                }}/>
-                <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
-                    Добавить одежду
-                </Text>
-              </TouchableOpacity>
-        </LinearGradient>
+    }
+
+  return (
+    <View style={styles.row}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <FlatList
+          ref={wardrobeRef}
+          data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
+          horizontal 
+          initialScrollIndex={scrollIndex}
+          renderItem={({item, index}) => (
+            <TouchableOpacity
+              key={'category-wardrobe-'+item.id}
+              accessibilityRole="button"
+              onPress={() => {
+                setIndex(index)
+                setCategoryId(item.id)
+              }}
+              style={{...styles.btnWrapper, backgroundColor: categoryId == item.id ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4}}
+            >
+              <Text style={{...styles.btnAnimated, color: categoryId == item.id ? BG_COLOR : GRAY_COLOR}}>
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          )}
+          onScrollToIndexFailed={info => {
+            const wait = new Promise(resolve => setTimeout(resolve, 500));
+            wait.then(() => {
+              wardrobeRef.current?.scrollToIndex({ index: info.index, animated: true });
+            });
+          }}
+          showsHorizontalScrollIndicator={false} 
+          style={styles.tabWrapper}
+        />
+        <View>
+          {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
+        </View>
+      </ScrollView>
+      <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
+            <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
+              <Image source={require("../../../assets/img/icons/outline/plusBlack.png")} style={{
+                width: 16,
+                height: 16,
+                transform: [{rotate: '45deg'}],
+                marginRight: 4
+              }}/>
+              <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
+                  Добавить одежду
+              </Text>
+            </TouchableOpacity>
+      </LinearGradient>
     </View>
   )
 }
@@ -137,7 +148,6 @@ const styles = StyleSheet.create({
   },
   btnWrapper: { 
     minWidth: 120,
-    paddingVertical: 8,
     paddingHorizontal: 28,
     borderRadius: 12,
     marginLeft: 8,

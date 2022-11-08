@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image, FlatList } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image, FlatList, Platform } from 'react-native'
 import React, {useEffect, useState, useCallback, useRef} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
@@ -22,6 +22,8 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    setSecondFetch(false)
+    setPage(0)
     requestLooks(page, true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
@@ -65,7 +67,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
     <ScrollView 
       style={{width: '100%'}}
       showsVerticalScrollIndicator={false}
-      refreshControl={<RefreshControl tintColor={GREEN_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
+      refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
       onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
       scrollEventThrottle={16}>
       <Image source={require('../../../assets/img/papaya.png')} style={styles.logo}/>
@@ -93,7 +95,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
                   <TouchableOpacity
                   accessibilityRole="button"
                   onPress={() => onPress(null)}
-                  style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG }}
+                  style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
                 >
                   <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
                     Для вас
@@ -105,7 +107,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
                 <TouchableOpacity
                   accessibilityRole="button"
                   onPress={() => onPress(item.ID, item.slug, index)}
-                  style={{...styles.btnWrapper, backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG }}
+                  style={{...styles.btnWrapper, backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
                 >
                   <Text style={{...styles.btnAnimated, color: isActive == item.ID ? BG_COLOR : GRAY_COLOR}}>
                     {item.name}
@@ -145,7 +147,6 @@ const styles = StyleSheet.create({
     },
     btnWrapper: { 
       minWidth: 120,
-      paddingVertical: 8,
       paddingHorizontal: 28,
       borderRadius: 12,
       marginLeft: 8,

@@ -39,7 +39,7 @@ const refreshAuthLogic = async failedRequest => {
     })
 };
 
-createAuthRefreshInterceptor(instance, refreshAuthLogic);
+createAuthRefreshInterceptor(instance, refreshAuthLogic, {statusCodes: [401, 403]});
 
 
 export const authAPI = {

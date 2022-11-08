@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { checkToken, googleLogin, appleLogin, toggleNotification } from '../redux/auth-reducer';
+import { checkToken, googleLogin, appleLogin } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
@@ -25,7 +25,7 @@ const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
 
 const AppContainer = (props) => {
-  useEffect(() => {
+  useMemo(() => {
     props.checkToken() 
 
     Notifications.cancelAllScheduledNotificationsAsync()
@@ -48,8 +48,6 @@ const AppContainer = (props) => {
         });
       }
     })
-
-    
   }, [])
 
   const linking = {
