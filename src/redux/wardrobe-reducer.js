@@ -42,15 +42,9 @@ export const wardrobeReducer = (state = initialState, action) => {
         case TOGGLE_IS_FETCHING_ID: 
             return {...state, fetchingId: action.fetchingId}
         case ADD_THING: 
-            let addWardrobe = [...state.selectedWardrobeId, action.payload.id]
-            return {...state, selectedWardrobeId: addWardrobe}
+            return {...state, selectedWardrobeId: action.selectedWardrobeId}
         case REMOVE_THING: 
-            let removeWardrobe = [...state.selectedWardrobeId]
-            let index = removeWardrobe.indexOf(action.payload.id);
-            if (index !== -1) {
-                removeWardrobe.splice(index, 1);
-            }
-            return {...state, selectedWardrobeId: removeWardrobe}
+            return {...state, selectedWardrobeId: action.selectedWardrobeId}
         default:
             return state;
     }
@@ -63,8 +57,8 @@ const getSelectedWardrobeCategories = (selectedWardrobeCategories) => ({type: GE
 const getCategories = (categories) => ({type: SET_CATEGORIES_WARDROBE, categories})
 const setParentCategories = (parentCategories) => ({type: SET_PARENT_CATEGORIES, parentCategories})
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
-const removeThing = (id) => ({type: REMOVE_THING, payload: {id}})
-const addThing = (id) => ({type: ADD_THING, payload: {id}})
+const removeThing = (selectedWardrobeId) => ({type: REMOVE_THING, selectedWardrobeId})
+const addThing = (selectedWardrobeId) => ({type: ADD_THING, selectedWardrobeId})
 
 
 export const requestAllWardrobe = (id) => async (dispatch) => {
@@ -109,16 +103,27 @@ export const requestCategories = () => async (dispatch) => {
 }
 
 export const setInterests = (interests) => async (dispatch) => {
+    console.log(initialState.selectedWardrobeId);
     interests = JSON.stringify({wardrobe: interests})
     await wardrobeAPI.setWardrobe(interests)
 }
 
-export const removeThingWardrobe = (id) => (dispatch) => {
-    dispatch(removeThing(id))
+export const removeThingWardrobe = (id, wardrobe) => (dispatch) => {
+    let removeWardrobe = [...wardrobe]
+    let index = removeWardrobe.indexOf(id);
+    if (index !== -1) {
+        removeWardrobe.splice(index, 1);
+    }
+    let rmInterests = JSON.stringify({wardrobe: removeWardrobe})
+    wardrobeAPI.setWardrobe(rmInterests)
+    dispatch(removeThing(removeWardrobe))
 }
 
-export const addThingWardrobe = (id) => (dispatch) => {
-    dispatch(addThing(id))
+export const addThingWardrobe = (id, wardrobe) => (dispatch) => {
+    let addWardrobe = [...wardrobe, id]
+    let addInterests = JSON.stringify({wardrobe: addWardrobe})
+    wardrobeAPI.setWardrobe(addInterests)
+    dispatch(addThing(addWardrobe))
 }
 
 

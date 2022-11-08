@@ -61,11 +61,13 @@ const MyWardrobe = ({
               selected={selectedWardrobeId.includes(item.id)}
               onPress={() => {
                 if(selectedWardrobeId.includes(item.id)){
-                  removeThingWardrobe(item.id)
-                  setInterests(selectedWardrobeId)
+                  removeThingWardrobe(item.id).then(() => 
+                    setInterests(selectedWardrobeId)
+                  )
                 }else{
-                  addThingWardrobe(item.id)
-                  setInterests(selectedWardrobeId)
+                  addThingWardrobe(item.id).then(() => 
+                    setInterests(selectedWardrobeId)
+                  )
                 }
               }}
               />
