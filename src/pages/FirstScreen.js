@@ -5,12 +5,12 @@ import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { Video } from 'expo-av';
 
-export const FirstScreen = ({navigation, googleLogin, appleLogin}) => {
+export const FirstScreen = ({googleLogin, appleLogin}) => {
   const video = useRef(null)
 
   const [_, __, promptAsync] = Google.useAuthRequest({
     expoClientId: '514770009692-qjgk66iibo568l92bn4c0qo6hppjh5gl.apps.googleusercontent.com',
-    iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    iosClientId: '514770009692-1a248fs9g3pcu6dsp2pbu5s5fcv5re4c.apps.googleusercontent.com',
     webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
     useProxy: true
   })

@@ -2,7 +2,7 @@ import { View, Animated, Pressable } from 'react-native'
 import React, { Children, useEffect, useRef } from 'react'
 import { GREEN_COLOR, BG_COLOR, GRAY_COLOR } from '../../theme'
 
-export const BounceAnimation = ({children, component, onPress}) => {
+export const BounceAnimation = ({children, component, onPress, style}) => {
   const animationScale = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const BounceAnimation = ({children, component, onPress}) => {
       }).start()
   }
   return (
-    <Pressable onPress={() => {
+    <Pressable style={{...style}} onPress={() => {
         pressHandler()
         onPress ? onPress() : null
       }}>

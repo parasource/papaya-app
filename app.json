@@ -2,7 +2,8 @@
   "expo": {
     "name": "papaya",
     "slug": "papaya",
-    "version": "1.0.0",
+    "privacy": "unlisted",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -31,7 +32,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.parasource.papaya.ios"
+      "bundleIdentifier": "tech.parasource.papaya.ios",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {

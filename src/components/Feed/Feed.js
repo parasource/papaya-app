@@ -6,6 +6,7 @@ import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer'
 import { RecommendLook } from '../RecommendLook';
 import { SkeletonFeed } from './SkeletonFeed';
 import { LooksFeed } from './LooksFeed';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -76,6 +77,10 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
           <View style={{paddingHorizontal: 16}}>
             <Text style={styles.title}>Образ на сегодня</Text>
             <RecommendLook look={todayLook} navigation={navigation}/>
+            <TouchableOpacity style={styles.wrapperInfo}>
+            <View style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></View>
+                <Text style={styles.text}>Образы составленные на основе вашего гардероба</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             ref={categoriesRef}
@@ -134,12 +139,41 @@ const styles = StyleSheet.create({
       paddingHorizontal: 16,
       paddingRight: 16
     },
+    text: {
+      color: TEXT_COLOR,
+      fontSize: 16
+    },
+    wardrobeInfo: {
+      width: 32,
+      height: 32,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+      backgroundColor: GREEN_COLOR,
+      elevation: 100,
+      zIndex: 100,
+      marginRight: 12
+    },
+    icon: {
+      fontSize: 20,
+    },
+    wrapperInfo: { 
+      width: '100%',
+      marginTop: 24,
+      borderRadius: 12,
+      flexDirection: 'row',
+      backgroundColor: INPUTS_BG,
+      paddingHorizontal: 12,
+      paddingVertical: 16,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     title: {
-        color: TEXT_COLOR,
-        fontFamily: 'GilroyBold',
-        fontSize: 24,
-        marginTop: 0,
-        marginBottom: 12
+      color: TEXT_COLOR,
+      fontFamily: 'GilroyBold',
+      fontSize: 24,
+      marginTop: 0,
+      marginBottom: 12
     },
     tabWrapper:{
       marginTop: 20,
