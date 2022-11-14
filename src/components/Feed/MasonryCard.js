@@ -1,11 +1,10 @@
 import { View, TouchableHighlight, StyleSheet, Text, Dimensions} from 'react-native'
 import React, { useState } from 'react'
-import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
+import { INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
-import AutoHeightImage from 'react-native-auto-height-image'
-import { BounceAnimation } from '../UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Image} from 'react-native-elements'
 
 const MasonryCard = ({navigation, item, withPop, modalHandler}) => {
   const [width, setWidth] = useState(Dimensions.get('window').width)
@@ -21,14 +20,16 @@ const MasonryCard = ({navigation, item, withPop, modalHandler}) => {
       style = {styles.wrapper}>
         <View> 
             {item.isFromWardrobe && <TouchableHighlight onPress={modalHandler} style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></TouchableHighlight>}
-            <View style={styles.cardWrapper}> 
+            <View style={{...styles.cardWrapper, width: width/2 - 16, 
+                          aspectRatio: +item.imageRatio.split('/')[0] / +item.imageRatio.split('/')[1]}}> 
               <SharedElement id={`feedCard${item.slug}`} style={{position: 'relative', zIndex: 1}}>
-                  <AutoHeightImage
-                    source={{uri: `${storage}/${item.image}`}}
-                    width={width/2 - 16}
-                    resizeMode="cover"
-                    style={{zIndex: 0, position: 'relative'}}
-                  />
+                  <Image
+                  source={{uri: `${storage}/${item.image}`}}
+                  style={{zIndex: 0, position: 'relative', 
+                  width: width/2 - 16, 
+                  aspectRatio: +item.imageRatio.split('/')[0] / +item.imageRatio.split('/')[1]}}
+                  resizeMode="cover"
+                  PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
               </SharedElement>
               
             </View>

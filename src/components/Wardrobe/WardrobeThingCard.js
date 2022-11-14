@@ -1,18 +1,19 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useRef } from 'react'
 import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { storage } from '../../const'
-import SkeletonContent from 'react-native-skeleton-content'
+import {Image} from 'react-native-elements'
 
 export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
   return (
     <View style={styles.container}>{
         isFetching ? 
-        <SkeletonContent containerStyle={{flex: 1, borderRadius: 12}}/>
+        <ActivityIndicator/>
         :
         <TouchableOpacity onPress={onPress}>
             <View style={styles.wrapper}>
-                <Image style={styles.image} source={{uri: `${storage}/${item.image}`}}/>
+                <Image style={styles.image} source={{uri: `${storage}/${item.image}`}}
+                PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
             </View>
             <View style={styles.textBlock}>
                 <Text style={styles.text}>{item.name}</Text>

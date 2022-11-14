@@ -4,9 +4,7 @@ import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { RecommendLook } from '../RecommendLook';
-import { SkeletonFeed } from './SkeletonFeed';
 import { LooksFeed } from './LooksFeed';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { BottomSheet } from '@rneui/themed';
 
 const wait = timeout => {
@@ -74,7 +72,6 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
       onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
       scrollEventThrottle={16}>
       <Image source={require('../../../assets/img/papaya.png')} style={styles.logo}/>
-        <SkeletonFeed secondFetch={secondFetch} isFetching={isFetching}>
         <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
           <View style={{paddingHorizontal: 16}}>
             <Text style={styles.title}>Образ на сегодня</Text>
@@ -131,7 +128,6 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
                 <Text style={styles.sheetText}>это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков</Text>
             </View>
         </BottomSheet>
-      </SkeletonFeed>
     </ScrollView>
   )
 }
@@ -203,7 +199,8 @@ const styles = StyleSheet.create({
     },
     tabWrapper:{
       marginTop: 20,
-      marginLeft: 8
+      marginLeft: 8,
+      maxHeight: 34,
     },
     btnWrapper: { 
       minWidth: 120,

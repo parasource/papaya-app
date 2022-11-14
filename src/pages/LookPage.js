@@ -1,16 +1,18 @@
 import { View, Text, StyleSheet, ScrollView, Image, Share } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { TEXT_COLOR } from '../theme';
+import { INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
 
 import { LookItem } from '../components/LookItem';
-import SkeletonContent from 'react-native-skeleton-content';
 import { SharedElement } from 'react-navigation-shared-element';
 import { storage } from '../const';
 import * as Linking from 'expo-linking';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
+import { Skeleton } from '@rneui/themed';
+import { StackView } from '@react-navigation/stack';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LookPage = ({
         route,
@@ -58,25 +60,31 @@ const LookPage = ({
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {isFetching ?
+        <>
+            <Skeleton style={styles.wrapper} LinearGradientComponent={() => (
+                <LinearGradient 
+                    start={{ x: 0, y: 0.5 }} 
+                    end={{ x: 1, y: 0.5 }} 
+                    colors={['rgba(31, 31, 31, 0)', '#313131', 'rgba(31, 31, 31, 0)']} 
+                    style={{height: '100%'}}/>
+                )} animation="wave"/>
+            <Skeleton style={{...styles.bar, height: 76}} LinearGradientComponent={() => (
+                <LinearGradient 
+                    start={{ x: 0, y: 0.5 }} 
+                    end={{ x: 1, y: 0.5 }} 
+                    colors={['rgba(31, 31, 31, 0)', '#313131', 'rgba(31, 31, 31, 0)']} 
+                    style={{height: '100%'}}/>
+                )} animation="wave"/>
+        </>
+         :
+         <>
         <View style={styles.wrapper}>
             <SharedElement id={`feedCard${lookSlug}`}>
                 <Image style={styles.image} 
                 source={{uri: `${storage}/${item.image}`}}/>
             </SharedElement>
         </View>
-         <SkeletonContent
-            containerStyle={{ flex: 1, width: '100%' }}
-            boneColor="#121212"
-            highlightColor="#333333"
-            animationType="pulse"
-            isLoading={isFetching}
-            layout={[
-            // { key: 'someId', width: '100%', height: 500, borderRadius: 12, },
-            { key: 'someOtherId', width: '100%', height: 68, marginTop: 12, borderRadius: 12, },
-            { key: 'title', width: 300, height: 22, marginTop: 24, borderRadius: 12, },
-            { key: 'item', width: '100%', height: 105, marginTop: 12, borderRadius: 12, },
-            ]}
-       >
             <View style={styles.bar}>
                 <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
                 <BounceAnimation onPress={() => {
@@ -122,7 +130,7 @@ const LookPage = ({
                     <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
                 ))}
             </View>
-       </SkeletonContent> 
+        </>}
     </ScrollView>
   )
 }
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
         height: 600,
         overflow: 'hidden',
         borderRadius: 12,
+        backgroundColor: INPUTS_BG
     },
     image: {
         height: '100%',
