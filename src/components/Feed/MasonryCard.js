@@ -1,13 +1,13 @@
 import { View, TouchableHighlight, StyleSheet, Text, Dimensions} from 'react-native'
 import React, { useState } from 'react'
-import { GREEN_COLOR, TEXT_COLOR } from '../../theme'
+import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
 import AutoHeightImage from 'react-native-auto-height-image'
 import { BounceAnimation } from '../UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const MasonryCard = ({navigation, item, withPop}) => {
+const MasonryCard = ({navigation, item, withPop, modalHandler}) => {
   const [width, setWidth] = useState(Dimensions.get('window').width)
 
   return (
@@ -20,7 +20,7 @@ const MasonryCard = ({navigation, item, withPop}) => {
       }}
       style = {styles.wrapper}>
         <View> 
-            {item.isFromWardrobe && <View style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></View>}
+            {item.isFromWardrobe && <TouchableHighlight onPress={modalHandler} style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></TouchableHighlight>}
             <View style={styles.cardWrapper}> 
               <SharedElement id={`feedCard${item.slug}`} style={{position: 'relative', zIndex: 1}}>
                   <AutoHeightImage
@@ -55,12 +55,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: GREEN_COLOR,
+    backgroundColor: INPUTS_BG,
     elevation: 100,
     zIndex: 100
   },
   icon: {
     fontSize: 20,
+    color: TEXT_COLOR,
   },
   wrapper: {
     marginTop: 16,

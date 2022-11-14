@@ -4,7 +4,7 @@ import { GRAY_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
 
-export const LooksFeed = ({looks, isListEnd, navigation}) => {
+export const LooksFeed = ({looks, isListEnd, navigation, modalHandler}) => {
     return (
         <View>
             <View style={styles.row}>
@@ -16,7 +16,7 @@ export const LooksFeed = ({looks, isListEnd, navigation}) => {
                     numColumns={2}
                     data={looks}
                     renderItem={({item, index}) => {
-                        return item ? <MasonryCard key={'looks-item' + item.slug + index} item={item} navigation={navigation}/> : <></>
+                        return item ? <MasonryCard key={'looks-item' + item.slug + index} item={item} navigation={navigation} modalHandler={modalHandler}/> : <></>
                     }}
                     scrollEnabled={false}
                 />}
@@ -26,6 +26,7 @@ export const LooksFeed = ({looks, isListEnd, navigation}) => {
               <Text style={styles.footerText}>No more articles at the moment</Text> 
               : <ActivityIndicator/>}
             </View>
+            
         </View>
     );
 }

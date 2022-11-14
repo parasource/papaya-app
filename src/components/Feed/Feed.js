@@ -7,6 +7,7 @@ import { RecommendLook } from '../RecommendLook';
 import { SkeletonFeed } from './SkeletonFeed';
 import { LooksFeed } from './LooksFeed';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { BottomSheet } from '@rneui/themed';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -17,6 +18,7 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
   
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
   const [isActive, setIsActive] = useState(null);
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
@@ -77,10 +79,6 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
           <View style={{paddingHorizontal: 16}}>
             <Text style={styles.title}>Образ на сегодня</Text>
             <RecommendLook look={todayLook} navigation={navigation}/>
-            <TouchableOpacity style={styles.wrapperInfo}>
-            <View style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></View>
-                <Text style={styles.text}>Образы составленные на основе вашего гардероба</Text>
-            </TouchableOpacity>
           </View>
           <FlatList
             ref={categoriesRef}
@@ -124,9 +122,15 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
           />
           <View style={styles.container}>
             <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
-              navigation={navigation} isListEnd={isListEnd} page={page}/>
+              navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => setModalVisible(true)}/>
           </View>
         </View>
+        <BottomSheet isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
+            <View style={styles.bottomSheet}>
+                <Text style={styles.sheetTitle}>Образы составлены на основе вашего гардероба</Text>
+                <Text style={styles.sheetText}>это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков</Text>
+            </View>
+        </BottomSheet>
       </SkeletonFeed>
     </ScrollView>
   )
@@ -141,7 +145,29 @@ const styles = StyleSheet.create({
     },
     text: {
       color: TEXT_COLOR,
-      fontSize: 16
+      fontSize: 16,
+      flex: 1
+    },
+    bottomSheet: {
+      flex: 1,
+      backgroundColor: INPUTS_BG,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      paddingVertical: 24,
+      paddingHorizontal: 16,
+      paddingBottom: 36
+    },
+    sheetTitle: {
+      fontFamily: 'SFsemibold',
+      fontSize: 17,
+      color: TEXT_COLOR,
+      textAlign: 'center'
+    },
+    sheetText: {
+      fontFamily: 'SFregular',
+      fontSize: 14,
+      color: TEXT_COLOR,
+      marginTop: 16
     },
     wardrobeInfo: {
       width: 32,

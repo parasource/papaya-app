@@ -18,6 +18,7 @@ import * as Linking from 'expo-linking';
 import MyWardrobe from './Wardrobe/MyWardrobe';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import InternetConnectionAlert from 'react-native-internet-connection-alert';
 
 const prefix = Linking.createURL('/');
 
@@ -97,6 +98,9 @@ const AppContainer = (props) => {
   }
 
   return (
+    <InternetConnectionAlert
+        onChange={(connectionState) => console.log("Connection State: ", connectionState)}
+        useInternetReachability={false}>
     <SafeAreaProvider>
       <StatusBar barStyle="light-content"/>
       <NavigationContainer theme={MyTheme} linking={linking}>
@@ -159,6 +163,7 @@ const AppContainer = (props) => {
         </Share.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </InternetConnectionAlert>
   );
 }
 
