@@ -19,7 +19,7 @@ export const FullButton = ({label, style, theme, navigation, to, pressHandler}) 
         style={{
           ...styles.label,
           color: theme == "light" ? GRAY_COLOR : BG_COLOR,
-          fontFamily: theme == "light" ? 'GilroyRegular' : 'GilroyBold',
+          fontFamily: theme == "light" ? 'SFsemibold' : 'SFsemibold',
         }}
       >
         {label}
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
+        lineHeight: 24,
         textAlign: 'center',
     }
 })

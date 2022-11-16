@@ -24,7 +24,7 @@ const SearchBlur = ({recommended, popular, navigation}) => {
           <Text style={styles.footerText}>No more articles at the moment</Text>
         </View>
       )}
-      <Text style={styles.title}>Популярное</Text>
+      <Text style={styles.title}>Популярное на этой неделе</Text>
       {popular ? (
         <View style={styles.row}>
           <MasonryList

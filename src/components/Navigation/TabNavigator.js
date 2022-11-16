@@ -13,7 +13,7 @@ import { BlurView } from 'expo-blur';
 
 const Tab = createBottomTabNavigator()
 
-export const TabBottomNavigator = () => {
+export const TabBottomNavigator = ({handelSnapPress}) => {
   return(
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -51,10 +51,9 @@ export const TabBottomNavigator = () => {
         ),
       })}
     >
-        <Tab.Screen
-          name="Home"
-          component={HomePage}
-        />
+        <Tab.Screen name="Home">
+            {() => <HomePage handelSnapPress={handelSnapPress}/>}
+        </Tab.Screen>
         <Tab.Screen
           name="Search"
           component={SearchPage}

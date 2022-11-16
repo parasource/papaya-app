@@ -39,7 +39,6 @@ const LookPage = ({
       getCurrentLook(lookSlug)
       Linking.getInitialURL().then((url) => {
         if (url) {
-          console.log('Initial url is: ' + url);
           setLink(url)
         }
       }).catch(err => console.error('An error occurred', err));

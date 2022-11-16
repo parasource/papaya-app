@@ -44,17 +44,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#1F1F1F',
         padding: 6,
         flexDirection: 'row',
-        marginTop: 12
+        marginTop: 12,
+        flex: 1
     },
     content: {
         marginLeft: 20,
+        flex: 1,
         paddingVertical: 6
     },
     title: {
         fontFamily: 'SFmedium',
         fontSize: 17,
         color: TEXT_COLOR,
-        marginBottom: 7
+        marginBottom: 7,
     },
     mute: {
         fontFamily: 'SFregular',

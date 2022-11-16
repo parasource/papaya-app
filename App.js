@@ -5,6 +5,7 @@ import AppLoading from 'expo-app-loading';
 import useFonts from './src/hooks/useFont';
 import AppContainer from './src/components/AppContainer';
 import * as Notifications from 'expo-notifications';
+import * as SplashScreen from 'expo-splash-screen';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {
@@ -31,7 +32,10 @@ export default function App() {
     return (
       <AppLoading
         startAsync={LoadFonts}
-        onFinish={() => SetIsReady(true)}
+        onFinish={async () => {
+          await SplashScreen.preventAutoHideAsync()
+          SetIsReady(true)
+        }}
         onError={error => console.log(error)}
       />
     );

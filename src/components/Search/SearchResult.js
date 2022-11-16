@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { View, StyleSheet } from "react-native";
 import FeedCard from "../Feed/FeedCard";
 import { GRAY_COLOR } from '../../theme';
@@ -7,7 +7,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import TopicCard from "./TopicCard";
 import MasonryCard from "../Feed/MasonryCard";
 
-const SearchResult = ({feed, navigation}) => {
+const SearchResult = ({feed, navigation, isFetching}) => {
   const renderItem = ({item}) => {
     if (item.type == "look") {
       return (
@@ -21,24 +21,28 @@ const SearchResult = ({feed, navigation}) => {
   };
 
   return (
-    <View>
-      {feed.length > 0 ? (
-        <MasonryList
-            contentContainerStyle={{
-              alignSelf: 'stretch',
-              marginHorizontal: -8
-            }}
-            numColumns={2}
-            data={feed}
-            renderItem={renderItem}
-            scrollEnabled={false}
-        />
-      ) : (
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>No more articles at the moment</Text>
+    <>
+    {isFetching ? <ActivityIndicator/> : 
+        <View>
+          {feed.length > 0 ? (
+            <MasonryList
+                contentContainerStyle={{
+                  alignSelf: 'stretch',
+                  marginHorizontal: -8
+                }}
+                numColumns={2}
+                data={feed}
+                renderItem={renderItem}
+                scrollEnabled={false}
+            />
+          ) : (
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>No more articles at the moment</Text>
+            </View>
+          )}
         </View>
-      )}
-    </View>
+    }
+    </>
   );
 };
 

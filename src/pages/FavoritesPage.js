@@ -7,11 +7,7 @@ import { BookmarkedContainer } from '../components/Bookmarked/Bookmarked'
 export const FavoritesPage = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Сохраненые</Text>
         <BookmarkedContainer navigation={navigation}/>
-        <View style={{height: 100}}></View>
-      </ScrollView>
     </SafeAreaView>
   )
 }

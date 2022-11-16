@@ -5,18 +5,27 @@ import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { RecommendLook } from '../RecommendLook';
 import { LooksFeed } from './LooksFeed';
-import { BottomSheet } from '@rneui/themed';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
-const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd, categories, categoriesLooks, requestCategoriesLooks}) => {
+const Feed = ({
+  navigation, 
+  isFetching, 
+  looks, 
+  requestLooks, 
+  todayLook, 
+  isListEnd, 
+  categories, 
+  categoriesLooks, 
+  requestCategoriesLooks, 
+  handelSnapPress
+}) => {
   const categoriesRef = useRef(null)
   
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false)
   const [isActive, setIsActive] = useState(null);
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
@@ -119,15 +128,9 @@ const Feed = ({navigation, isFetching, looks, requestLooks, todayLook, isListEnd
           />
           <View style={styles.container}>
             <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
-              navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => setModalVisible(true)}/>
+              navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => handelSnapPress(0)}/>
           </View>
         </View>
-        <BottomSheet isVisible={modalVisible} onBackdropPress={() => setModalVisible(false)}>
-            <View style={styles.bottomSheet}>
-                <Text style={styles.sheetTitle}>Образы составлены на основе вашего гардероба</Text>
-                <Text style={styles.sheetText}>это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков</Text>
-            </View>
-        </BottomSheet>
     </ScrollView>
   )
 }
@@ -143,27 +146,6 @@ const styles = StyleSheet.create({
       color: TEXT_COLOR,
       fontSize: 16,
       flex: 1
-    },
-    bottomSheet: {
-      flex: 1,
-      backgroundColor: INPUTS_BG,
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12,
-      paddingVertical: 24,
-      paddingHorizontal: 16,
-      paddingBottom: 36
-    },
-    sheetTitle: {
-      fontFamily: 'SFsemibold',
-      fontSize: 17,
-      color: TEXT_COLOR,
-      textAlign: 'center'
-    },
-    sheetText: {
-      fontFamily: 'SFregular',
-      fontSize: 14,
-      color: TEXT_COLOR,
-      marginTop: 16
     },
     wardrobeInfo: {
       width: 32,
@@ -222,7 +204,7 @@ const styles = StyleSheet.create({
       alignSelf: 'center',
       marginBottom: 20,
       marginTop: 20
-    }
+    },
 })
 
 const mapStateToProps = (state) => ({

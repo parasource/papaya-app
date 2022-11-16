@@ -9,7 +9,18 @@ import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 
 
-const SearchPage = ({navigation, requestAutofill, autofill, feed, history, requestSearchResultLooks, requestSearchHistory, clearHistoryHandler, topicsRecommended, topicsPopular}) => {
+const SearchPage = ({
+    navigation, 
+    requestAutofill, 
+    autofill, 
+    feed, 
+    history, 
+    requestSearchResultLooks, 
+    requestSearchHistory, 
+    clearHistoryHandler, 
+    topicsRecommended, 
+    topicsPopular, 
+    isFetching}) => {
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
@@ -70,7 +81,7 @@ const SearchPage = ({navigation, requestAutofill, autofill, feed, history, reque
                                     hiddenButtonRef.current.blur()
                                 }}/>
                             </View>}
-                        {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation}/>}
+                        {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching}/>}
                         {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                     </View>
                 </ScrollView>
@@ -108,7 +119,8 @@ const mapStateToProps = (state) => ({
     history: state.feed.searchHistory,
     topicsRecommended: state.feed.topicsRecommended,
     topicsPopular: state.feed.topicsPopular,
-    autofill: state.feed.autofill
+    autofill: state.feed.autofill,
+    isFetching: state.feed.isFetching
 })
 
 export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);
