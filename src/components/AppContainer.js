@@ -77,10 +77,15 @@ const AppContainer = (props) => {
     prefixes: [prefix],
     config: {
       screens: {
-        LookPage: 'look'
+        LookPage: {
+          path: 'look/:lookSlug',
+          parse: (lookSlug) => `${lookSlug}`
+        }
       }
     }
   };
+
+// exp://192.168.168.163:19000/--/
 
   const MyTheme = {
     ...DarkTheme,

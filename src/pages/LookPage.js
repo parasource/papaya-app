@@ -41,7 +41,7 @@ const LookPage = ({
       getCurrentLook(lookSlug)
       Linking.getInitialURL().then((url) => {
         if (url) {
-          setLink(url)
+            setLink(url)
         }
       }).catch(err => console.error('An error occurred', err));
   }, [item])
@@ -49,7 +49,7 @@ const LookPage = ({
   const shareHandler = async () => {
     const options={
         message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
-        url: link
+        url: `${url}/--/${lookSlug}`
     }
     try{
         const result = await Share.share(options)
@@ -83,7 +83,7 @@ const LookPage = ({
         <View style={styles.wrapper}>
             <SharedElement id={`feedCard${lookSlug}`}>
                 <Image style={styles.image} 
-                source={{uri: `${storage}/${item.image}`}}/>
+                source={{uri: `${storage}/${currentLook.image}`}}/>
             </SharedElement>
         </View>
             <View style={styles.bar}>
