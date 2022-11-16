@@ -49,7 +49,7 @@ const LookPage = ({
   const shareHandler = async () => {
     const options={
         message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
-        url: `${url}/--/${lookSlug}`
+        url: `${link}/--/${lookSlug}`
     }
     try{
         const result = await Share.share(options)
