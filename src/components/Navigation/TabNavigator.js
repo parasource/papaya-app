@@ -52,7 +52,7 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
       })}
     >
         <Tab.Screen name="Home">
-            {() => <HomePage handelSnapPress={handelSnapPress}/>}
+            {({navigation}) => <HomePage handelSnapPress={handelSnapPress} navigation={navigation}/>}
         </Tab.Screen>
         <Tab.Screen
           name="Search"
