@@ -79,7 +79,8 @@
     "redux-thunk": "^2.4.1",
     "yup": "^0.32.11",
     "react-native-gesture-handler": "~2.5.0",
-    "expo-splash-screen": "~0.16.2"
+    "expo-splash-screen": "~0.16.2",
+    "expo-haptics": "~11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",

@@ -14,6 +14,8 @@ import { Skeleton } from '@rneui/themed';
 import { StackView } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import * as Haptics from 'expo-haptics'
+
 const LookPage = ({
         route,
         isFetching,
@@ -95,7 +97,7 @@ const LookPage = ({
                             }
                             likeLook(lookSlug)
                         }
-
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
                     <Icon name = {!isLiked ? "heart-outline" : "heart"}
                     style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}/>
@@ -109,6 +111,7 @@ const LookPage = ({
                             }
                             dislikeLook(lookSlug)
                         }
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
                     <Icon name = {!isDisliked ? "heart-dislike-outline" : "heart-dislike"}
                     style = {styles.icon}/>
@@ -119,6 +122,7 @@ const LookPage = ({
                         }else{
                             saveLook(lookSlug)
                         }
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
                     <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.iconSM}/>
                 }/>
@@ -142,10 +146,10 @@ const styles = StyleSheet.create({
     },
     wrapper: {
         width: '100%',
-        height: 600,
         overflow: 'hidden',
         borderRadius: 12,
-        backgroundColor: INPUTS_BG
+        backgroundColor: INPUTS_BG,
+        aspectRatio: 9/13
     },
     image: {
         height: '100%',
