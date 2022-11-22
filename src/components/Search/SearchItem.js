@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity } from 'react-native';
-import {View, StyleSheet} from 'react-native';
 import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
 
 const SearchItem = ({item, onClick, icon}) => {

@@ -54,7 +54,6 @@ const SearchPage = ({
                         }
                         setValue(newVal)
                         requestAutofill(value)
-                        requestSearchHistory(value)
                     }}
                     placeholder="Искать"
                     placeholderTextColor="#888"

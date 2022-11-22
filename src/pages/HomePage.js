@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Feed from '../components/Feed/Feed';
 
 export const HomePage = (props) => {
-  return (
-      <SafeAreaView style={styles.container}>
-          <Feed navigation={props.navigation} handelSnapPress={props.handelSnapPress}/>
-      </SafeAreaView>
-  )
+    return (
+        <SafeAreaView style={styles.container}>
+            <Feed navigation={props.navigation} handelSnapPress={props.handelSnapPress}/>
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({

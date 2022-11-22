@@ -50,7 +50,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation}) => {
         // refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
         // onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
-            <Text style={styles.title}>Сохраненые</Text>
+            <Text style={styles.title}>Сохраненные</Text>
             <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={true}/>
             <View style={{height: 100}}></View>
         </ScrollView>

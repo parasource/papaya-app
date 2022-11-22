@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, Linking, TouchableOpacity, Share } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
 import FeedCard from './FeedCard';
@@ -6,15 +6,47 @@ import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BounceAnimation } from '../UI/BounceAnimation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
   const [page, setPage] = useState(0)
   const { topicSlug } = route.params;
 
+  const [link, setLink] = useState('')
+
   useEffect(() => {
     getCurrentTopic(topicSlug, page)
-  }, [])
+    let canGoBack = navigation.canGoBack();
+    Linking.getInitialURL().then((url) => {if(url) setLink(url)})
+    .catch(err => console.error('An error occurred', err));
+
+    if(!route.params.topicName) navigation.setOptions({title: currentTopic.topic.name})
+    if(!canGoBack) {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('MainNavigator')}>
+                    <Icon name="chevron-back-outline" style={{fontSize: 24, color: '#fff'}}/>
+                </TouchableOpacity>
+            ),
+        })
+    }
+  }, [topicSlug])
+
+
+  const shareHandler = async () => {
+    const options={
+        message: `Посмотри эту подборку образов:\n${currentTopic.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}\n\n${storage}/${currentTopic.topic.image}`,
+    }
+    try{
+        const result = await Share.share(options)
+    }catch(err){
+        console.log(err);
+    }
+
+  }
+
   
   return (
     <ScrollView key={topicSlug}>
@@ -27,7 +59,12 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
              PlaceholderContent={<ActivityIndicator />}/>
              <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}/>
              <View style={{paddingHorizontal: 16}}>
-               <Text style={styles.title}>{currentTopic?.topic?.name}</Text>
+              <View style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
+               <Text style={styles.title}>
+                {currentTopic?.topic?.name}
+                </Text>
+                <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+              </View>
                <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
             </View>
             <View style={styles.row}>
@@ -61,6 +98,7 @@ const styles = StyleSheet.create({
         fontFamily: 'SFbold',
         fontSize: 34,
         marginTop: 10,
+        flex: 1
     },
     desc: {
         color: GRAY_COLOR,
@@ -79,7 +117,11 @@ const styles = StyleSheet.create({
       width: '100%',
       height: 118,
       marginTop: -118
-    }
+    },
+    iconSM: {
+      color: TEXT_COLOR,
+      fontSize: 28
+    },
 })
 
 const mapStateToProps = (state) => ({

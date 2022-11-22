@@ -38,10 +38,8 @@ const WardrobeDetail = ({
                   onPress={() => {
                     if(selectedWardrobeId.includes(item.id)){
                       removeThingWardrobe(item.id, selectedWardrobeId) 
-                      // setInterests(selectedWardrobeId)
                     }else{
                       addThingWardrobe(item.id, selectedWardrobeId) 
-                      // setInterests(selectedWardrobeId)
                     }
                   }}
                   />

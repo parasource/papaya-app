@@ -169,7 +169,7 @@ export const requestAutofill = (string) => async (dispatch) => {
     if(response.status == 200){
         dispatch(setAutofill(response.data))
     }else{
-        console.log(response);
+        console.log('autofill',response);
     }
 }
 

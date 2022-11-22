@@ -72,7 +72,6 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
 
 const styles = StyleSheet.create({
   tab: {
-    // backgroundColor: '#1F1F1F',
     paddingVertical: 8,
     minHeight: 60,
     borderTopLeftRadius: 8,

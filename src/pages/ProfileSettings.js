@@ -19,6 +19,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser }) => {
         ActionSheetIOS.showActionSheetWithOptions({
           options: BUTTONS,
           cancelButtonIndex: 2,
+          title: 'Выберите свой пол'
         },
         (buttonIndex) => {
           if(buttonIndex !== 2){

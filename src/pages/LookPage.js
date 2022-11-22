@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, Share } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, Share, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,9 +11,7 @@ import { storage } from '../const';
 import * as Linking from 'expo-linking';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { Skeleton } from '@rneui/themed';
-import { StackView } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
-
 import * as Haptics from 'expo-haptics'
 
 const LookPage = ({
@@ -33,23 +31,32 @@ const LookPage = ({
         isSaved = false
     }) => {
   const { lookSlug } = route.params;
-  const { item } = route.params;
 
   const [link, setLink] = useState('')
 
   useEffect(() => {
-      getCurrentLook(lookSlug)
-      Linking.getInitialURL().then((url) => {
+        let canGoBack = navigation.canGoBack();
+        getCurrentLook(lookSlug)
+        Linking.getInitialURL().then((url) => {
         if (url) {
             setLink(url)
         }
-      }).catch(err => console.error('An error occurred', err));
-  }, [item])
+        }).catch(err => console.error('An error occurred', err));
+        if(!route.params.lookName) navigation.setOptions({title: currentLook.name})
+        if(!canGoBack) {
+            navigation.setOptions({
+                headerLeft: () => (
+                    <TouchableOpacity onPress={() => navigation.navigate('MainNavigator')}>
+                        <Icon name="chevron-back-outline" style={{fontSize: 24, color: '#fff'}}/>
+                    </TouchableOpacity>
+                ),
+            })
+        }
+  }, [lookSlug])
 
   const shareHandler = async () => {
     const options={
-        message: `Посмотри этот образ:\n${item.name}\n\nБольше образов ты найдешь в приложении Papaya\n\n${storage}/${item.image}`,
-        url: `${link}/--/${lookSlug}`
+        message: `Посмотри этот образ:\n${currentLook.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/looks/${lookSlug}\n\n${storage}/${currentLook.image}`,
     }
     try{
         const result = await Share.share(options)

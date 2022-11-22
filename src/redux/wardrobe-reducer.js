@@ -97,7 +97,7 @@ export const requestCategories = () => async (dispatch) => {
         dispatch(setParentCategories(parentCategories))
         dispatch(toggleIsFetching(false))
     }else{
-        console.log("Interests error: ", response.data.message);
+        console.log("Wardrobe categories error: ", response.data);
         dispatch(toggleIsFetching(false))
     }
 }

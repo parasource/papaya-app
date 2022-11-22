@@ -74,18 +74,20 @@ const AppContainer = (props) => {
   );
 
   const linking = {
-    prefixes: [prefix],
+    prefixes: [prefix, 'https://papaya.pw'],
     config: {
       screens: {
         LookPage: {
-          path: 'look/:lookSlug',
+          path: 'looks/:lookSlug',
           parse: (lookSlug) => `${lookSlug}`
+        },
+        TopicPage: {
+          path: 'topics/:topicSlug',
+          parse: (topicSlug) => `${topicSlug}`
         }
       }
     }
   };
-
-// exp://192.168.168.163:19000/--/
 
   const MyTheme = {
     ...DarkTheme,
@@ -135,7 +137,7 @@ const AppContainer = (props) => {
             <Share.Screen
               name="MainNavigator"
               options={{ 
-                headerShown: false
+                headerShown: false,
               }}
               >
                 {() => <TabBottomNavigator handelSnapPress={handelSnapPress}/>}
@@ -148,7 +150,10 @@ const AppContainer = (props) => {
               <Share.Screen
                 name="LookPage"
                 component={LookPage}
-                options={({ route }) => ({ title: route.params.lookName,})}
+                options={({ route }) => ({
+                  title: route.params.lookName,
+                  headerBackButtonMenuEnabled: true
+                })}
               />
               <Share.Screen
                 name="TopicPage"
@@ -237,6 +242,7 @@ const mapStateToProps = (state) => ({
   isAuth: state.auth.isAuth,
   isFirstTime: state.auth.isFirstTime,
   auth: state.auth,
+  currentLook: state.feed.current
 })
 
 export default connect(mapStateToProps, {checkToken, googleLogin, appleLogin})(AppContainer)
