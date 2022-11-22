@@ -28,14 +28,12 @@ const MyWardrobe = ({
 
   useEffect(() => {
     requestCategories()
+    requestWardrobe(categoryId)
   }, [])
 
   useEffect(() => {
     categories != localCategories ? setLocalCategories(categories) : null
-    if(categoryId){
-      requestSelectedWardrobeThings(categoryId)
-      requestWardrobe(categoryId)
-    }
+    requestSelectedWardrobeThings(categoryId)
   }, [categoryId])
 
   useEffect(() => {
@@ -76,6 +74,13 @@ const MyWardrobe = ({
 
   return (
     <View style={styles.row}>
+      {selectedWardrobeId.length < 0 ? <Text style={{
+        fontSize: 16,
+        fontFamily: 'SFregular',
+        color: GRAY_COLOR,
+        textAlign: 'center',
+        marginTop: 20
+      }}>Ваш гардероб пуст {"\n"}Добавьте элементы гардероба</Text> :
       <ScrollView showsVerticalScrollIndicator={false}>
       {localCategories.length > 0 && <FlatList
           ref={wardrobeRef}
@@ -109,7 +114,7 @@ const MyWardrobe = ({
         <View>
           {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
         </View>
-      </ScrollView>
+      </ScrollView>}
       <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
             <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
               <Image source={require("../../../assets/img/icons/outline/plusBlack.png")} style={{
