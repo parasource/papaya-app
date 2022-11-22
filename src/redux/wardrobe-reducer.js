@@ -75,18 +75,6 @@ export const requestAllWardrobe = (id) => async (dispatch) => {
     }
 }
 
-export const requestWardrobe = (id) => async (dispatch) => {
-    dispatch(toggleIsFetching(true))
-    let response = await wardrobeAPI.getWardrobeById(id)
-    if(response.status == 200){
-        dispatch(getAllWardrobe(response.data))
-        dispatch(toggleIsFetching(false))
-    }else{
-        console.log("Wardrobe error: ", response.data.message);
-        dispatch(toggleIsFetching(false))
-    }
-}
-
 export const requestCategories = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getCategories()
@@ -126,13 +114,26 @@ export const addThingWardrobe = (id, wardrobe) => (dispatch) => {
     dispatch(addThing(addWardrobe))
 }
 
-
+export const requestWardrobe = (id) => async (dispatch) => {
+    dispatch(toggleIsFetching(true))
+    let response = await wardrobeAPI.getWardrobeById(id)
+    if(response.status == 200){
+        dispatch(getAllWardrobe(response.data))
+        dispatch(toggleIsFetching(false))
+    }else{
+        console.log("Wardrobe error: ", response.data.message);
+        dispatch(toggleIsFetching(false))
+    }
+}
 
 export const requestSelectedWardrobe = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getSelectedWardrobe()
     if(response.status == 200){
+        let selectedCategories = [...new Set(response.data.map(item => item.category_id))]
+        dispatch(getSelectedWardrobeCategories(selectedCategories))
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
+        requestWardrobe(selectedCategories.sort((a, b) => a - b)[0])
         dispatch(toggleIsFetching(false))
     }else{
         console.log("Wardrobe error: ", response.data.message);
@@ -146,8 +147,6 @@ export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
     if(response.status == 200){
         let wardrobeThings = response.data.filter(item => item.category_id === id)
         dispatch(getSelectedWardrobeThings(wardrobeThings))
-        dispatch(getSelectedWardrobeCategories([...new Set(response.data.map(item => item.category_id))]))
-        dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
         dispatch(toggleIsFetching(false))
     }else{
         console.log("Wardrobe error: ", response.data.message);

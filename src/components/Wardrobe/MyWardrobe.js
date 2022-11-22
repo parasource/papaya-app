@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl, Platform, ScrollView, VirtualizedList, ActivityIndicator } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { requestSelectedWardrobeThings, requestCategories, addThingWardrobe, removeThingWardrobe, requestWardrobe } from '../../redux/wardrobe-reducer';
+import { requestSelectedWardrobeThings, requestSelectedWardrobe, requestCategories, addThingWardrobe, removeThingWardrobe, requestWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
@@ -16,6 +16,7 @@ const MyWardrobe = ({
     requestWardrobe,
     removeThingWardrobe,
     requestSelectedWardrobeThings,
+    requestSelectedWardrobe,
     categories, 
     requestCategories, 
     navigation
@@ -28,24 +29,22 @@ const MyWardrobe = ({
 
   useEffect(() => {
     requestCategories()
-    requestWardrobe(categoryId)
+    requestSelectedWardrobe()
   }, [])
 
   useEffect(() => {
-    categories != localCategories ? setLocalCategories(categories) : null
-    requestSelectedWardrobeThings(categoryId)
-  }, [categoryId])
-
-  useEffect(() => {
-    categories != localCategories ? setLocalCategories(categories) : null
-    if(localCategories.length){
-      wardrobeRef?.current?.scrollToIndex({
-        index: scrollIndex, 
-        animated: true, 
-        viewOffset: 16
-      })
+    if(categoryId){
+      categories != localCategories ? setLocalCategories(categories) : null
+      if(localCategories.length){
+        wardrobeRef?.current?.scrollToIndex({
+          index: scrollIndex, 
+          animated: true, 
+          viewOffset: 16
+        })
+      }
+      requestSelectedWardrobeThings(categoryId)
     }
-  }, [scrollIndex])
+  }, [scrollIndex, categoryId])
 
     const MapWardrobe = () => {
       if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
@@ -82,7 +81,7 @@ const MyWardrobe = ({
         marginTop: 20
       }}>Ваш гардероб пуст {"\n"}Добавьте элементы гардероба</Text> :
       <ScrollView showsVerticalScrollIndicator={false}>
-      {localCategories.length > 0 && <FlatList
+      <FlatList
           ref={wardrobeRef}
           data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
           horizontal 
@@ -110,7 +109,7 @@ const MyWardrobe = ({
           }}
           showsHorizontalScrollIndicator={false} 
           style={styles.tabWrapper}
-        />}
+        />
         <View>
           {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
         </View>
@@ -191,4 +190,4 @@ const mapStateToProps = (state) => ({
   selectedWardrobeCategories: state.wardrobe.selectedWardrobeCategories
 })
 
-export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestCategories, removeThingWardrobe, addThingWardrobe, requestWardrobe})(MyWardrobe)
+export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestSelectedWardrobe, requestCategories, removeThingWardrobe, addThingWardrobe, requestWardrobe})(MyWardrobe)
