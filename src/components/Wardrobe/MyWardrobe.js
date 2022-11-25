@@ -33,43 +33,42 @@ const MyWardrobe = ({
   }, [])
 
   useEffect(() => {
-    if(categoryId){
-      categories != localCategories ? setLocalCategories(categories) : null
-      if(localCategories.length){
-        wardrobeRef?.current?.scrollToIndex({
-          index: scrollIndex, 
-          animated: true, 
-          viewOffset: 16
-        })
-      }
-      requestSelectedWardrobeThings(categoryId)
+    categories != localCategories ? setLocalCategories(categories) : null
+    if(localCategories.length){
+      wardrobeRef?.current?.scrollToIndex({
+        index: scrollIndex, 
+        animated: true, 
+        viewOffset: 16
+      })
     }
+    requestSelectedWardrobeThings(categoryId)
   }, [scrollIndex, categoryId])
 
-    const MapWardrobe = () => {
-      if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
-      return <MasonryList
-            data={selectedWardrobe}
-            numColumns={2}
-            keyExtractor={(item) => item.id + "wardrobe-thing"}
-            renderItem={({item}) => (
-            <WardrobeThingCard
-              isFetching={isFetching}
-              item={item} 
-              selected={selectedWardrobeId.includes(item.id)}
-              onPress={() => {
-                if(selectedWardrobeId.includes(item.id)){
-                  removeThingWardrobe(item.id, selectedWardrobeId) 
-                }else{
-                  addThingWardrobe(item.id, selectedWardrobeId) 
-                }
-              }}
-              />
-            )}
-            nestedScrollEnabled
-            ListFooterComponent={() => <View style={{height: 128}}></View>}
-        />
-    }
+  const MapWardrobe = () => {
+    if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+
+    return <MasonryList
+          data={selectedWardrobe}
+          numColumns={2}
+          keyExtractor={(item) => item.id + "wardrobe-thing"}
+          renderItem={({item}) => (
+          <WardrobeThingCard
+            isFetching={isFetching}
+            item={item} 
+            selected={selectedWardrobeId.includes(item.id)}
+            onPress={() => {
+              if(selectedWardrobeId.includes(item.id)){
+                removeThingWardrobe(item.id, selectedWardrobeId) 
+              }else{
+                addThingWardrobe(item.id, selectedWardrobeId) 
+              }
+            }}
+            />
+          )}
+          nestedScrollEnabled
+          ListFooterComponent={() => <View style={{height: 128}}></View>}
+      />
+  }
 
   return (
     <View style={styles.row}>
@@ -81,38 +80,38 @@ const MyWardrobe = ({
         marginTop: 20
       }}>Ваш гардероб пуст {"\n"}Добавьте элементы гардероба</Text> :
       <ScrollView showsVerticalScrollIndicator={false}>
-      <FlatList
-          ref={wardrobeRef}
-          data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
-          horizontal 
-          initialScrollIndex={scrollIndex}
-          renderItem={({item, index}) => (
-            <TouchableOpacity
-              key={'category-wardrobe-'+item.id}
-              accessibilityRole="button"
-              onPress={() => {
-                setIndex(index)
-                setCategoryId(item.id)
-              }}
-              style={{...styles.btnWrapper, backgroundColor: categoryId == item.id ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4}}
-            >
-              <Text style={{...styles.btnAnimated, color: categoryId == item.id ? BG_COLOR : GRAY_COLOR}}>
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          )}
-          onScrollToIndexFailed={info => {
-            const wait = new Promise(resolve => setTimeout(resolve, 500));
-            wait.then(() => {
-              wardrobeRef.current?.scrollToIndex({ index: info.index, animated: true });
-            });
-          }}
-          showsHorizontalScrollIndicator={false} 
-          style={styles.tabWrapper}
-        />
-        <View>
-          {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
-        </View>
+          <FlatList
+            ref={wardrobeRef}
+            data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
+            horizontal 
+            initialScrollIndex={scrollIndex}
+            renderItem={({item, index}) => (
+              <TouchableOpacity
+                key={'category-wardrobe-'+item.id}
+                accessibilityRole="button"
+                onPress={() => {
+                  setIndex(index)
+                  setCategoryId(item.id)
+                }}
+                style={{...styles.btnWrapper, backgroundColor: categoryId == item.id ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4}}
+              >
+                <Text style={{...styles.btnAnimated, color: categoryId == item.id ? BG_COLOR : GRAY_COLOR}}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            )}
+            onScrollToIndexFailed={info => {
+              const wait = new Promise(resolve => setTimeout(resolve, 500));
+              wait.then(() => {
+                wardrobeRef.current?.scrollToIndex({ index: info.index, animated: true });
+              });
+            }}
+            showsHorizontalScrollIndicator={false} 
+            style={styles.tabWrapper}
+          />
+          <View>
+            {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
+          </View>
       </ScrollView>}
       <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
             <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>

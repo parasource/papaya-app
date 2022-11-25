@@ -115,6 +115,7 @@ export const addThingWardrobe = (id, wardrobe) => (dispatch) => {
 }
 
 export const requestWardrobe = (id) => async (dispatch) => {
+    console.log(id);
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getWardrobeById(id)
     if(response.status == 200){
@@ -133,8 +134,17 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
         let selectedCategories = [...new Set(response.data.map(item => item.category_id))]
         dispatch(getSelectedWardrobeCategories(selectedCategories))
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
-        requestWardrobe(selectedCategories.sort((a, b) => a - b)[0])
-        dispatch(toggleIsFetching(false))
+
+        const requestId = selectedCategories.sort((a, b) => a - b)[0]
+        let responseWardrobe = await wardrobeAPI.getWardrobeById(requestId)
+        if(responseWardrobe.status == 200){
+            console.log(requestId);
+            dispatch(getAllWardrobe(responseWardrobe.data))
+            dispatch(toggleIsFetching(false))
+        }else{
+            console.log("Wardrobe error: ", responseWardrobe.data.message);
+            dispatch(toggleIsFetching(false))
+        }
     }else{
         console.log("Wardrobe error: ", response.data.message);
         dispatch(toggleIsFetching(false))

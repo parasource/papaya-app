@@ -276,23 +276,23 @@ export const unsaveLook = (slug) => async (dispatch) => {
     })
 }
 
-export const requestBookmarked = () => async (dispatch) => {
+export const requestBookmarked = (page) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
-    const response = await feedAPI.getSaved()
+    const response = await feedAPI.getSaved(page)
     if(response.status == 200){
-        // if(onRefresh){
+        if(onRefresh){
             dispatch(setBookmarked(response.data))
-            // dispatch(toggleIsListEnd(false))
+            dispatch(toggleIsListEnd(false))
             dispatch(toggleIsFetching(false))
-        // }else{
-        //     if(!response.data || !response.data.length){
-        //         dispatch(toggleIsListEnd(true))
-        //         dispatch(toggleIsFetching(false))
-        //     }else{
-        //         dispatch(setBookmarked(response.data))
-        //         dispatch(toggleIsFetching(false))
-        //     }
-        // }
+        }else{
+            if(!response.data || !response.data.length){
+                dispatch(toggleIsListEnd(true))
+                dispatch(toggleIsFetching(false))
+            }else{
+                dispatch(setBookmarked(response.data))
+                dispatch(toggleIsFetching(false))
+            }
+        }
     }else{
         console.log(response);
         dispatch(toggleIsFetching(false))
