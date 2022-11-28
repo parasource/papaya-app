@@ -21,7 +21,7 @@ const SearchBlur = ({recommended, popular, navigation}) => {
         </ScrollView>
       ) : (
         <View style={styles.footer}>
-          <Text style={styles.footerText}>No more articles at the moment</Text>
+          <Text style={styles.footerText}>Больше образов нет</Text>
         </View>
       )}
       <Text style={styles.title}>Популярное на этой неделе</Text>
@@ -40,7 +40,7 @@ const SearchBlur = ({recommended, popular, navigation}) => {
         </View>
       ) : (
         <View style={styles.footer}>
-          <Text style={styles.footerText}>No more articles at the moment</Text>
+          <Text style={styles.footerText}>Больше образов нет</Text>
         </View>
       )}
     </View>

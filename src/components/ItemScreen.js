@@ -1,5 +1,6 @@
+import { openBrowserAsync } from 'expo-web-browser';
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { storage } from '../const';
 import { requestItem } from '../redux/looks-reducer';
@@ -14,24 +15,26 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
     }, [])
 
     return (
-      <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Купить в магазине</Text>
+          <Text style={{...styles.title, paddingHorizontal: 16}}>Купить в магазине</Text>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.row}>
             {item?.item?.urls?.map(url => (
-              <TouchableOpacity key={url.ID} onPress={() => Linking.openURL(url.url)} style={styles.linkWrapper}>
+              <TouchableOpacity key={url.ID} onPress={() => openBrowserAsync(url.url)} style={styles.linkWrapper}>
                 <Image style={styles.img} source={{uri: `${storage}/${url.brand.image}`}}/>
               </TouchableOpacity>
             ))}
           </View>
-          <Text style={styles.title}>Образы с этим элементом</Text>
-          <View style={styles.feed}>
-            {item.looks && item.looks.map((item,index) => (
-              <FeedCard item={item} key={index} navigation={navigation} withPop={true}/>
-            ))}
+          </ScrollView>
+          <View style={styles.container}>
+            <Text style={styles.title}>Образы с этим элементом</Text>
+            <View style={styles.feed}>
+              {item.looks && item.looks.map((item,index) => (
+                <FeedCard item={item} key={index} navigation={navigation} withPop={true}/>
+              ))}
+            </View>
           </View>
         </ScrollView>
-      </View>
     )
   }
 
@@ -64,11 +67,13 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
       borderRadius: 12,
       resizeMode: 'cover'
     },
+    linkWrapper: {
+      marginLeft: 8,
+    },
     row: {
       width: '100%', 
       flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between'
+      marginHorizontal: 8
     }
   })
 

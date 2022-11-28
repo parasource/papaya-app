@@ -175,7 +175,7 @@ const AppContainer = (props) => {
               }}/>
               <Share.Screen name="MyWardrobe" component={MyWardrobe} 
               options={{ 
-                title: "Мой гародероб",
+                title: "Мой гардероб",
               }}/>
               <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
               <Share.Screen

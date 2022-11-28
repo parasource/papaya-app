@@ -91,7 +91,6 @@ export const requestCategories = () => async (dispatch) => {
 }
 
 export const setInterests = (interests) => async (dispatch) => {
-    console.log(initialState.selectedWardrobeId);
     interests = JSON.stringify({wardrobe: interests})
     await wardrobeAPI.setWardrobe(interests)
 }
@@ -138,7 +137,6 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
         const requestId = selectedCategories.sort((a, b) => a - b)[0]
         let responseWardrobe = await wardrobeAPI.getWardrobeById(requestId)
         if(responseWardrobe.status == 200){
-            console.log(requestId);
             dispatch(getAllWardrobe(responseWardrobe.data))
             dispatch(toggleIsFetching(false))
         }else{

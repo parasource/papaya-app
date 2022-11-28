@@ -37,7 +37,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
 
   const shareHandler = async () => {
     const options={
-        message: `Посмотри эту подборку образов:\n${currentTopic.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}\n\n${storage}/${currentTopic.topic.image}`,
+        message: `Посмотри эту подборку образов:\n${currentTopic.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}`,
     }
     try{
         const result = await Share.share(options)

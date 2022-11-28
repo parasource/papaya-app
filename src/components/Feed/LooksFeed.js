@@ -23,7 +23,7 @@ export const LooksFeed = ({looks, isListEnd, navigation, modalHandler}) => {
             </View>
             <View style={styles.footer}>
               {isListEnd ? 
-              <Text style={styles.footerText}>No more articles at the moment</Text> 
+              <Text style={styles.footerText}>Больше образов нет</Text> 
               : <ActivityIndicator/>}
             </View>
             

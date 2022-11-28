@@ -276,7 +276,7 @@ export const unsaveLook = (slug) => async (dispatch) => {
     })
 }
 
-export const requestBookmarked = (page) => async (dispatch) => {
+export const requestBookmarked = (page, onRefresh) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getSaved(page)
     if(response.status == 200){

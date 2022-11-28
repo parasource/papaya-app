@@ -9,7 +9,7 @@ const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
-const Bookmarked = ({requestBookmarked, bookmarked, navigation}) => {  
+const Bookmarked = ({requestBookmarked, bookmarked, navigation, isListEnd, isFetching}) => {  
     const [page, setPage] = useState(0)
     const [refreshing, setRefreshing] = useState(false);
     const [secondFetch, setSecondFetch] = useState(false);
@@ -40,7 +40,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation}) => {
     }
 
     useEffect(() => {
-        requestLooks(page, false)
+        requestBookmarked(page, false)
     }, [page])
 
     return (
