@@ -11,6 +11,7 @@ const SET_TODAY_LOOK = 'SET_TODAY_LOOK'
 const TOGGLE_LIKED = 'TOGGLE_LIKED'
 const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
 const TOGGLE_IS_LIST_END = 'TOGGLE_IS_LIST_END'
+const TOGGLE_IS_SAVED_END = 'TOGGLE_IS_SAVED_END'
 const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_SEARCH_RESULT_LOOKS = 'SET_SEARCH_RESULT_LOOKS'
 const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
@@ -32,6 +33,7 @@ let initialState = {
     currentItem: {},
     categoriesLooks: [],
     isListEnd: false,
+    isSavedEnd: false,
     searchResultLooks: [],
     currentTopic: {},
     topicsRecommended: [],
@@ -72,6 +74,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isDisliked: action.isDisliked}
         case TOGGLE_IS_LIST_END: 
             return {...state, isListEnd: action.isListEnd}
+        case TOGGLE_IS_SAVED_END: 
+            return {...state, isSavedEnd: action.isSavedEnd}
         case TOGGLE_IS_SAVE: 
             return {...state, isSaved: action.isSaved}
         case SET_POPULAR_TOPICS: 
@@ -100,6 +104,7 @@ const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
 const toggleDisliked = (isDisliked) => ({ type: TOGGLE_DISLIKED, isDisliked })
 const toggleIsListEnd = (isListEnd) => ({ type: TOGGLE_IS_LIST_END, isListEnd })
+const toggleIsSavedEnd = (isSavedEnd) => ({ type: TOGGLE_IS_SAVED_END, isSavedEnd })
 const toggleIsSaved = (isSaved) => ({ type: TOGGLE_IS_SAVE, isSaved })
 const setCurrentTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const setRecommendedTopics = (topicsRecommended) => ({ type: SET_RECOMMENDED_TOPICS, topicsRecommended })
@@ -282,11 +287,11 @@ export const requestBookmarked = (page, onRefresh) => async (dispatch) => {
     if(response.status == 200){
         if(onRefresh){
             dispatch(setBookmarked(response.data))
-            dispatch(toggleIsListEnd(false))
+            dispatch(toggleIsSavedEnd(false))
             dispatch(toggleIsFetching(false))
         }else{
             if(!response.data || !response.data.length){
-                dispatch(toggleIsListEnd(true))
+                dispatch(toggleIsSavedEnd(true))
                 dispatch(toggleIsFetching(false))
             }else{
                 dispatch(setBookmarked(response.data))

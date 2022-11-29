@@ -9,7 +9,7 @@ const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
   };
 
-const Bookmarked = ({requestBookmarked, bookmarked, navigation, isListEnd, isFetching}) => {  
+const Bookmarked = ({requestBookmarked, bookmarked, navigation, isSavedEnd, isFetching}) => {  
     const [page, setPage] = useState(0)
     const [refreshing, setRefreshing] = useState(false);
     const [secondFetch, setSecondFetch] = useState(false);
@@ -23,7 +23,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation, isListEnd, isFet
     }, []);
 
     const scrollHandler = (nativeEvent) => {
-        if (isCloseToBottom(nativeEvent) && !isListEnd && !isFetching) {
+        if (isCloseToBottom(nativeEvent) && !isSavedEnd && !isFetching) {
         moreData()
         }
     }
@@ -34,7 +34,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation, isListEnd, isFet
 
     const moreData = () => {
         setSecondFetch(true)
-        if(!isListEnd){
+        if(!isSavedEnd){
             requestBookmarked(page + 1)
         }
     }
@@ -51,7 +51,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation, isListEnd, isFet
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
             <Text style={styles.title}>Сохраненные</Text>
-            <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={true}/>
+            <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={isSavedEnd}/>
             <View style={{height: 100}}></View>
         </ScrollView>
     );
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     bookmarked: state.feed.bookmarked, 
-    isListEnd: state.feed.isListEnd,
+    isSavedEnd: state.feed.isSavedEnd,
     isFetching: state.feed.isFetching
   })
   
