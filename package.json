@@ -32,6 +32,7 @@
     "expo-blur": "~11.2.0",
     "expo-constants": "~13.2.4",
     "expo-font": "~10.2.0",
+    "expo-haptics": "~11.3.0",
     "expo-linear-gradient": "~11.4.0",
     "expo-linking": "~3.2.2",
     "expo-notifications": "~0.16.1",
@@ -39,6 +40,7 @@
     "expo-random": "~12.3.0",
     "expo-secure-store": "~11.3.0",
     "expo-sharing": "~10.3.0",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-updates": "~0.14.7",
     "expo-video-player": "^2.2.0",
@@ -55,6 +57,7 @@
     "react-native-auto-height-image": "^3.2.4",
     "react-native-dropdownalert": "^4.5.1",
     "react-native-elements": "^3.4.2",
+    "react-native-gesture-handler": "~2.5.0",
     "react-native-internet-connection-alert": "^0.1.9",
     "react-native-ionicons": "^4.6.5",
     "react-native-keychain": "^8.0.0",
@@ -77,10 +80,8 @@
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
-    "yup": "^0.32.11",
-    "react-native-gesture-handler": "~2.5.0",
-    "expo-splash-screen": "~0.16.2",
-    "expo-haptics": "~11.3.0"
+    "sharp-cli": "^3.0.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
