@@ -46,7 +46,7 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
           shouldPlay
           rate={1}/>
         <View style={styles.textBlock}>
-          <Text style={styles.h1}>Начни стильно одеваться</Text>
+          <Text style={styles.h1}>Одеваться стильно просто</Text>
           <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
         </View>
        {Platform.OS === 'ios' && <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
@@ -55,12 +55,12 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
               Sign in with Apple
             </Text>
         </TouchableOpacity>}
-         <TouchableOpacity style={styles.googleBtn} onPress={googleHandler}>
+        {Platform.OS !== 'ios' && <TouchableOpacity style={styles.googleBtn} onPress={googleHandler}>
             <Image source={require('../../assets/img/icons/google.png')} style={styles.googleIcon}/>
             <Text style={styles.googleBtnText}>
               Sign in with Google
             </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </View>
   )

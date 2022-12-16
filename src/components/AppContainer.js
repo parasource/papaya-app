@@ -27,30 +27,31 @@ const prefix = Linking.createURL('/');
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
 
+
+Notifications.cancelAllScheduledNotificationsAsync()
+
+AsyncStorage.getItem('notification').then(res => {
+  if(res === 'on'){
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "🔔 Мы собрали вам образ на сегодня",
+        body: "посмотреть в приложении",
+        data: {
+          data: "goes here"
+        },
+      },
+      trigger: {
+        hour: 5,
+        minute: 45,
+        repeats: true,
+      },
+    });
+  }
+})
+
 const AppContainer = (props) => {
   useMemo(() => {
     props.checkToken() 
-
-    Notifications.cancelAllScheduledNotificationsAsync()
-
-    AsyncStorage.getItem('notification').then(res => {
-      if(res === 'on'){
-        Notifications.scheduleNotificationAsync({
-          content: {
-            title: "🔔 Мы собрали вам образ на сегодня",
-            body: "посмотреть в приложении",
-            data: {
-              data: "goes here"
-            },
-          },
-          trigger: {
-            hour: 5,
-            minute: 45,
-            repeats: true,
-          },
-        });
-      }
-    })
   }, [])
 
   const sheetRef = useRef(null)

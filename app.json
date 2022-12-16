@@ -33,7 +33,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "tech.parasource.papaya.ios",
-      "buildNumber": "3",
+      "buildNumber": "4",
       "usesAppleSignIn": true,
       "associatedDomains": ["applinks:papaya.parasource.tech"]
     },

@@ -134,6 +134,22 @@ const LookPage = ({
                     <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.iconSM}/>
                 }/>
             </View>
+            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
+                {currentLook?.categories?.map(category => (
+                    <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
+                        paddingHorizontal: 12,
+                        paddingVertical: 6,
+                        borderRadius: 8,
+                        backgroundColor: INPUTS_BG,
+                        marginRight: 8,
+                        marginTop: 8
+                    }} onPress={() => navigation.navigate('Home', ({initCategory: category}))}>
+                        <Text style={{color: TEXT_COLOR}}>
+                            #{category.name.toLowerCase().split(' ').join('')}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
                 {currentLook?.items?.map(item => (

@@ -143,6 +143,7 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
 export const requestCategoriesLooks = (slug) => async (dispatch) => {
     if(slug){
         dispatch(toggleIsFetching(true))
+        dispatch(setCategoriesLooks([]))
         dispatch(toggleIsListEnd(false))
         const response = await feedAPI.getCategoriesLooks(slug)
         if(response.status == 200){

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, RefreshControl, Platform, ScrollView, VirtualizedList, ActivityIndicator } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { requestSelectedWardrobeThings, requestSelectedWardrobe, requestCategories, addThingWardrobe, removeThingWardrobe, requestWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
@@ -34,19 +34,24 @@ const MyWardrobe = ({
 
   useEffect(() => {
     categories != localCategories ? setLocalCategories(categories) : null
-    if(localCategories.length){
-      wardrobeRef?.current?.scrollToIndex({
-        index: scrollIndex, 
-        animated: true, 
-        viewOffset: 16
-      })
+    if(categoryId){
+      if(localCategories.length){
+        wardrobeRef?.current?.scrollToIndex({
+          index: scrollIndex, 
+          animated: true, 
+          viewOffset: 16
+        })
+      }
+      requestSelectedWardrobeThings(categoryId)
     }
-    requestSelectedWardrobeThings(categoryId)
   }, [scrollIndex, categoryId])
 
-  const MapWardrobe = () => {
-    if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+  useLayoutEffect(() => {
+    setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+  })
 
+  const MapWardrobe = () => {
+    // if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
     return <MasonryList
           data={selectedWardrobe}
           numColumns={2}
@@ -83,7 +88,7 @@ const MyWardrobe = ({
           <FlatList
             ref={wardrobeRef}
             data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
-            horizontal 
+            horizontal
             initialScrollIndex={scrollIndex}
             renderItem={({item, index}) => (
               <TouchableOpacity

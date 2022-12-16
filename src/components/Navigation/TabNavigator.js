@@ -3,20 +3,23 @@ import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
-import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
 import homeIcon from '../../../assets/img/icons/outline/home.png';
 import searchIcon from '../../../assets/img/icons/outline/search.png';
 import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
 import userIcon from '../../../assets/img/icons/outline/user.png';
 import { BlurView } from 'expo-blur';
+import { useState } from 'react';
 
 const Tab = createBottomTabNavigator()
 
 export const TabBottomNavigator = ({handelSnapPress}) => {
+  const [onTop, setOnTop] = useState(null)
+
   return(
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           let title;
@@ -34,10 +37,19 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
             title = "Профиль"
           }
           return (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Pressable style={{justifyContent: 'center', alignItems: 'center'}} 
+            onPress={() => {
+              let history = navigation.getState().history
+              if(title === "Главная" && history.length === 1){
+                if(onTop === 1) setOnTop(2)
+                else setOnTop(1)
+              }
+              navigation.navigate(route.name)
+            }}
+            >
               <Image source={{uri: Image.resolveAssetSource(iconName).uri}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
               <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
-            </View>
+            </Pressable>
           )
         },
         tabBarActiveTintColor: TEXT_COLOR,
@@ -52,7 +64,7 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
       })}
     >
         <Tab.Screen name="Home">
-            {({navigation}) => <HomePage handelSnapPress={handelSnapPress} navigation={navigation}/>}
+            {({navigation, route}) => <HomePage handelSnapPress={handelSnapPress} navigation={navigation} onTop={onTop} route={route} onTopEnd={() => setOnTop(null)}/>}
         </Tab.Screen>
         <Tab.Screen
           name="Search"

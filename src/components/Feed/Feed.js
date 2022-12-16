@@ -1,5 +1,5 @@
 import { Dimensions, View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image, FlatList, Platform } from 'react-native'
-import React, {useEffect, useState, useCallback, useRef} from 'react'
+import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
@@ -11,6 +11,7 @@ const wait = timeout => {
 };
 
 const Feed = ({
+  onTop,
   navigation, 
   isFetching, 
   looks, 
@@ -20,9 +21,13 @@ const Feed = ({
   categories, 
   categoriesLooks, 
   requestCategoriesLooks, 
-  handelSnapPress
+  handelSnapPress,
+  route
 }) => {
   const categoriesRef = useRef(null)
+  const scrollRef = useRef(null)
+
+  const initCategory = route?.params?.initCategory
   
   const [height, setHeight] = useState(Dimensions.get('window').height)
   const [page, setPage] = useState(0)
@@ -30,6 +35,7 @@ const Feed = ({
   const [isActive, setIsActive] = useState(null);
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
+  const [categoriesY, setCategoriesY] = useState(null);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -73,9 +79,32 @@ const Feed = ({
   useEffect(() => {
     requestLooks(page, false)
   }, [page])
+
+  useEffect(() => {
+    if(onTop === 1){
+      scrollRef.current?.scrollTo({
+        y: 0,
+        animated: true,
+      });
+    }else if(onTop === 2){
+      onPress(null)
+    }
+    
+  }, [onTop])
   
+  useMemo(() => {
+    if(initCategory){
+      onPress(initCategory.ID, initCategory.slug, categories.findIndex(el => el.slug === initCategory.slug))
+      scrollRef.current?.scrollTo({
+        y: categoriesY + 20,
+        animated: true,
+      });
+    }
+  }, [initCategory, categoriesY])
+
   return (
       <ScrollView 
+        ref={scrollRef}
         style={{width: '100%'}}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
@@ -91,7 +120,7 @@ const Feed = ({
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
               horizontal 
-              keyExtractor={(item,index) => 'category'+item.ID}
+              keyExtractor={(item) => 'category'+item.ID}
               initialScrollIndex={index}
               onScrollToIndexFailed={info => {
                 const wait = new Promise(resolve => setTimeout(resolve, 500));
@@ -127,7 +156,10 @@ const Feed = ({
               showsHorizontalScrollIndicator={false} 
               style={styles.tabWrapper}
             />
-            <View style={styles.container}>
+            <View style={styles.container} onLayout={(event) => {
+                const { layout } = event.nativeEvent;
+                setCategoriesY(layout.y)
+              }}>
               <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
                 navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => handelSnapPress(0)}/>
             </View>
