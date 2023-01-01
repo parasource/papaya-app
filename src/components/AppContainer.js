@@ -203,7 +203,7 @@ const AppContainer = (props) => {
       onClose={() => setIsOpen(false)}
       backdropComponent={renderBackdrop}>
         <View style={styles.bottomSheet}>
-            <Text style={styles.sheetTitle}>Образы составлены на основе вашего гардероба</Text>
+            <Text style={styles.sheetTitle}>Образ подобран на основе вашего гардероба</Text>
             <Text style={styles.sheetText}>Этой иконкой обозначены образы, которые были рекомендованы на основе вашего гардероба. В них есть как минимум одна вещь, которая есть у вас.</Text>
             <FullButton label="Отлично!" style={{marginTop: 40}} pressHandler={() => sheetRef.current?.close()}/>
         </View>

@@ -31,7 +31,7 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
             title = "Поиск"
           } else if (route.name === "Favorites") {
             iconName = favoriteIcon;
-            title = "Закладки"
+            title = "Сохраненные"
           } else if (route.name === "Profile") {
             iconName = userIcon;
             title = "Профиль"
