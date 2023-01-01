@@ -1,29 +1,65 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux"
-import { checkToken } from '../../redux/auth-reducer';
+import { checkToken, updateUser } from '../../redux/auth-reducer';
 import { requestCategories, requestSelectedWardrobe } from '../../redux/wardrobe-reducer';
-import { View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, ActionSheetIOS, ActivityIndicator, TouchableOpacity, Text, ScrollView } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
-import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
+import Chevron from '../../../assets/img/icons/chevron.left.svg'
+import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, requestSelectedWardrobe, firstTime}) => {
+const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, requestSelectedWardrobe, firstTime, name, sex, updateUser}) => {
+    const [stateSex, setSex] = useState(sex)
+    
     useEffect(() => {
         requestCategories()
-    }, [])
+    }, [sex])
 
     useEffect(() => {
         requestSelectedWardrobe()
-    }, [])
+        if(firstTime){
+            showActionSheet()
+        }
+    })
+
+    const BUTTONS = [
+        "Mужской", 
+        "Женский", 
+        "Отмена"
+    ]
+
+    const showActionSheet = () => {
+        ActionSheetIOS.showActionSheetWithOptions({
+        options: BUTTONS,
+        cancelButtonIndex: 2,
+        title: 'Выберите свой пол'
+        },
+        (buttonIndex) => {
+        if(buttonIndex !== 2){
+            setSex(buttonIndex === 0 ? "male" : "female");
+            updateUser({"sex": (buttonIndex === 0 ? "male" : "female"), "name": name})
+        }
+        });
+    }
 
     return(
       <View style={{paddingHorizontal: 16, flex: 1}}>
         {isFetching ? <ActivityIndicator /> :
         <ScrollView showsVerticalScrollIndicator={false}>
             {firstTime && 
-            <TouchableOpacity style={styles.wrapper}>
-                <Text style={styles.text}>Вы выбрали {selectedWardrobeId.length} вещей из 5</Text>
-            </TouchableOpacity>}
+                <>
+                    <TouchableOpacity style={styles.wrapper}>
+                        <Text style={styles.text}>Вы выбрали {selectedWardrobeId.length} вещей из 5</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.listItem} onPress={showActionSheet}>
+                    <Text style={styles.listItemLabel}>Ваш пол</Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.mute}>{sex === "male" ? "Муж." : "Жен."}</Text>
+                        <Chevron style={styles.chevron}/>
+                    </View>
+                    </TouchableOpacity>
+                </>
+            }
             {parentCategories.map((parent, index) => (
                 <View key={'wardrobe-parent-category' + index}>
                     <Text style={styles.parentTitle}>{parent}</Text>
@@ -103,6 +139,33 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 16
     },
+
+    chevron: {
+        width: 8,
+        height: 12,
+        marginTop: 4
+    },
+    listItem: {
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 8,
+        backgroundColor: INPUTS_BG,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        color: TEXT_COLOR
+    },
+    mute: {
+        color: MUTE_TEXT,
+        fontSize: 17,
+        fontFamily: 'SFregular', 
+        marginRight: 8
+    },
+    listItemLabel: {
+        color: TEXT_COLOR,
+        fontSize: 16,
+        fontFamily: 'SFregular', 
+    }
 })
 
 
@@ -111,7 +174,9 @@ const mapStateToProps = (state) => ({
     categories: state.wardrobe.categories,
     isFetching: state.wardrobe.isFetching,
     selectedWardrobe: state.wardrobe.selectedWardrobe,
-    selectedWardrobeId: state.wardrobe.selectedWardrobeId
+    selectedWardrobeId: state.wardrobe.selectedWardrobeId,
+    sex: state.auth.sex,
+    name: state.auth.name
 })
 
-export default connect(mapStateToProps, {requestCategories, requestSelectedWardrobe, checkToken})(Wardrobe)
+export default connect(mapStateToProps, {requestCategories, requestSelectedWardrobe, checkToken, updateUser})(Wardrobe)

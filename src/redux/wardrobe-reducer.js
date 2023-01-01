@@ -135,14 +135,8 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
 
         const requestId = selectedCategories.sort((a, b) => a - b)[0]
-        let responseWardrobe = await wardrobeAPI.getWardrobeById(requestId)
-        if(responseWardrobe.status == 200){
-            dispatch(getAllWardrobe(responseWardrobe.data))
-            dispatch(toggleIsFetching(false))
-        }else{
-            console.log("Wardrobe error: ", responseWardrobe.data.message);
-            dispatch(toggleIsFetching(false))
-        }
+
+        dispatch(requestWardrobe(requestId))
     }else{
         console.log("Wardrobe error: ", response.data.message);
         dispatch(toggleIsFetching(false))

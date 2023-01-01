@@ -34,6 +34,7 @@ const MyWardrobe = ({
 
   useEffect(() => {
     categories != localCategories ? setLocalCategories(categories) : null
+
     if(categoryId){
       if(localCategories.length){
         wardrobeRef?.current?.scrollToIndex({
@@ -46,12 +47,8 @@ const MyWardrobe = ({
     }
   }, [scrollIndex, categoryId])
 
-  useLayoutEffect(() => {
-    setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
-  })
-
   const MapWardrobe = () => {
-    // if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+    if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
     return <MasonryList
           data={selectedWardrobe}
           numColumns={2}

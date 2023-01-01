@@ -143,9 +143,9 @@ const LookPage = ({
                         backgroundColor: INPUTS_BG,
                         marginRight: 8,
                         marginTop: 8
-                    }} onPress={() => navigation.navigate('Home', ({initCategory: category}))}>
+                    }}>
                         <Text style={{color: TEXT_COLOR}}>
-                            #{category.name.toLowerCase().split(' ').join('')}
+                            {category.name.toLowerCase().split(' ').join('')}
                         </Text>
                     </TouchableOpacity>
                 ))}
