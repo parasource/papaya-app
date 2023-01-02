@@ -24,7 +24,7 @@ const MasonryCard = ({navigation, item, withPop, modalHandler}) => {
             <View style={{...styles.cardWrapper, width: width, aspectRatio: !isNaN(ratio) ? ratio : 2/3}}> 
               <SharedElement id={`feedCard${item.slug}`} style={{position: 'relative', zIndex: 1}}>
                   <Image
-                  source={{uri: `${storage}/${item.image}`}}
+                  source={{uri: `${storage}/${item.imageResized}`}}
                   style={{zIndex: 0, position: 'relative', 
                   width: width, 
                   aspectRatio: !isNaN(ratio) ? ratio : 2/3}}
