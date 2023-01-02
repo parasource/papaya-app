@@ -16,8 +16,8 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
     }, [sex])
 
     useEffect(() => {
-        requestSelectedWardrobeLength()
         if(firstTime){
+            requestSelectedWardrobeLength()
             showActionSheet()
         }
     })
