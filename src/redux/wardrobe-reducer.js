@@ -135,8 +135,9 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
         dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
 
         const requestId = selectedCategories.sort((a, b) => a - b)[0]
-
-        dispatch(requestWardrobe(requestId))
+        if(requestId){
+            dispatch(requestWardrobe(requestId))
+        }
     }else{
         console.log("Wardrobe error: ", response.data.message);
         dispatch(toggleIsFetching(false))

@@ -74,7 +74,7 @@ const MyWardrobe = ({
 
   return (
     <View style={styles.row}>
-      {selectedWardrobeId.length < 0 ? <Text style={{
+      {selectedWardrobeId.length <= 0 ? <Text style={{
         fontSize: 16,
         fontFamily: 'SFregular',
         color: GRAY_COLOR,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { connect } from "react-redux"
 import { checkToken, updateUser } from '../../redux/auth-reducer';
 import { requestCategories, requestSelectedWardrobeLength } from '../../redux/wardrobe-reducer';
@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, requestSelectedWardrobeLength, firstTime, name, sex, updateUser}) => {
     const [stateSex, setSex] = useState(sex)
+    const [opened, setOpen] = useState(false)
     
     useEffect(() => {
         requestCategories()
@@ -18,7 +19,10 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
     useEffect(() => {
         if(firstTime){
             requestSelectedWardrobeLength()
-            showActionSheet()
+            if(!opened){
+                showActionSheet()
+                setOpen(true)
+            }
         }
     })
 
@@ -30,9 +34,9 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
 
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions({
-        options: BUTTONS,
-        cancelButtonIndex: 2,
-        title: 'Выберите свой пол'
+            options: BUTTONS,
+            cancelButtonIndex: 2,
+            title: 'Выберите свой пол'
         },
         (buttonIndex) => {
         if(buttonIndex !== 2){
