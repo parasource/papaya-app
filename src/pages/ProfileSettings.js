@@ -3,9 +3,10 @@ import { View, Text,  StyleSheet,  ActionSheetIOS, TouchableOpacity, TextInput, 
 import { GRAY_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { updateUser } from '../redux/auth-reducer';
+import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 
-const ProfileSettingsContainer = ({ name, sex, updateUser }) => {
+const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe }) => {
     const [stateSex, setSex] = useState(sex)
     const [stateName, setName] = useState(name)
 
@@ -25,6 +26,11 @@ const ProfileSettingsContainer = ({ name, sex, updateUser }) => {
           if(buttonIndex !== 2){
             setSex(buttonIndex === 0 ? "male" : "female");
             updateUser({"sex": (buttonIndex === 0 ? "male" : "female"), "name": stateName})
+            if(sex !== (buttonIndex === 0 ? "male" : "female")){
+              requestCategories()
+              requestSelectedWardrobe()
+              console.log('reload');
+            }
           }
         });
       }
@@ -135,4 +141,4 @@ const mapStateToProps = (state) => ({
   sex: state.auth.sex
 })
 
-export const ProfileSettings = connect(mapStateToProps, {updateUser})(ProfileSettingsContainer)
+export const ProfileSettings = connect(mapStateToProps, {updateUser, requestCategories, requestSelectedWardrobe})(ProfileSettingsContainer)

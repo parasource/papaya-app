@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { connect } from "react-redux"
 import { checkToken, updateUser } from '../../redux/auth-reducer';
-import { requestCategories, requestSelectedWardrobeLength } from '../../redux/wardrobe-reducer';
+import { requestCategories } from '../../redux/wardrobe-reducer';
 import { View, StyleSheet, ActionSheetIOS, ActivityIndicator, TouchableOpacity, Text, ScrollView } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
 import Chevron from '../../../assets/img/icons/chevron.left.svg'
 import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, requestSelectedWardrobeLength, firstTime, name, sex, updateUser}) => {
+const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, firstTime, name, sex, updateUser}) => {
     const [stateSex, setSex] = useState(sex)
     const [opened, setOpen] = useState(false)
     
@@ -17,13 +17,10 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
     }, [sex])
 
     useEffect(() => {
-        if(firstTime){
-            requestSelectedWardrobeLength()
-            if(!opened){
+        if(firstTime && !opened){
                 showActionSheet()
                 setOpen(true)
             }
-        }
     })
 
     const BUTTONS = [
@@ -183,4 +180,4 @@ const mapStateToProps = (state) => ({
     name: state.auth.name
 })
 
-export default connect(mapStateToProps, {requestCategories, requestSelectedWardrobeLength, checkToken, updateUser})(Wardrobe)
+export default connect(mapStateToProps, {requestCategories, checkToken, updateUser})(Wardrobe)

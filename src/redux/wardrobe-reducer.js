@@ -144,18 +144,6 @@ export const requestSelectedWardrobe = () => async (dispatch) => {
     }
 }
 
-export const requestSelectedWardrobeLength = () => async (dispatch) => {
-    dispatch(toggleIsFetching(true))
-    let response = await wardrobeAPI.getSelectedWardrobe()
-    if(response.status == 200){
-        dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
-    }else{
-        console.log("Wardrobe error: ", response.data.message);
-        dispatch(toggleIsFetching(false))
-    }
-}
-
-
 export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getSelectedWardrobe()

@@ -19,7 +19,8 @@ const MyWardrobe = ({
     requestSelectedWardrobe,
     categories, 
     requestCategories, 
-    navigation
+    navigation,
+    sex
   }) => {
   const wardrobeRef = useRef(null)
 
@@ -28,9 +29,10 @@ const MyWardrobe = ({
   const [localCategories, setLocalCategories] = useState([])
 
   useEffect(() => {
+    setCategoryId(null)
     requestCategories()
     requestSelectedWardrobe()
-  }, [])
+  }, [sex])
 
   useEffect(() => {
     categories != localCategories ? setLocalCategories(categories) : null
@@ -44,11 +46,14 @@ const MyWardrobe = ({
         })
       }
       requestSelectedWardrobeThings(categoryId)
+    }else{
+      setCategoryId(selectedWardrobeCategories?.sort((a, b) => a - b)[0])
     }
   }, [scrollIndex, categoryId])
 
   const MapWardrobe = () => {
     if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
+
     return <MasonryList
           data={selectedWardrobe}
           numColumns={2}
@@ -188,7 +193,8 @@ const mapStateToProps = (state) => ({
   selectedWardrobeId: state.wardrobe.selectedWardrobeId,
   selectedWardrobe: state.wardrobe.selectedWardrobe,
   categories: state.wardrobe.categories,
-  selectedWardrobeCategories: state.wardrobe.selectedWardrobeCategories
+  selectedWardrobeCategories: state.wardrobe.selectedWardrobeCategories,
+  sex: state.auth.sex,
 })
 
 export default connect(mapStateToProps, {requestSelectedWardrobeThings, requestSelectedWardrobe, requestCategories, removeThingWardrobe, addThingWardrobe, requestWardrobe})(MyWardrobe)
