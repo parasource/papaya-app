@@ -114,10 +114,16 @@ const AppContainer = (props) => {
             headerBackTitleVisible: false,
             headerTintColor: '#fff',
          }}>
-              <Stack.Screen name="Wardrobe" 
-              options={{ 
-                title: "Гардероб",
-              }}>
+              <Stack.Screen
+                name="ProfileSettings"
+                options={{headerShown: false}}>
+                {({navigation}) => <ProfileSettings firstTime={true} navigation={navigation}/>}
+              </Stack.Screen>
+              <Stack.Screen 
+                name="Wardrobe" 
+                options={{ 
+                  title: "Гардероб",
+                }}>
                 {({navigation}) => <Wardrobe firstTime={true} navigation={navigation}/>}
               </Stack.Screen>
               <Stack.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>

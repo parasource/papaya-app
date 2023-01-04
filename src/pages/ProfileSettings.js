@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text,  StyleSheet,  ActionSheetIOS, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { GRAY_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme';
+import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { updateUser } from '../redux/auth-reducer';
 import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe }) => {
+const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, firstTime, navigation}) => {
     const [stateSex, setSex] = useState(sex)
     const [stateName, setName] = useState(name)
 
@@ -47,6 +48,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
+            {firstTime && <Text style={{fontFamily: 'SFsemibold', fontSize: 24, textAlign: 'center', color: TEXT_COLOR, marginTop: 16, marginBottom: 32}}>Создать аккаунт</Text>}
             <Text style={styles.label}>Имя пользователя</Text>
             <TextInput
                 style={styles.listItem}
@@ -64,6 +66,13 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
                 <Chevron style={styles.chevron}/>
               </View>
             </TouchableOpacity>
+            {firstTime && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
+                  <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
+                    <Text style={{fontFamily: 'SFsemibold', fontSize: 16, lineHeight: 20}}>
+                        Продолжить
+                    </Text>
+                  </TouchableOpacity>
+            </LinearGradient>}
         </View>
       </TouchableWithoutFeedback>
     )
@@ -74,6 +83,26 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
       marginTop: 20,
       paddingHorizontal: 16, 
       flex: 1,
+    },
+    gradient: {
+        height: 128,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute', 
+        left: 0, 
+        right: 0, 
+        bottom: 0,
+        paddingHorizontal: 20
+    },
+    addBtn: {
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: GREEN_COLOR,
+      borderRadius: 12,
+      width: '100%',
+      justifyContent: 'center'
     },
     chevron: {
       width: 8,
