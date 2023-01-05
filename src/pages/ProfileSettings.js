@@ -48,7 +48,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-            {firstTime && <Text style={{fontFamily: 'SFsemibold', fontSize: 24, textAlign: 'center', color: TEXT_COLOR, marginTop: 16, marginBottom: 32}}>Создать аккаунт</Text>}
+            {firstTime && <Text style={{fontFamily: 'SFsemibold', fontSize: 24, textAlign: 'center', color: TEXT_COLOR, marginTop: 32, marginBottom: 32}}>Создать аккаунт</Text>}
             <Text style={styles.label}>Имя пользователя</Text>
             <TextInput
                 style={styles.listItem}

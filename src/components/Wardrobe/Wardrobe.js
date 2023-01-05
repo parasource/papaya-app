@@ -18,9 +18,9 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
         <ScrollView showsVerticalScrollIndicator={false}>
             {firstTime && 
                 <>
-                    <Text style={{fontFamily: 'SFsemibold', fontSize: 20, color: TEXT_COLOR, marginTop: 16}}>Выберите 5 вещей из вашего гардероба {selectedWardrobeId.length > 0 && `(выбрано ${selectedWardrobeId.length})`}</Text>
-                    <Text style={{fontFamily: 'SFregular', fontSize: 12, color: GRAY_COLOR, marginTop: 10}}>Наша рекомендательная система будет подбирать оборазы на основе вашего гардероба. </Text>
-                    <Text style={{fontFamily: 'SFregular', fontSize: 12, color: TEXT_COLOR}}>Гардероб можно будет поменть в настройках позднее</Text>
+                    <Text style={{fontFamily: 'SFsemibold', fontSize: 20, color: TEXT_COLOR, marginTop: 32}}>Выберите 5 вещей из вашего гардероба {selectedWardrobeId.length > 0 && `(выбрано ${selectedWardrobeId.length})`}</Text>
+                    <Text style={{fontFamily: 'SFregular', fontSize: 14, color: GRAY_COLOR, marginTop: 10}}>Наша рекомендательная система будет подбирать оборазы на основе вашего гардероба. </Text>
+                    <Text style={{fontFamily: 'SFregular', fontSize: 14, color: TEXT_COLOR, marginTop: 20}}>Гардероб можно будет поменть в настройках позднее</Text>
                 </>
             }
             {parentCategories.map((parent, index) => (
