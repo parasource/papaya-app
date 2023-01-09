@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';
-import { logout } from '../redux/auth-reducer';
+import { logout, remove } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
-const ProfilePage = ({navigation, logout, name}) => {
+const ProfilePage = ({navigation, logout, remove, name}) => {
   const [isActive, setIsActive] = useState(true)
 
   useEffect(() => {
@@ -61,6 +61,24 @@ const ProfilePage = ({navigation, logout, name}) => {
       );  
   }  
 
+  const removeAlert = () => {  
+      Alert.alert(  
+          'Вы уверены?',  
+          'Вы точно хотите удалить аккаунт',  
+          [  
+              {  
+                  text: 'Отмена',    
+                  style: 'cancel'
+              },  
+              {
+                text: 'Выйти', 
+                onPress: () => remove(),
+              },  
+          ],
+          {cancelable: true}
+      );  
+  }  
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -83,6 +101,7 @@ const ProfilePage = ({navigation, logout, name}) => {
             <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
           </TouchableOpacity>
           <Text style={styles.logout} onPress={logoutAlert}>Выйти из аккаунта</Text>
+          <Text style={styles.remove} onPress={removeAlert}>Удалить аккаунт</Text>
       </View>
       </ScrollView>
     </SafeAreaView>
@@ -104,6 +123,13 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontFamily: 'SFregular',
       marginTop: 24,
+      textAlign: 'center',
+    }, 
+    remove: {
+      color: '#f44',
+      fontSize: 16,
+      fontFamily: 'SFregular',
+      marginTop: 16,
       textAlign: 'center',
     }, 
     wrapper: {
@@ -161,4 +187,4 @@ const mapStateToProps = (state) => ({
   email: state.auth.email
 })
 
-export default connect(mapStateToProps, {logout})(ProfilePage)
+export default connect(mapStateToProps, {logout, remove})(ProfilePage)

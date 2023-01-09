@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
 
 const SearchItem = ({item, onClick, icon}) => {
@@ -14,12 +15,12 @@ const SearchItem = ({item, onClick, icon}) => {
             flexDirection: 'row'
         }}
         onPress={() => onClick(item.query)}>
-            <Image source={{uri: Image.resolveAssetSource(icon).uri}} 
+            <Icon name={icon} 
             style={{
-            width: 24, 
-            height: 24,
+            fontSize: 24, 
             marginRight: 16,
-            opacity: .5
+            opacity: .5,
+            color: TEXT_COLOR
             }}/>
             <Text style={{
                 fontFamily: 'SFregular',

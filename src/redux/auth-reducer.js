@@ -109,6 +109,14 @@ export const logout = () => async (dispatch) => {
     await SecureStore.deleteItemAsync('refresh_token', null)
 }
 
+export const remove = () => async (dispatch) => {
+    dispatch(setAuthUserData(null, null, null, null))
+    dispatch(setAuthUserToken(null, null, false))
+    await SecureStore.deleteItemAsync('token', null)
+    await SecureStore.deleteItemAsync('refresh_token', null)
+    await authAPI.remove()
+}
+
 export const checkToken = () => async (dispatch) => {
     const token = await SecureStore.getItemAsync('token')
     const refreshToken = await SecureStore.getItemAsync('refresh_token')

@@ -46,6 +46,9 @@ export const authAPI = {
     me() {
         return instance.get(`auth/user`)
     },
+    remove(){
+        return instance.get(`profile/remove`)
+    },
     googleLogin(token) {
         return instance.post(`auth/login/google`, {accessToken: token})
     },

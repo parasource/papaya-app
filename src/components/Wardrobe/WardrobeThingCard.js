@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { storage } from '../../const'
 import {Image} from 'react-native-elements'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
   return (
@@ -22,14 +23,10 @@ export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
                             ...styles.button,
                             backgroundColor:  selected ? GREEN_COLOR : INPUTS_BG
                             }}>
-                            <Image source={selected ? 
-                            require("../../../assets/img/icons/outline/plusBlack.png") :
-                            require("../../../assets/img/icons/outline/plus.png")}
-                            style={{
-                                width: selected ? 28.28 : 20, 
-                                height: selected ? 28.28 : 20, 
-                                transform: [{rotate: selected ? "180deg" : "0deg"}]
-                            }}/>
+                                <Icon name={selected ? 'add-outline' : 'close-outline'} style={{
+                                fontSize: 28.28, 
+                                color: selected ? INPUTS_BG : TEXT_COLOR,
+                                transform: [{rotate: selected ? "180deg" : "0deg", }]}}/>
                         </View>
                     </TouchableOpacity>
             </View>

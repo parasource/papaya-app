@@ -3,8 +3,6 @@ import { Text, TouchableOpacity } from "react-native";
 import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
-import searchIcon from '../../../assets/img/icons/outline/search.png';
-import trendIcon from '../../../assets/img/icons/outline/trending-up.png';
 
 const SearchFocus = ({feed, onClick, onClear, autofill}) => {
   const setHistory = feed.history.filter((value, index, self) => {
@@ -23,7 +21,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill}) => {
           <View>
             {autofill.map((item, index) => {
               if(item.query ){
-                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={searchIcon}/>
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={'search-outline'}/>
               }
             })}
           </View>
@@ -44,7 +42,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill}) => {
             
             {setHistory.map((item, index) => {
               if(item.query ){
-                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={searchIcon}/>
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={'search-outline'}/>
               }
             })}
           </View>}
@@ -52,7 +50,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill}) => {
             <Text style={styles.title}>Также ищут</Text>
             {setPopular.map((item, index) => {
               if(item.query ){
-                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={trendIcon}/>
+                return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={'flash-outline'}/>
               }
             })}
           </View>
