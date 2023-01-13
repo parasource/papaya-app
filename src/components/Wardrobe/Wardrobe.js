@@ -18,9 +18,8 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
         <ScrollView showsVerticalScrollIndicator={false}>
             {firstTime && 
                 <>
-                    <Text style={{fontFamily: 'SFsemibold', fontSize: 20, color: TEXT_COLOR, marginTop: 32}}>Выберите 5 вещей из вашего гардероба {selectedWardrobeId.length > 0 && `(выбрано ${selectedWardrobeId.length})`}</Text>
-                    <Text style={{fontFamily: 'SFregular', fontSize: 14, color: GRAY_COLOR, marginTop: 10}}>Наша рекомендательная система будет подбирать оборазы на основе вашего гардероба. </Text>
-                    <Text style={{fontFamily: 'SFregular', fontSize: 14, color: TEXT_COLOR, marginTop: 20}}>Гардероб можно будет поменять в настройках позднее</Text>
+                    <Text style={{fontFamily: 'SFsemibold', fontSize: 28, color: TEXT_COLOR, marginTop: 24}}>Выберите 5 вещей {selectedWardrobeId.length > 0 && `(выбрано ${selectedWardrobeId.length})`}</Text>
+                    <Text style={{fontFamily: 'SFregular', fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>Наша рекомендательная система будет подбирать образы на основе вашего гардероба</Text>
                 </>
             }
             {parentCategories.map((parent, index) => (
@@ -32,7 +31,8 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
                         navigation={navigation} />)}
                 </View>
             ))}
-            </ScrollView>
+            <View style={{height: 100}}></View>
+        </ScrollView>
         }
         {(selectedWardrobeId.length >= 5 && firstTime) && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
               <TouchableOpacity style={styles.addBtn} onPress={checkToken}>

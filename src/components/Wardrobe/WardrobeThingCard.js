@@ -23,10 +23,9 @@ export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
                             ...styles.button,
                             backgroundColor:  selected ? GREEN_COLOR : INPUTS_BG
                             }}>
-                                <Icon name={selected ? 'add-outline' : 'close-outline'} style={{
-                                fontSize: 28.28, 
-                                color: selected ? INPUTS_BG : TEXT_COLOR,
-                                transform: [{rotate: selected ? "180deg" : "0deg", }]}}/>
+                                <Icon name={selected ? 'close-outline' : 'add-outline'} style={{
+                                fontSize: 24, 
+                                color: selected ? INPUTS_BG : TEXT_COLOR}}/>
                         </View>
                     </TouchableOpacity>
             </View>

@@ -8,7 +8,7 @@ export const LookItem = ({lookSlug, item, navigation}) => {
  const urlsArr = item.urls.slice(0,2)
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
+    <TouchableOpacity activeOpacity={.6} onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
         <View style={styles.wrapper}>
         <Image source={{uri: `${storage}/${item.image}`}} 
                 resizeMode = "cover"

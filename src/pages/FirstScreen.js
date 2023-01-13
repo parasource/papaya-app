@@ -4,6 +4,7 @@ import { BG_COLOR, GRAY_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { Video } from 'expo-av';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const FirstScreen = ({googleLogin, appleLogin}) => {
   const video = useRef(null)
@@ -50,7 +51,7 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
           <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
         </View>
        {Platform.OS === 'ios' && <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
-            <Image source={require('../../assets/img/icons/apple.png')} style={styles.appleIcon}/>
+            <Icon name="logo-apple" style={styles.appleIcon}/>
             <Text style={styles.appleBtnText}>
               Sign in with Apple
             </Text>
@@ -100,9 +101,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   appleIcon: {
-    width: 18,
-    height: 22,
-    marginRight: 10
+    fontSize: 20,
+    marginRight: 10,
+    marginTop: -3
   },
   appleBtn: {
       justifyContent: 'center',

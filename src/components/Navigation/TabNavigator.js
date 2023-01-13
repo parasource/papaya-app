@@ -3,11 +3,14 @@ import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
-import { Platform, Pressable, StyleSheet, Text } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
+import homeIcon from '../../../assets/img/icons/outline/home.png';
+import searchIcon from '../../../assets/img/icons/outline/search.png';
+import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
+import userIcon from '../../../assets/img/icons/outline/user.png';
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator()
 
@@ -21,16 +24,16 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
           let iconName;
           let title;
           if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
+            iconName = homeIcon;
             title = "Главная"
           } else if (route.name === "Search") {
-            iconName = focused ? "search" : "search-outline";
+            iconName = searchIcon;
             title = "Поиск"
           } else if (route.name === "Favorites") {
-            iconName = focused ? "bookmark" : "bookmark-outline";
+            iconName = favoriteIcon;
             title = "Сохраненные"
           } else if (route.name === "Profile") {
-            iconName = focused ? "person-circle" : "person-circle-outline";
+            iconName = userIcon;
             title = "Профиль"
           }
           return (
@@ -44,7 +47,7 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
               navigation.navigate(route.name)
             }}
             >
-              <Icon name={iconName} size={size} color={color}/>
+              <Image source={{uri: Image.resolveAssetSource(iconName).uri}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
               <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
             </Pressable>
           )
