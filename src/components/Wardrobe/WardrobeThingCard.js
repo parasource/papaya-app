@@ -11,14 +11,14 @@ export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {
         isFetching ? 
         <ActivityIndicator/>
         :
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} activeOpacity={.6}>
             <View style={styles.wrapper}>
                 <Image style={styles.image} source={{uri: `${storage}/${item.image}`}}
                 PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
             </View>
             <View style={styles.textBlock}>
                 <Text style={styles.text}>{item.name}</Text>
-                <TouchableOpacity onPress={onPress}>
+                <TouchableOpacity onPress={onPress} activeOpacity={1}>
                         <View style={{
                             ...styles.button,
                             backgroundColor:  selected ? GREEN_COLOR : INPUTS_BG

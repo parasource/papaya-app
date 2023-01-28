@@ -1,6 +1,7 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import * as SecureStore from 'expo-secure-store';
+import { checkToken } from '../redux/auth-reducer';
 
 const instance = axios.create({
     baseURL: 'http://api.papaya.parasource.tech/api'
@@ -35,6 +36,9 @@ const refreshAuthLogic = async failedRequest => {
         failedRequest.response.config.headers['Authorization'] = 'Bearer ' + tokenRefreshResponse.data.token;
         return Promise.resolve();
     }).catch(err => {
+        SecureStore.deleteItemAsync('token', null)
+        SecureStore.deleteItemAsync('refresh_token', null)
+        checkToken()
         console.log('err', err);
     })
 };
@@ -57,6 +61,9 @@ export const authAPI = {
     },
     updateSettings(data) {
         return instance.post('profile/update-settings', data)
+    },
+    setAPNS(token) {
+        return instance.post('profile/set-apns-token', {apns_token: token})
     }
 }
 

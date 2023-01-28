@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
       paddingVertical: 13,
       borderRadius: 12,
   },
-
   appleBtnText: {
     fontFamily: 'SFsemibold',
     fontSize: 16,

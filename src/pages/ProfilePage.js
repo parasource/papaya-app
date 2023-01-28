@@ -3,43 +3,20 @@ import React, { useEffect, useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';
-import { logout, remove } from '../redux/auth-reducer';
+import { logout, remove, updateUser } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Notifications from 'expo-notifications';
 
-const ProfilePage = ({navigation, logout, remove, name}) => {
-  const [isActive, setIsActive] = useState(true)
-
-  useEffect(() => {
-    AsyncStorage.getItem('notification').then(res => {
-      res === 'on' ? setIsActive(true) : setIsActive(false)
-    })
-  }, [])
+const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex, updateUser}) => {
+  const [isActive, setIsActive] = useState(toggleNotification)
 
   const pushHandler = async () => {
     if(isActive){
-      AsyncStorage.setItem('notification', 'off')
       setIsActive(false)
-      Notifications.cancelAllScheduledNotificationsAsync()
+      updateUser({"sex": sex, "name": name, "receive_push_notifications": false})
     }else{
-      AsyncStorage.setItem('notification', 'on')
       setIsActive(true)
-      Notifications.scheduleNotificationAsync({
-        content: {
-          title: "🔔 Мы собрали вам образ на сегодня",
-          body: "посмотреть в приложении",
-          data: {
-            data: "goes here"
-          },
-        },
-        trigger: {
-          hour: 5,
-          minute: 45,
-          repeats: true,
-        },
-      });
+      updateUser({"sex": sex, "name": name, "receive_push_notifications": true})
     }
   }
 
@@ -184,7 +161,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   name: state.auth.name, 
   id: state.auth.id, 
-  email: state.auth.email
+  email: state.auth.email,
+  toggleNotification: state.auth.toggleNotification,
+  sex: state.auth.sex
 })
 
-export default connect(mapStateToProps, {logout, remove})(ProfilePage)
+export default connect(mapStateToProps, {logout, remove, updateUser})(ProfilePage)

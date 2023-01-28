@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { RecommendLook } from '../RecommendLook';
 import { LooksFeed } from './LooksFeed';
+import { storage } from '../../const';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -110,7 +111,7 @@ const Feed = ({
         refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
-        <Image source={require('../../../assets/img/papaya.png')} style={styles.logo}/>
+        <Image source={{uri:  storage + '/ui/papaya.png'}} style={styles.logo}/>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
             <View style={{paddingHorizontal: 16}}>
               <Text style={styles.title}>Образ на сегодня</Text>

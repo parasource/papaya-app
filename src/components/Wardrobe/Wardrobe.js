@@ -6,6 +6,7 @@ import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Text, ScrollView
 import WardrobeCard from "./WardrobeCard";
 import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR, GRAY_COLOR } from '../../theme';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, firstTime, sex}) => {
     useEffect(() => {
@@ -35,7 +36,10 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
         </ScrollView>
         }
         {(selectedWardrobeId.length >= 5 && firstTime) && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
-              <TouchableOpacity style={styles.addBtn} onPress={checkToken}>
+              <TouchableOpacity style={styles.addBtn} onPress={() => {
+                    checkToken()
+                    AsyncStorage.setItem('notification', 'on')
+                }}>
                 <Text style={{fontFamily: 'SFsemibold', fontSize: 16, lineHeight: 20}}>
                     Продолжить
                 </Text>

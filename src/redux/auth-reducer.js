@@ -2,6 +2,7 @@ import {
     authAPI
 } from "../api/api"
 import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SET_USER_DATA = 'SET_USER_DATA'
@@ -120,9 +121,11 @@ export const remove = () => async (dispatch) => {
 export const checkToken = () => async (dispatch) => {
     const token = await SecureStore.getItemAsync('token')
     const refreshToken = await SecureStore.getItemAsync('refresh_token')
+    const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
     if(!initialState.accessToken && token){
         dispatch(setAuthUserToken(token, refreshToken, true))
-        let userResponse = await authAPI.me()
+        const userResponse = await authAPI.me()
+        await authAPI.setAPNS(deviceToken)
         if(userResponse.status == 200){
             let {
                 ID,
@@ -143,9 +146,11 @@ export const updateUser = (data) => async (dispatch) => {
             ID,
             email,
             name,
-            sex
+            sex,
+            receive_push_notifications
         } = userResponse.data
         dispatch(setAuthUserData(ID, email, name, sex))
+        dispatch(toggleNotification(receive_push_notifications))
         dispatch(setLoginError(''))
     }else{
         dispatch(setLoginError(response))

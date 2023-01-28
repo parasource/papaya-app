@@ -5,12 +5,9 @@ import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
 import { Image, Platform, Pressable, StyleSheet, Text } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
-import homeIcon from '../../../assets/img/icons/outline/home.png';
-import searchIcon from '../../../assets/img/icons/outline/search.png';
-import favoriteIcon from '../../../assets/img/icons/outline/bookmark.png';
-import userIcon from '../../../assets/img/icons/outline/user.png';
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
+import { storage } from '../../const';
 
 const Tab = createBottomTabNavigator()
 
@@ -24,16 +21,16 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
           let iconName;
           let title;
           if (route.name === "Home") {
-            iconName = homeIcon;
+            iconName = 'home.png';
             title = "Главная"
           } else if (route.name === "Search") {
-            iconName = searchIcon;
+            iconName = 'search.png';
             title = "Поиск"
           } else if (route.name === "Favorites") {
-            iconName = favoriteIcon;
+            iconName = 'bookmark.png';
             title = "Сохраненные"
           } else if (route.name === "Profile") {
-            iconName = userIcon;
+            iconName = 'user.png';
             title = "Профиль"
           }
           return (
@@ -47,7 +44,7 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
               navigation.navigate(route.name)
             }}
             >
-              <Image source={{uri: Image.resolveAssetSource(iconName).uri}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
+              <Image source={{uri: storage + "/ui/" + iconName}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
               <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
             </Pressable>
           )

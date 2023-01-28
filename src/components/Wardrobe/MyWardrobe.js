@@ -6,6 +6,7 @@ import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../
 import { WardrobeThingCard } from './WardrobeThingCard';
 import { LinearGradient } from 'expo-linear-gradient';
 import MasonryList from '@react-native-seoul/masonry-list';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const MyWardrobe = ({
     isFetching,
@@ -119,17 +120,13 @@ const MyWardrobe = ({
           <View>
             {isFetching ? <ActivityIndicator style={{marginTop: 40}}/> : <MapWardrobe/>}
           </View>
+          <View style={{height: 120}}></View>
       </ScrollView>}
       <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
             <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
-              <Image source={require("../../../assets/img/icons/outline/plusBlack.png")} style={{
-                width: 16,
-                height: 16,
-                transform: [{rotate: '45deg'}],
-                marginRight: 4
-              }}/>
+              <Icon name="add-outline" style={{fontSize: 24}}/>
               <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
-                  Добавить одежду
+                Добавить одежду
               </Text>
             </TouchableOpacity>
       </LinearGradient>
@@ -175,15 +172,18 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     left: 0, 
     right: 0, 
-    bottom: 0
+    bottom: 0,
+    paddingHorizontal: 20
   },
   addBtn: {
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: GREEN_COLOR,
     borderRadius: 12,
+    width: '100%',
+    justifyContent: 'center'
   }
 })
 

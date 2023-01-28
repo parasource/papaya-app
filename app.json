@@ -1,9 +1,10 @@
 {
   "expo": {
+    "userInterfaceStyle": "dark",
     "name": "papaya",
     "slug": "papaya",
     "privacy": "unlisted",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -33,8 +34,9 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "tech.parasource.papaya.ios",
-      "buildNumber": "11",
+      "buildNumber": "12",
       "usesAppleSignIn": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "associatedDomains": [
         "applinks:papaya.pw"
       ]
@@ -47,7 +49,18 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyDK7yoBuRjNxgs2jZYD7ZhzBdIrAIR3aBQ",
+          "authDomain": "papaya-364915.firebaseapp.com",
+          "projectId": "papaya-364915",
+          "storageBucket": "papaya-364915.appspot.com",
+          "messagingSenderId": "514770009692",
+          "appId": "1:514770009692:web:f46a548dfe02937b963099",
+          "measurementId": "G-YXX10KCGBQ"
+        }
+      }
     },
     "packagerOpts": {
       "config": "metro.config.js",

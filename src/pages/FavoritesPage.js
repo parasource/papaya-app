@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
     },
     title: {
         color: TEXT_COLOR,
-        fontFamily: 'GilroyBold',
-        fontSize: 24,
+        fontSize: 34,
+        fontFamily: 'SFbold', 
         marginTop: 40,
-        marginBottom: 12
+        marginBottom: 12,      
     },
 })

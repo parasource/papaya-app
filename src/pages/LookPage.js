@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Image, Share, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { INPUTS_BG, TEXT_COLOR } from '../theme';
+import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
@@ -13,6 +13,7 @@ import { BounceAnimation } from '../components/UI/BounceAnimation';
 import { Skeleton } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics'
+import * as Analytics from 'expo-firebase-analytics';
 
 const LookPage = ({
         route,
@@ -55,6 +56,8 @@ const LookPage = ({
   }, [lookSlug])
 
   const shareHandler = async () => {
+    Analytics.logEvent('share', {contentType: 'Share look' + currentLook.name});
+
     const options={
         message: `Посмотри этот образ:\n${currentLook.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/looks/${lookSlug}`,
     }
@@ -103,6 +106,7 @@ const LookPage = ({
                                 undislikeLook(lookSlug)
                             }
                             likeLook(lookSlug)
+                            Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
                         }
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
@@ -117,6 +121,7 @@ const LookPage = ({
                                 unlikeLook(lookSlug)
                             }
                             dislikeLook(lookSlug)
+                            Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
                         }
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
@@ -128,6 +133,7 @@ const LookPage = ({
                             unsaveLook(lookSlug)
                         }else{
                             saveLook(lookSlug)
+                            Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});
                         }
                         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                     }} component={
@@ -150,12 +156,16 @@ const LookPage = ({
                     </TouchableOpacity>
                 ))}
             </View>
+            {currentLook?.items?.length ? 
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
                 {currentLook?.items?.map(item => (
                     <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
                 ))}
-            </View>
+            </View> : 
+            <View style={{paddingBottom: 100}}>
+                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>
+            </View>}
         </>}
     </ScrollView>
   )
@@ -203,6 +213,13 @@ const styles = StyleSheet.create({
         fontFamily: 'SFsemibold',
         fontSize: 24,
         marginTop: 12
+    },
+    message: {
+        color: GRAY_COLOR,
+        fontFamily: 'SFregular',
+        fontSize: 14,
+        marginTop: 12,
+        textAlign: 'center'
     },
     text: {
         color: TEXT_COLOR,

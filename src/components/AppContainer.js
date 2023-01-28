@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useCallback, useState, useRef } from 'react'
 import { StatusBar, View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { checkToken, googleLogin, appleLogin } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
@@ -16,47 +16,27 @@ import WardrobeDetail from './Wardrobe/WardrobeDetail';
 import { TopicPage } from '../pages/TopicPage';
 import * as Linking from 'expo-linking';
 import MyWardrobe from './Wardrobe/MyWardrobe';
-import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import InternetConnectionAlert from 'react-native-internet-connection-alert';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import { FullButton } from './UI/FullButton';
+import * as Analytics from "expo-firebase-analytics";
 
 const prefix = Linking.createURL('/');
 
 const Stack = createNativeStackNavigator()
 const Share = createNativeStackNavigator()
 
-
-Notifications.cancelAllScheduledNotificationsAsync()
-
-AsyncStorage.getItem('notification').then(res => {
-  if(res === 'on'){
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "🔔 Мы собрали вам образ на сегодня",
-        body: "посмотреть в приложении",
-        data: {
-          data: "goes here"
-        },
-      },
-      trigger: {
-        hour: 5,
-        minute: 45,
-        repeats: true,
-      },
-    });
-  }
-})
-
 const AppContainer = (props) => {
   useMemo(() => {
-    props.checkToken() 
+    props.checkToken()
   }, [])
 
   const sheetRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = [314]
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+
   const handelSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index)
     setIsOpen(true)
@@ -137,7 +117,22 @@ const AppContainer = (props) => {
     <InternetConnectionAlert useInternetReachability={false}>
     <SafeAreaProvider>
       <StatusBar barStyle="light-content"/>
-      <NavigationContainer theme={MyTheme} linking={linking}>
+      <NavigationContainer theme={MyTheme} linking={linking}
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          routeNameRef.current = currentRouteName;
+          await Analytics.logEvent("screen_view",{
+            "prev_screen_name": previousRouteName,
+            "screen_name": currentRouteName,});
+        }
+      }}>
         <Share.Navigator screenOptions={{  
           headerShown: true, 
           headerBackTitleVisible: false  }}>
