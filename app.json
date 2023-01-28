@@ -1,10 +1,10 @@
 {
   "expo": {
     "userInterfaceStyle": "dark",
-    "name": "papaya",
+    "name": "Papaya",
     "slug": "papaya",
     "privacy": "unlisted",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,9 +13,6 @@
       "backgroundColor": "#000000"
     },
     "scheme": "papaya",
-    "notification": {
-      "icon": "./assets/icon.png"
-    },
     "plugins": [
       [
         "expo-notifications",
@@ -23,7 +20,13 @@
           "icon": "./assets/favicon.png",
           "color": "#ffffff"
         }
-      ]
+      ],
+      ["expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }]
     ],
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -34,7 +37,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "tech.parasource.papaya.ios",
-      "buildNumber": "12",
+      "buildNumber": "16",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "associatedDomains": [

@@ -121,11 +121,9 @@ export const remove = () => async (dispatch) => {
 export const checkToken = () => async (dispatch) => {
     const token = await SecureStore.getItemAsync('token')
     const refreshToken = await SecureStore.getItemAsync('refresh_token')
-    const deviceToken = (await Notifications.getDevicePushTokenAsync()).data;
     if(!initialState.accessToken && token){
         dispatch(setAuthUserToken(token, refreshToken, true))
         const userResponse = await authAPI.me()
-        await authAPI.setAPNS(deviceToken)
         if(userResponse.status == 200){
             let {
                 ID,
