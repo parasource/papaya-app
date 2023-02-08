@@ -1,7 +1,6 @@
 import React from "react";
 import { ActivityIndicator, Text } from "react-native";
 import { View, StyleSheet } from "react-native";
-import FeedCard from "../Feed/FeedCard";
 import { GRAY_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import TopicCard from "./TopicCard";

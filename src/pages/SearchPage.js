@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR } from '../theme';
-import { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler } from '../redux/looks-reducer';
+import { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler } from '../redux/search-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
@@ -114,12 +114,12 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-    feed: state.feed.searchResultLooks,
-    history: state.feed.searchHistory,
-    topicsRecommended: state.feed.topicsRecommended,
-    topicsPopular: state.feed.topicsPopular,
-    autofill: state.feed.autofill,
-    isFetching: state.feed.isFetching
+    feed: state.search.searchResultLooks,
+    history: state.search.searchHistory,
+    topicsRecommended: state.search.topicsRecommended,
+    topicsPopular: state.search.topicsPopular,
+    autofill: state.search.autofill,
+    isFetching: state.search.isFetching
 })
 
 export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);

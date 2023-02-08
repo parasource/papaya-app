@@ -7,7 +7,7 @@ import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-re
 import { connect } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, firstTime, navigation}) => {
+const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, firstTime, navigation, toggleNotification}) => {
     const [stateSex, setSex] = useState(sex)
     const [stateName, setName] = useState(name)
 
@@ -26,7 +26,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
         (buttonIndex) => {
           if(buttonIndex !== 2){
             setSex(buttonIndex === 0 ? "male" : "female");
-            updateUser({"sex": (buttonIndex === 0 ? "male" : "female"), "name": stateName})
+            updateUser({"sex": (buttonIndex === 0 ? "male" : "female"), "name": stateName, "receive_push_notifications": toggleNotification})
             if(sex !== (buttonIndex === 0 ? "male" : "female")){
               requestCategories()
               requestSelectedWardrobe()
@@ -39,7 +39,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
       const handleChange = () => {
         let str = stateName.trim()
         if(str.length > 0){
-          updateUser({"sex": stateSex, "name": str})
+          updateUser({"sex": stateSex, "name": str, "receive_push_notifications": toggleNotification})
         }else{
           setName(name)
         }
@@ -171,7 +171,8 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
 
 const mapStateToProps = (state) => ({
   name: state.auth.name, 
-  sex: state.auth.sex
+  sex: state.auth.sex,
+  toggleNotification: state.auth.toggleNotification
 })
 
 export const ProfileSettings = connect(mapStateToProps, {updateUser, requestCategories, requestSelectedWardrobe})(ProfileSettingsContainer)

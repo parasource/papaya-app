@@ -7,11 +7,13 @@ import {
 import {authReducer} from "./auth-reducer";
 import { looksReducer } from "./looks-reducer";
 import { wardrobeReducer } from "./wardrobe-reducer";
+import { searchReducer } from "./search-reducer";
 
 const reducers = combineReducers({
     auth: authReducer,
     wardrobe: wardrobeReducer,
-    feed: looksReducer
+    feed: looksReducer,
+    search: searchReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

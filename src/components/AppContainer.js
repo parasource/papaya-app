@@ -171,14 +171,8 @@ const AppContainer = (props) => {
                     };
                   }})}
               />
-              <Share.Screen name="Wardrobe" component={Wardrobe} 
-              options={{ 
-                title: "Гардероб",
-              }}/>
-              <Share.Screen name="MyWardrobe" component={MyWardrobe} 
-              options={{ 
-                title: "Мой гардероб",
-              }}/>
+              <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
+              <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
               <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
               <Share.Screen
                   name="ProfileSettings"

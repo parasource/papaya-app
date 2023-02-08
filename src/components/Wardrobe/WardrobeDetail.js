@@ -1,6 +1,6 @@
 import { View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { requestWardrobe, requestSelectedWardrobe, addThingWardrobe, setInterests, removeThingWardrobe } from '../../redux/wardrobe-reducer';
+import { requestWardrobe, requestSelectedWardrobe, addThingWardrobe, removeThingWardrobe } from '../../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
@@ -13,7 +13,6 @@ const WardrobeDetail = ({
     selectedWardrobeId,
     addThingWardrobe,
     removeThingWardrobe,
-    setInterests
   }) => {
   const { categoryId } = route.params;
 
@@ -72,4 +71,4 @@ const mapStateToProps = (state) => ({
   selectedWardrobeId: state.wardrobe.selectedWardrobeId,
 })
 
-export default connect(mapStateToProps, {requestWardrobe, requestSelectedWardrobe, setInterests, removeThingWardrobe, addThingWardrobe})(WardrobeDetail)
+export default connect(mapStateToProps, {requestWardrobe, requestSelectedWardrobe, removeThingWardrobe, addThingWardrobe})(WardrobeDetail)

@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { checkToken } from '../redux/auth-reducer';
 
 const instance = axios.create({
-    baseURL: 'http://api.papaya.parasource.tech/api'
+    baseURL: 'https://api.papaya.parasource.tech/api'
     // baseURL: 'http://api.dev1.papaya.parasource.tech/api'
 })
 
@@ -17,17 +17,6 @@ instance.interceptors.request.use(
         return config;
     }
 )
-
-const setInterseptors = (response) => {
-    instance.interceptors.request.use(
-        config => {
-            if (!config.headers.Authorization) {
-                config.headers.Authorization = `Bearer ${response.data.token}`;
-            }
-            return config;
-        }
-    )
-}
 
 const refreshAuthLogic = async failedRequest => {
     const refresh = await SecureStore.getItemAsync("refresh_token")
