@@ -6,9 +6,21 @@ import useFonts from './src/hooks/useFont';
 import AppContainer from './src/components/AppContainer';
 import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
-import * as StoreReview from 'expo-store-review'
 import * as Device from 'expo-device'
 import { authAPI } from './src/api/api';
+
+const defaultErrorHandler = ErrorUtils.getGlobalHandler()
+
+const myErrorHandler = (e, isFatal) => {
+  defaultErrorHandler(e, isFatal)
+  authAPI.sendLogs(e, isFatal).then((response) => {
+    if(response.status === 200){
+      console.log('error send');
+    }
+  })
+}
+
+ErrorUtils.setGlobalHandler(myErrorHandler)
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {
@@ -51,20 +63,6 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    const rate = async () => {
-      if (StoreReview.isAvailableAsync()) {
-        await StoreReview.requestReview()
-        .then(function(response){
-          console.log("response is",response)
-         })
-        .catch(e => { console.log(e) })
-       }
-    }
-
-    rate()
-  })
-
   if (!IsReady) {
     return (
       <AppLoading
@@ -88,9 +86,6 @@ export default function App() {
 async function registerForPushNotificationsAsync() {
   let token;
 
-
-console.log()
-
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
@@ -113,9 +108,7 @@ console.log()
     }
     token = (await Notifications.getDevicePushTokenAsync()).data;
     console.log(token);
-  } else {
-    alert('Must use physical device for Push Notifications');
-  }
+  } 
 
   return token;
 }

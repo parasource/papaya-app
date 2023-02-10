@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
-
+import * as StoreReview from 'expo-store-review'
 
 const SearchPage = ({
     navigation, 
@@ -29,6 +29,18 @@ const SearchPage = ({
 
     useEffect(() => {
         requestSearchHistory()
+
+        const rate = async () => {
+            if (StoreReview.isAvailableAsync()) {
+              await StoreReview.requestReview()
+              .then(function(response){
+                console.log("response is",response)
+               })
+              .catch(e => { console.log(e) })
+             }
+          }
+      
+          rate()
     }, [])
     
     useEffect(() => {

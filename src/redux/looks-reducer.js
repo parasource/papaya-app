@@ -7,7 +7,6 @@ const SET_BOOKMARKED = 'SET_BOOKMARKED'
 const SET_CATEGORIES = 'SET_CATEGORIES'
 const SET_ITEM = 'SET_ITEM'
 const SET_LOOK = 'SET_LOOK'
-const SET_TODAY_LOOK = 'SET_TODAY_LOOK'
 const TOGGLE_LIKED = 'TOGGLE_LIKED'
 const TOGGLE_DISLIKED = 'TOGGLE_DISLIKED'
 const TOGGLE_IS_LIST_END = 'TOGGLE_IS_LIST_END'
@@ -23,7 +22,6 @@ let initialState = {
     currentLook: {},
     isLiked: false,
     isDisliked: false,
-    todayLook: {},
     currentItem: {},
     categoriesLooks: [],
     isListEnd: false,
@@ -51,8 +49,6 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isFetching: action.isFetching}
         case SET_LOOK: 
             return {...state, currentLook: action.currentLook}
-        case SET_TODAY_LOOK: 
-            return {...state, todayLook: action.todayLook}
         case TOGGLE_LIKED: 
             return {...state, isLiked: action.isLiked}
         case TOGGLE_DISLIKED: 
@@ -76,7 +72,6 @@ const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
 const setCurrentItem = (currentItem) => ({ type: SET_ITEM, currentItem })
 const setLook = (currentLook) => ({ type: SET_LOOK, currentLook })
-const setTodayLook = (todayLook) => ({ type: SET_TODAY_LOOK, todayLook })
 const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 const toggleLiked = (isLiked) => ({ type: TOGGLE_LIKED, isLiked })
 const toggleDisliked = (isDisliked) => ({ type: TOGGLE_DISLIKED, isDisliked })
@@ -91,10 +86,10 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLooks(page)
     if(response.status == 200){
+        // console.log(response.data.topics);
         if(onRefresh){
             dispatch(setLooks(response.data.looks))
             dispatch(setCategories(response.data.categories))
-            dispatch(setTodayLook(response.data.todayLook))
             dispatch(toggleIsFetching(false))
             dispatch(toggleIsListEnd(false))
         }else{
@@ -104,7 +99,6 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
             }else{
                 dispatch(setLooksPage(response.data.looks))
                 dispatch(setCategories(response.data.categories))
-                dispatch(setTodayLook(response.data.todayLook))
                 dispatch(toggleIsFetching(false))
             }
         }

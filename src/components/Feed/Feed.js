@@ -3,9 +3,7 @@ import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
-import { RecommendLook } from '../RecommendLook';
 import { LooksFeed } from './LooksFeed';
-import { storage } from '../../const';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -17,7 +15,6 @@ const Feed = ({
   isFetching, 
   looks, 
   requestLooks, 
-  todayLook, 
   isListEnd, 
   categories, 
   categoriesLooks, 
@@ -29,8 +26,7 @@ const Feed = ({
   const scrollRef = useRef(null)
 
   const initCategory = route?.params?.initCategory
-  
-  const [height, setHeight] = useState(Dimensions.get('window').height)
+
   const [page, setPage] = useState(0)
   const [refreshing, setRefreshing] = useState(false);
   const [isActive, setIsActive] = useState(null);
@@ -111,12 +107,7 @@ const Feed = ({
         refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
-        <Image source={{uri:  storage + '/ui/papaya.png'}} style={styles.logo}/>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
-            <View style={{paddingHorizontal: 16}}>
-              <Text style={styles.title}>Образ на сегодня</Text>
-              <RecommendLook look={todayLook} navigation={navigation}/>
-            </View>
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
@@ -244,7 +235,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   looks: state.feed.looks, 
   isFetching: state.feed.isFetching,
-  todayLook: state.feed.todayLook,
   isListEnd: state.feed.isListEnd,
   categories: state.feed.categories,
   categoriesLooks: state.feed.categoriesLooks,

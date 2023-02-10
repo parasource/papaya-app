@@ -4,8 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 import { checkToken } from '../redux/auth-reducer';
 
 const instance = axios.create({
-    baseURL: 'https://api.papaya.parasource.tech/api'
-    // baseURL: 'http://api.dev1.papaya.parasource.tech/api'
+    baseURL: 'https://api.papaya.parasource.tech/api/v2'
 })
 
 instance.interceptors.request.use(
@@ -53,6 +52,9 @@ export const authAPI = {
     },
     setAPNS(token) {
         return instance.post('profile/set-apns-token', {apns_token: token})
+    },
+    sendLogs(error, isFatal){
+        return instance.post('frontend/error-logs', {message: error, isFatal: isFatal})
     }
 }
 
