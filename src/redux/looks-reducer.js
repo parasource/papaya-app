@@ -5,6 +5,8 @@ const SET_LOOKS = 'SET_LOOKS'
 const SET_LOOKS_PAGE = 'SET_LOOKS_PAGE'
 const SET_BOOKMARKED = 'SET_BOOKMARKED'
 const SET_CATEGORIES = 'SET_CATEGORIES'
+const SET_TOPICS = 'SET_TOPICS'
+const SET_ARTICLES = 'SET_ARTICLES'
 const SET_ITEM = 'SET_ITEM'
 const SET_LOOK = 'SET_LOOK'
 const TOGGLE_LIKED = 'TOGGLE_LIKED'
@@ -28,6 +30,8 @@ let initialState = {
     isSavedEnd: false,
     currentTopic: {},
     isSaved: false,
+    topics: [],
+    articles: [],
     bookmarked: [],
 }
 
@@ -35,6 +39,10 @@ export const looksReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_LOOKS_PAGE: 
             return {...state, looks: [...state.looks, ...action.looks]}
+        case SET_TOPICS: 
+            return {...state, topics: action.topics}
+        case SET_ARTICLES: 
+            return {...state, articles: action.articles}
         case SET_LOOKS: 
             return {...state, looks: action.looks}
         case SET_BOOKMARKED: 
@@ -67,6 +75,8 @@ export const looksReducer = (state = initialState, action) => {
 }
 
 const setLooks = (looks) => ({ type: SET_LOOKS, looks })
+const setTopics = (topics) => ({ type: SET_TOPICS, topics })
+const setArticles = (articles) => ({ type: SET_ARTICLES, articles })
 const setLooksPage = (looks) => ({ type: SET_LOOKS_PAGE, looks })
 const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
@@ -86,10 +96,11 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLooks(page)
     if(response.status == 200){
-        // console.log(response.data.topics);
         if(onRefresh){
             dispatch(setLooks(response.data.looks))
             dispatch(setCategories(response.data.categories))
+            dispatch(setArticles(response.data.articles))
+            dispatch(setTopics(response.data.topics))
             dispatch(toggleIsFetching(false))
             dispatch(toggleIsListEnd(false))
         }else{
@@ -99,6 +110,8 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
             }else{
                 dispatch(setLooksPage(response.data.looks))
                 dispatch(setCategories(response.data.categories))
+                dispatch(setArticles(response.data.articles))
+                dispatch(setTopics(response.data.topics))
                 dispatch(toggleIsFetching(false))
             }
         }

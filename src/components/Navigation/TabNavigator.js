@@ -40,6 +40,8 @@ export const TabBottomNavigator = ({handelSnapPress}) => {
               if(title === "Главная" && history.length === 1){
                 if(onTop === 1) setOnTop(2)
                 else setOnTop(1)
+              }else if(title === "Поиск"){
+                navigation.navigate(route.name, {isFocused: false})
               }
               navigation.navigate(route.name)
             }}

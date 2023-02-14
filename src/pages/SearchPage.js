@@ -8,9 +8,11 @@ import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 import * as StoreReview from 'expo-store-review'
+import { CommonActions } from '@react-navigation/native';
 
 const SearchPage = ({
     navigation, 
+    route,
     requestAutofill, 
     autofill, 
     feed, 
@@ -21,28 +23,56 @@ const SearchPage = ({
     topicsRecommended, 
     topicsPopular, 
     isFetching}) => {
+    const isFocused = route.params?.isFocused
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
     const [isResult, setIsResult] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
 
+    const checkParams = () => {
+        if (isFocused) {
+            hiddenButtonRef.current.focus()
+        }else{
+            hiddenButtonRef.current.blur()
+        }
+    }
+
     useEffect(() => {
         requestSearchHistory()
 
-        const rate = async () => {
-            if (StoreReview.isAvailableAsync()) {
-              await StoreReview.requestReview()
-              .then(function(response){
-                console.log("response is",response)
-               })
-              .catch(e => { console.log(e) })
-             }
-          }
-      
-          rate()
+        // const rate = async () => {
+        //     if (StoreReview.isAvailableAsync()) {
+        //         await StoreReview.requestReview()
+        //             .then(function (response) {
+        //                 console.log("response is", response)
+        //             })
+        //             .catch(e => {
+        //                 console.log(e)
+        //             })
+        //     }
+        // }
+
+        // rate()
     }, [])
-    
+
+    useEffect(() => {
+        checkParams()
+
+        const unsubscribe = navigation.addListener('focus', () => {
+            checkParams()
+        });
+
+        const unsubscribeBlur = navigation.addListener('blur', () => {
+            navigation.dispatch(CommonActions.setParams({ isFocused: false }));
+        });
+
+        return () => {
+            unsubscribe()
+            unsubscribeBlur()
+        }
+    }, [route])
+
     useEffect(() => {
         const timeOutId = setTimeout(() => requestAutofill(value), 600);
         return () => clearTimeout(timeOutId);
@@ -55,47 +85,47 @@ const SearchPage = ({
 
     return (
         <SafeAreaView>
-                <SearchBar
-                    platform="ios"
-                    containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
-                    inputContainerStyle={{backgroundColor: '#1F1F1F'}}
-                    inputStyle={{backgroundColor: '#1F1F1F', color: GRAY_COLOR}}
-                    onChangeText={newVal => {
-                        if(isResult){
-                            setIsResult(false)
-                        }
-                        setValue(newVal)
-                        requestAutofill(value)
-                    }}
-                    placeholder="Искать"
-                    placeholderTextColor="#888"
-                    cancelButtonTitle="Отмена"
-                    value={value}
-                    onSubmitEditing={onSubmit}
-                    onFocus={() => {
-                        setIsFocus(true)
+            <SearchBar
+                platform="ios"
+                containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
+                inputContainerStyle={{backgroundColor: '#1F1F1F'}}
+                inputStyle={{backgroundColor: '#1F1F1F', color: GRAY_COLOR}}
+                onChangeText={newVal => {
+                    if(isResult){
                         setIsResult(false)
-                    }}
-                    onBlur={() => {
-                        setIsFocus(false)
-                    }}
-                    blurOnSubmit={true}
-                    ref={hiddenButtonRef}
-                />
-                <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
-                    <View style={styles.container}>
-                        {(isFocus && !isResult) && <View>
-                                <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
-                                    setValue(prop)
-                                    requestSearchResultLooks(prop)
-                                    setIsResult(true)
-                                    hiddenButtonRef.current.blur()
-                                }}/>
-                            </View>}
-                        {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching}/>}
-                        {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
-                    </View>
-                </ScrollView>
+                    }
+                    setValue(newVal)
+                    requestAutofill(value)
+                }}
+                placeholder="Искать"
+                placeholderTextColor="#888"
+                cancelButtonTitle="Отмена"
+                value={value}
+                onSubmitEditing={onSubmit}
+                onFocus={() => {
+                    setIsFocus(true)
+                    setIsResult(false)
+                }}
+                onBlur={() => {
+                    setIsFocus(false)
+                }}
+                blurOnSubmit={true}
+                ref={hiddenButtonRef}
+            />
+            <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                    {(isFocus && !isResult) && <View>
+                            <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
+                                setValue(prop)
+                                requestSearchResultLooks(prop)
+                                setIsResult(true)
+                                hiddenButtonRef.current.blur()
+                            }}/>
+                        </View>}
+                    {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching}/>}
+                    {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -131,7 +161,7 @@ const mapStateToProps = (state) => ({
     topicsRecommended: state.search.topicsRecommended,
     topicsPopular: state.search.topicsPopular,
     autofill: state.search.autofill,
-    isFetching: state.search.isFetching
+    isFetching: state.search.isFetching,
 })
 
-export default connect(mapStateToProps, {requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);
+export default connect(mapStateToProps, { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);

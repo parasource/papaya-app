@@ -1,9 +1,13 @@
-import { Dimensions, View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, Image, FlatList, Platform } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, FlatList, Platform, Dimensions, Image } from 'react-native'
 import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
+import { requestSearchHistory } from '../../redux/search-reducer';
 import { LooksFeed } from './LooksFeed';
+import TopicCard from '../Search/TopicCard';
+import Carousel from 'react-native-reanimated-carousel';
+import { storage } from '../../const';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -14,11 +18,14 @@ const Feed = ({
   navigation, 
   isFetching, 
   looks, 
+  topics,
+  articles,
   requestLooks, 
   isListEnd, 
   categories, 
   categoriesLooks, 
   requestCategoriesLooks, 
+  requestSearchHistory,
   handelSnapPress,
   route
 }) => {
@@ -33,6 +40,8 @@ const Feed = ({
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
   const [categoriesY, setCategoriesY] = useState(null);
+
+  const width = Dimensions.get('window').width;
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -67,6 +76,10 @@ const Feed = ({
   }
 
   useEffect(() => {
+    requestSearchHistory()
+  }, [])
+
+  useEffect(() => {
     categoriesRef.current?.scrollToIndex({
       index: index, 
       animated: true, 
@@ -86,7 +99,6 @@ const Feed = ({
     }else if(onTop === 2){
       onPress(null)
     }
-    
   }, [onTop])
   
   useMemo(() => {
@@ -108,6 +120,53 @@ const Feed = ({
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
+          onPress={() => navigation.navigate('Search', {isFocused: true})}>
+            <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
+            <Text style={styles.searchPlaceholder}>Search</Text>
+            </TouchableOpacity>
+            {topics && (
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.scrollRow}>
+                  {topics.map((card, index) => {
+                    if(index == 0){
+                      return(
+                        <>
+                        <View style={{marginLeft: 8}}></View>
+                        <TopicCard 
+                          key={'main-feed-topic' + card.slug} 
+                          item={card} navigation={navigation} 
+                          small={true}/>
+                        </>)
+                    }else{
+                    return(<TopicCard 
+                      key={'feed-topic' + card.slug} 
+                      item={card} navigation={navigation} 
+                      small={true}/>)
+                  }})}
+                </View>
+              </ScrollView>
+            )}
+            <Carousel
+                loop={false}
+                width={width}
+                height={width / 2}
+                data={[...new Array(3).keys()]}
+                renderItem={({ index }) => (
+                    <View
+                        style={{
+                            flex: 1,
+                            borderWidth: 1,
+                            justifyContent: 'center',
+                            borderColor: '#fff'
+                        }}
+                    >
+                        <Text style={{ textAlign: 'center', fontSize: 30 }}>
+                            {index}
+                        </Text>
+                    </View>
+                )}
+            />
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
@@ -230,6 +289,27 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       marginTop: 20
     },
+    scrollRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      width: 'auto',
+      height: 120
+    },
+    searchPlaceholder: {
+      color: '#888',
+      fontSize: 18,
+      marginLeft: 12
+    },
+    searchWrapper: {
+      flex: 1,
+      marginHorizontal: 16,
+      paddingHorizontal: 8,
+      paddingVertical: 12,
+      borderRadius: 8,
+      backgroundColor: '#1F1F1F',
+      flexDirection: 'row',
+      alignItems: 'center'
+    }
 })
 
 const mapStateToProps = (state) => ({
@@ -237,7 +317,9 @@ const mapStateToProps = (state) => ({
   isFetching: state.feed.isFetching,
   isListEnd: state.feed.isListEnd,
   categories: state.feed.categories,
-  categoriesLooks: state.feed.categoriesLooks,
+  topics: state.feed.topics,
+  articles: state.feed.articles,
+  categoriesLooks: state.feed.categoriesLooks
 })
 
-export default connect(mapStateToProps, {requestLooks, requestCategoriesLooks})(Feed)
+export default connect(mapStateToProps, {requestLooks, requestCategoriesLooks, requestSearchHistory})(Feed)

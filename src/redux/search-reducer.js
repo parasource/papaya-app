@@ -58,10 +58,10 @@ export const requestSearchHistory = () => async (dispatch) => {
 
 export const requestAutofill = (string) => async (dispatch) => {
     const response = await feedAPI.getAutofill(string)
-    if(response.status == 200){
+    if(response.status == 200 || response.status == 204){
         dispatch(setAutofill(response.data))
     }else{
-        console.log('autofill',response);
+        console.log('autofill', response.status);
     }
 }
 
