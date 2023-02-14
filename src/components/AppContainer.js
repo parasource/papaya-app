@@ -20,6 +20,7 @@ import InternetConnectionAlert from 'react-native-internet-connection-alert';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import { FullButton } from './UI/FullButton';
 import * as Analytics from "expo-firebase-analytics";
+import ArticlePage from '../pages/ArticlePage';
 
 const prefix = Linking.createURL('/');
 
@@ -154,6 +155,14 @@ const AppContainer = (props) => {
                 component={LookPage}
                 options={({ route }) => ({
                   title: route.params.lookName,
+                  headerBackButtonMenuEnabled: true
+                })}
+              />
+              <Share.Screen
+                name="ArticlePage"
+                component={ArticlePage}
+                options={({ route }) => ({
+                  title: route.params.articleName,
                   headerBackButtonMenuEnabled: true
                 })}
               />

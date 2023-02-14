@@ -100,6 +100,7 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
             dispatch(setLooks(response.data.looks))
             dispatch(setCategories(response.data.categories))
             dispatch(setArticles(response.data.articles))
+            console.log(response.data.articles);
             dispatch(setTopics(response.data.topics))
             dispatch(toggleIsFetching(false))
             dispatch(toggleIsListEnd(false))

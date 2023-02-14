@@ -132,8 +132,8 @@ const Feed = ({
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
           <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
           onPress={() => navigation.navigate('Search', {isFocused: true})}>
-            <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
-            <Text style={styles.searchPlaceholder}>Search</Text>
+              <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
+              <Text style={styles.searchPlaceholder}>Search</Text>
             </TouchableOpacity>
             {topics && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -162,7 +162,7 @@ const Feed = ({
                 loop={false}
                 width={width - 32}
                 height={width / 3.125}
-                data={[...new Array(3).keys()]}
+                data={articles}
                 style={styles.sliderWrapper}
                 pagingEnabled={true}
                 snapEnabled={true}
@@ -171,9 +171,9 @@ const Feed = ({
                 onProgressChange={(_, absoluteProgress) =>
                   (progressValue.value = absoluteProgress)
                 }        
-                renderItem={({ index }) => <ArticlesCard key={'articles-item_' + index}/>}
+                renderItem={({ item }) => <ArticlesCard key={'articles-item_' + item.slug} item={item} navigation={navigation}/>}
             />
-            {!!progressValue && (
+            {/* {!!progressValue && (
               <View
                 style={{
                     flex: 1,
@@ -184,18 +184,18 @@ const Feed = ({
                     marginTop: 12
                 }}
               >
-                {[...new Array(3).keys()].map((index) => {
+                {articles.map((index) => {
                   return (
                     <PaginationItem
                       animValue={progressValue}
                       index={index}
-                      length={3}
+                      length={articles.length}
                       key={'slider-pagination_' + index}
                     />
                   );
                 })}
               </View>
-            )}
+            )} */}
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}

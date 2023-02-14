@@ -1,7 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { storage } from '../../const';
 
-export const ArticlesCard = ({image}) => {
+export const ArticlesCard = ({item, navigation}) => {
     return (
         <TouchableOpacity activeOpacity={0.8}
             style={{
@@ -10,9 +11,10 @@ export const ArticlesCard = ({image}) => {
                 overflow: 'hidden',
                 marginLeft: 8
             }}
+            onPress={() => navigation.navigate('ArticlePage', {articleSlug: item.slug, articleName: item.Title})}
         >
             <Image style={{flex: 1}} resizeMode={'cover'}
-             source={{uri: 'https://s0.rbk.ru/v6_top_pics/resized/590xH/media/img/3/08/756763696084083.jpg'}}/>
+             source={{uri: storage + '/' + item.Cover}}/>
         </TouchableOpacity>
     );
 }
