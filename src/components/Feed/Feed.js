@@ -8,6 +8,9 @@ import { LooksFeed } from './LooksFeed';
 import TopicCard from '../Search/TopicCard';
 import Carousel from 'react-native-reanimated-carousel';
 import { storage } from '../../const';
+import { ArticlesCard } from './ArticlesCard';
+import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { PaginationItem } from './PaginationItem';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -40,6 +43,7 @@ const Feed = ({
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
   const [categoriesY, setCategoriesY] = useState(null);
+  const progressValue = useSharedValue(0);
 
   const width = Dimensions.get('window').width;
 
@@ -111,6 +115,12 @@ const Feed = ({
     }
   }, [initCategory, categoriesY])
 
+  const baseOptions = {
+    vertical: false,
+    width: width * 0.85,
+    height: width / 2,
+  };
+
   return (
       <ScrollView 
         ref={scrollRef}
@@ -132,7 +142,7 @@ const Feed = ({
                     if(index == 0){
                       return(
                         <>
-                        <View style={{marginLeft: 8}}></View>
+                        <View style={{marginLeft: 10}}></View>
                         <TopicCard 
                           key={'main-feed-topic' + card.slug} 
                           item={card} navigation={navigation} 
@@ -148,25 +158,44 @@ const Feed = ({
               </ScrollView>
             )}
             <Carousel
+                {...baseOptions}
                 loop={false}
-                width={width}
-                height={width / 2}
+                width={width - 32}
+                height={width / 3.125}
                 data={[...new Array(3).keys()]}
-                renderItem={({ index }) => (
-                    <View
-                        style={{
-                            flex: 1,
-                            borderWidth: 1,
-                            justifyContent: 'center',
-                            borderColor: '#fff'
-                        }}
-                    >
-                        <Text style={{ textAlign: 'center', fontSize: 30 }}>
-                            {index}
-                        </Text>
-                    </View>
-                )}
+                style={styles.sliderWrapper}
+                pagingEnabled={true}
+                snapEnabled={true}
+                overscrollEnabled={true}
+                enabled={true}
+                onProgressChange={(_, absoluteProgress) =>
+                  (progressValue.value = absoluteProgress)
+                }        
+                renderItem={({ index }) => <ArticlesCard key={'articles-item_' + index}/>}
             />
+            {!!progressValue && (
+              <View
+                style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignSelf: "center",
+                    marginBottom: 12,
+                    marginTop: 12
+                }}
+              >
+                {[...new Array(3).keys()].map((index) => {
+                  return (
+                    <PaginationItem
+                      animValue={progressValue}
+                      index={index}
+                      length={3}
+                      key={'slider-pagination_' + index}
+                    />
+                  );
+                })}
+              </View>
+            )}
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
@@ -225,6 +254,11 @@ const styles = StyleSheet.create({
     container: {
       paddingHorizontal: 16,
       paddingRight: 16
+    },
+    sliderWrapper: {
+      marginTop: 24,
+      width: "100%",
+      marginLeft: 10
     },
     text: {
       color: TEXT_COLOR,
@@ -293,7 +327,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       flexWrap: 'wrap',
       width: 'auto',
-      height: 120
+      height: 120,
+      marginTop: 16
     },
     searchPlaceholder: {
       color: '#888',
