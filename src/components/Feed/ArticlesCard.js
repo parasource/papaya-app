@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { storage } from '../../const';
 
@@ -11,12 +11,10 @@ export const ArticlesCard = ({item, navigation}) => {
                 overflow: 'hidden',
                 marginLeft: 8
             }}
-            onPress={() => navigation.navigate('ArticlePage', {articleSlug: item.slug, articleName: item.Title})}
+            onPress={() => navigation.navigate('ArticlePage', {articleSlug: item.Slug, articleName: item.Title})}
         >
             <Image style={{flex: 1}} resizeMode={'cover'}
              source={{uri: storage + '/' + item.Cover}}/>
         </TouchableOpacity>
     );
 }
-
-const styles = StyleSheet.create({})

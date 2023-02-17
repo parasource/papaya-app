@@ -1,7 +1,6 @@
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import * as SecureStore from 'expo-secure-store';
-import { checkToken } from '../redux/auth-reducer';
 
 const instance = axios.create({
     baseURL: 'https://api.papaya.parasource.tech/api/v2'
@@ -26,7 +25,6 @@ const refreshAuthLogic = async failedRequest => {
     }).catch(err => {
         SecureStore.deleteItemAsync('token', null)
         SecureStore.deleteItemAsync('refresh_token', null)
-        checkToken()
         console.log('err', err);
     })
 };
@@ -82,6 +80,9 @@ export const feedAPI = {
     },
     getCategoriesLooks(slug) {
         return instance.get(`/feed/${slug}`)
+    },
+    getArticle(slug) {
+        return instance.get(`/articles/${slug}`)
     },
     getLook(slug) {
         return instance.get(`/looks/${slug}`)

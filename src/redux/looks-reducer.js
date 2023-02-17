@@ -16,6 +16,7 @@ const TOGGLE_IS_SAVED_END = 'TOGGLE_IS_SAVED_END'
 const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_TOPIC = 'SET_TOPIC'
 const TOGGLE_IS_SAVE = 'TOGGLE_IS_SAVE'
+const SET_CURRENT_ARTICLE = 'SET_CURRENT_ARTICLE'
 
 let initialState = {
     looks: [],
@@ -32,6 +33,7 @@ let initialState = {
     isSaved: false,
     topics: [],
     articles: [],
+    currentArticle: {},
     bookmarked: [],
 }
 
@@ -57,6 +59,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isFetching: action.isFetching}
         case SET_LOOK: 
             return {...state, currentLook: action.currentLook}
+        case SET_CURRENT_ARTICLE: 
+            return {...state, currentArticle: action.currentArticle}
         case TOGGLE_LIKED: 
             return {...state, isLiked: action.isLiked}
         case TOGGLE_DISLIKED: 
@@ -77,6 +81,7 @@ export const looksReducer = (state = initialState, action) => {
 const setLooks = (looks) => ({ type: SET_LOOKS, looks })
 const setTopics = (topics) => ({ type: SET_TOPICS, topics })
 const setArticles = (articles) => ({ type: SET_ARTICLES, articles })
+const setCurrentArticle = (currentArticle) => ({ type: SET_CURRENT_ARTICLE, currentArticle })
 const setLooksPage = (looks) => ({ type: SET_LOOKS_PAGE, looks })
 const setCategories = (categories) => ({ type: SET_CATEGORIES, categories })
 const setCategoriesLooks = (categoriesLooks) => ({ type: SET_CATEGORIES_LOOKS, categoriesLooks })
@@ -144,6 +149,18 @@ export const requestItem = (slug, id) => async (dispatch) => {
         dispatch(setCurrentItem(response.data))
     }else{
         console.log(response);
+    }
+}
+
+
+export const getCurrentArticle = (slug) => async (dispatch) => {
+    dispatch(toggleIsFetching(true))
+    const response = await feedAPI.getArticle(slug)
+    if(response.status == 200){
+        dispatch(setCurrentArticle(response.data))
+    }else{
+        console.log(response);
+        dispatch(toggleIsFetching(false))
     }
 }
 

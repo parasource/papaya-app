@@ -1,22 +1,23 @@
-import { StyleSheet, ScrollView, useWindowDimensions } from 'react-native'
+import { StyleSheet, ScrollView, useWindowDimensions, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { TEXT_COLOR, GRAY_COLOR } from '../theme';
+import { TEXT_COLOR, GRAY_COLOR, GREEN_COLOR } from '../theme';
 import { connect } from 'react-redux';
-// import { getCurrentArticle } from '../redux/looks-reducer';
+import { getCurrentArticle } from '../redux/looks-reducer';
 import RenderHtml from 'react-native-render-html';
 
 const ArticlePage = ({
         route,
-        articles
-        // currentArticle,
-        // getCurrentArticle,
+        currentArticle,
+        getCurrentArticle,
+        isFetching
     }) => {
   const { articleSlug } = route.params;
 
   const { width } = useWindowDimensions();
 
   useEffect(() => {
-    // getCurrentArticle(articleSlug)
+    getCurrentArticle(articleSlug)
+    console.log(currentArticle);
   }, [route])
 
   const tagsStyles = {
@@ -24,15 +25,15 @@ const ArticlePage = ({
       color: TEXT_COLOR
     },
     a: {
-      color: GRAY_COLOR
+      color: GREEN_COLOR
     }
   };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <RenderHtml
+       <RenderHtml
             contentWidth={width - 32}
-            source={{html: articles[0].Text}}
+            source={{html: currentArticle.Text}}
             tagsStyles={tagsStyles}
         />
     </ScrollView>
@@ -49,10 +50,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state) => ({
-    // currentArticle: state.feed.currentArticle,
-    articles: state.feed.articles,
+    currentArticle: state.feed.currentArticle,
+    isFetching: state.feed.isFetching
 })
 
-export default connect(mapStateToProps, {
-  // getCurrentArticle
-})(ArticlePage)
+export default connect(mapStateToProps, {getCurrentArticle})(ArticlePage)

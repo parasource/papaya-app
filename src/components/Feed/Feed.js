@@ -9,7 +9,7 @@ import TopicCard from '../Search/TopicCard';
 import Carousel from 'react-native-reanimated-carousel';
 import { storage } from '../../const';
 import { ArticlesCard } from './ArticlesCard';
-import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { useSharedValue } from 'react-native-reanimated';
 import { PaginationItem } from './PaginationItem';
 
 const wait = timeout => {
@@ -141,61 +141,72 @@ const Feed = ({
                   {topics.map((card, index) => {
                     if(index == 0){
                       return(
-                        <>
-                        <View style={{marginLeft: 10}}></View>
-                        <TopicCard 
-                          key={'main-feed-topic' + card.slug} 
-                          item={card} navigation={navigation} 
-                          small={true}/>
-                        </>)
+                        <View key={'main-feed-topic_' + index} style={{marginLeft: 10}}>
+                          <TopicCard 
+                            item={card} navigation={navigation} 
+                            small={true}/>
+                        </View>)
                     }else{
                     return(<TopicCard 
-                      key={'feed-topic' + card.slug} 
+                      key={'feed-topic_' + index} 
                       item={card} navigation={navigation} 
                       small={true}/>)
                   }})}
                 </View>
               </ScrollView>
             )}
-            <Carousel
-                {...baseOptions}
-                loop={false}
-                width={width - 32}
-                height={width / 3.125}
-                data={articles}
-                style={styles.sliderWrapper}
-                pagingEnabled={true}
-                snapEnabled={true}
-                overscrollEnabled={true}
-                enabled={true}
-                onProgressChange={(_, absoluteProgress) =>
-                  (progressValue.value = absoluteProgress)
-                }        
-                renderItem={({ item }) => <ArticlesCard key={'articles-item_' + item.slug} item={item} navigation={navigation}/>}
-            />
-            {/* {!!progressValue && (
-              <View
-                style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignSelf: "center",
-                    marginBottom: 12,
-                    marginTop: 12
-                }}
-              >
-                {articles.map((index) => {
-                  return (
-                    <PaginationItem
-                      animValue={progressValue}
-                      index={index}
-                      length={articles.length}
-                      key={'slider-pagination_' + index}
-                    />
-                  );
-                })}
-              </View>
-            )} */}
+              <Carousel
+                  {...baseOptions}
+                  loop={false}
+                  width={width - 32}
+                  height={width / 3.125}
+                  data={articles}
+                  style={styles.sliderWrapper}
+                  pagingEnabled={true}
+                  snapEnabled={true}
+                  overscrollEnabled={true}
+                  enabled={true}
+                  onProgressChange={(_, absoluteProgress) =>
+                    (progressValue.value = absoluteProgress)
+                  }        
+                  renderItem={({ item, index }) => {
+                    if(index === 0){
+                      return (
+                        <View style={{flex: 1, marginLeft: 10}} key={'articles-item_' + item.slug}>
+                          <ArticlesCard item={item} navigation={navigation}/>
+                        </View>)
+                    }else{
+                      return (
+                        <View style={{flex: 1}} key={'articles-item_' + item.slug}>
+                          <ArticlesCard item={item} navigation={navigation}/>
+                        </View>)
+                    }
+                  }}
+              />
+              {(!!progressValue && (articles.length > 0)) && (
+                <View
+                  style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignSelf: "center",
+                      marginBottom: 12,
+                      marginTop: 12
+                  }}
+                >
+                  {articles.map((_,index) => {
+                    return (
+                      <View key={'slider-pagination_' + index}>
+                        <PaginationItem
+                          animValue={progressValue}
+                          index={index}
+                          length={articles.length}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
@@ -258,7 +269,6 @@ const styles = StyleSheet.create({
     sliderWrapper: {
       marginTop: 24,
       width: "100%",
-      marginLeft: 10
     },
     text: {
       color: TEXT_COLOR,
