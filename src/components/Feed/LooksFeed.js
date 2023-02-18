@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { GRAY_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';

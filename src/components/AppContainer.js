@@ -21,6 +21,7 @@ import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import { FullButton } from './UI/FullButton';
 import * as Analytics from "expo-firebase-analytics";
 import ArticlePage from '../pages/ArticlePage';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const prefix = Linking.createURL('/');
 
@@ -154,8 +155,16 @@ const AppContainer = (props) => {
                 name="LookPage"
                 component={LookPage}
                 options={({ route }) => ({
-                  title: route.params.lookName,
-                  headerBackButtonMenuEnabled: true
+                  headerBackButtonMenuEnabled: true,
+                  headerTransparent: true,
+                  headerTitle: '',
+                  headerBlurEffect: '',
+                  headerBackground: () => {
+                    return (
+                      <LinearGradient
+                      colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
+                      />
+                  )},
                 })}
               />
               <Share.Screen
@@ -172,13 +181,15 @@ const AppContainer = (props) => {
                 options={({ route }) => ({ 
                   title: route.params.topicName,
                   headerBackTitleVisible: false,
-                  cardStyleInterpolator: ({ current: { progress } }) => {
-                    return {
-                      cardStyle: {
-                        opacity: progress,
-                      },
-                    };
-                  }})}
+                  headerTransparent: true,
+                  headerBlurEffect: '',
+                  headerBackground: () => {
+                    return (
+                      <LinearGradient
+                      colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
+                      />
+                  )},
+                })}
               />
               <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
               <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
@@ -241,6 +252,16 @@ const styles = StyleSheet.create({
     textAlign: 'center', 
     maxWidth: 288
   },
+  gradient: {
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute', 
+    left: 0, 
+    right: 0, 
+    bottom: 0,
+    paddingHorizontal: 20
+},
 })
 
 const mapStateToProps = (state) => ({

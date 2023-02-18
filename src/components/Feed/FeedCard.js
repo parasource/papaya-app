@@ -1,4 +1,4 @@
-import { View, TouchableHighlight, StyleSheet, Text, ActivityIndicator} from 'react-native'
+import { View, TouchableHighlight, StyleSheet, Text} from 'react-native'
 import React from 'react'
 import { INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'

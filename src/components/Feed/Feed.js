@@ -130,11 +130,13 @@ const Feed = ({
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
-          <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
-          onPress={() => navigation.navigate('Search', {isFocused: true})}>
-              <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
-              <Text style={styles.searchPlaceholder}>Search</Text>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
+              onPress={() => navigation.navigate('Search', {isFocused: true})}>
+                <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
+                <Text style={styles.searchPlaceholder}>Search</Text>
+              </TouchableOpacity>
+            </View>
             {topics && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.scrollRow}>

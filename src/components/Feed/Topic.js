@@ -58,15 +58,15 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
              style = {{height: 358, flex: 1}}
              PlaceholderContent={<ActivityIndicator />}/>
              <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}/>
-             <View style={{paddingHorizontal: 16}}>
-              <View style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
-               <Text style={styles.title}>
-                {currentTopic?.topic?.name}
-                </Text>
-                <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
-              </View>
+              <View style={{paddingHorizontal: 16}}>
+                <View style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
+                  <Text style={styles.title}>
+                    {currentTopic?.topic?.name}
+                  </Text>
+                  <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+                </View>
                <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
-            </View>
+              </View>
             <View style={styles.row}>
               {currentTopic?.looks?.map(item => (
                 <FeedCard item={item} key={item.ID} navigation={navigation}/>
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR,
         fontFamily: 'SFbold',
         fontSize: 34,
-        marginTop: 10,
-        flex: 1
+        flex: 1,
+        marginRight: 10,
     },
     desc: {
         color: GRAY_COLOR,
