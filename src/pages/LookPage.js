@@ -17,6 +17,7 @@ import * as Analytics from 'expo-firebase-analytics';
 import { BlurView } from 'expo-blur';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LookPage = ({
         route,
@@ -104,51 +105,54 @@ const LookPage = ({
                     </Animated.View>
             </PinchGestureHandler>
         </View>
-        <View style={styles.bar}>
-        <View style={styles.iconsGroup}>
-            <BlurView style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255,71,71,.25)' : 'rgba(31,31,31,.4)'}}>
-                <BounceAnimation onPress={() => {
-                        if(isLiked){
-                            unlikeLook(lookSlug)
-                        }else{
-                            if(isDisliked){
-                                undislikeLook(lookSlug)
-                            }
-                            likeLook(lookSlug)
-                            Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
-                        }
-                        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-                    }} component={
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                            style = {{...styles.icon, color: isLiked ? 'red' : TEXT_COLOR}}/>
-                        <Text style={{color: TEXT_COLOR, marginLeft: 4, fontSize: 14}}>Нравится</Text>
-                    </View>
-                }/>
-            </BlurView>
-            <BlurView style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgba(31,31,31,.4)'}}>
+        <View
+         style={styles.bar} 
+        // colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 0.8)']}
+        >
+            <View style={styles.iconsGroup}>
+                <BlurView intensity={20} style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255,71,71,.4)' : 'rgba(31,31,31,.4)'}}>
                     <BounceAnimation onPress={() => {
-                            if(isDisliked){
-                                undislikeLook(lookSlug)
+                            if(isLiked){
+                                unlikeLook(lookSlug)
                             }else{
-                                if(isLiked){
-                                    unlikeLook(lookSlug)
+                                if(isDisliked){
+                                    undislikeLook(lookSlug)
                                 }
-                                dislikeLook(lookSlug)
-                                Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
+                                likeLook(lookSlug)
+                                Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
                             }
-                            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+                            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
                         }} component={
-                        !isDisliked ?
-                        <FeatherAwesomeIcon name="slash" 
-                        style={styles.icon}/> :
-                        <FontAwesomeIcon name="ban" 
-                        style={{...styles.icon, color: '#F15A28'}}/>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Icon name = {!isLiked ? "heart-outline" : "heart"}
+                                style = {{...styles.icon, color: isLiked ? 'rgba(255, 71, 71, 1)' : TEXT_COLOR}}/>
+                            <Text style={{color: TEXT_COLOR, marginLeft: 4, fontSize: 14}}>Нравится</Text>
+                        </View>
                     }/>
                 </BlurView>
-            </View>
-            <View style={styles.iconsGroup}>
-                <BlurView style={{...styles.iconWrapper, marginHorizontal: 4}}>
+                <BlurView intensity={20} style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgba(31,31,31,.4)'}}>
+                        <BounceAnimation onPress={() => {
+                                if(isDisliked){
+                                    undislikeLook(lookSlug)
+                                }else{
+                                    if(isLiked){
+                                        unlikeLook(lookSlug)
+                                    }
+                                    dislikeLook(lookSlug)
+                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
+                                }
+                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+                            }} component={
+                            !isDisliked ?
+                            <FeatherAwesomeIcon name="slash" 
+                            style={styles.icon}/> :
+                            <FontAwesomeIcon name="ban" 
+                            style={{...styles.icon, color: '#F15A28'}}/>
+                        }/>
+                    </BlurView>
+                </View>
+                <View style={styles.iconsGroup}>
+                <BlurView intensity={20} style={{...styles.iconWrapper, marginHorizontal: 4}}>
                     <BounceAnimation onPress={() => {
                             if(isSaved){
                                 unsaveLook(lookSlug)
@@ -161,19 +165,12 @@ const LookPage = ({
                         <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
                     }/>
                 </BlurView>
-                <BlurView style={styles.iconWrapper}>
+                <BlurView intensity={20} style={styles.iconWrapper}>
                     <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.icon}/>}/>
                 </BlurView>
             </View>
         </View>
         <View style={styles.container}>
-            <TouchableOpacity style={{
-                    marginTop: 8
-                }}>
-                <Text style={{color: TEXT_COLOR, fontSize: 14}}>
-                   @zara
-                </Text>
-            </TouchableOpacity>
             <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
                 {currentLook?.categories?.map(category => (
                     <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
@@ -190,6 +187,12 @@ const LookPage = ({
                     </TouchableOpacity>
                 ))}
             </View>
+            <Text style={{color: '#B4B7C0', fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
+            <TouchableOpacity style={{marginTop: 4}}>
+                <Text style={{color: TEXT_COLOR, fontSize: 16}}>
+                   @zara
+                </Text>
+            </TouchableOpacity>
             {currentLook?.items?.length ? 
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
@@ -208,7 +211,7 @@ const LookPage = ({
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
-        paddingVertical: 20,
+        paddingVertical: 16,
         position: 'relative',
     },
     wrapper: {
@@ -225,11 +228,13 @@ const styles = StyleSheet.create({
     },
     bar: {
         width: '100%',
-        marginTop: -52,
+        height: 128,
+        marginTop: -128,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 16
+        alignItems: 'flex-end',
+        paddingHorizontal: 16,
+        paddingVertical: 16
     },
     iconWrapper: {
         overflow: 'hidden',

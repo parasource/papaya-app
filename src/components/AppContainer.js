@@ -161,9 +161,7 @@ const AppContainer = (props) => {
                   headerBlurEffect: '',
                   headerBackground: () => {
                     return (
-                      <LinearGradient
-                      colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
-                      />
+                      <LinearGradient colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
                   )},
                 })}
               />
@@ -253,7 +251,7 @@ const styles = StyleSheet.create({
     maxWidth: 288
   },
   gradient: {
-    height: 200,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute', 

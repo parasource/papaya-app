@@ -130,7 +130,8 @@ const Feed = ({
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
-            <View>
+            <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginTop: 16}}>
+              <Image source={require('../../../assets/logo-transparent.png')} style={{height: 40, width: 35, marginRight: 12}}/>
               <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
               onPress={() => navigation.navigate('Search', {isFocused: true})}>
                 <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
@@ -349,7 +350,6 @@ const styles = StyleSheet.create({
     },
     searchWrapper: {
       flex: 1,
-      marginHorizontal: 16,
       paddingHorizontal: 8,
       paddingVertical: 12,
       borderRadius: 8,

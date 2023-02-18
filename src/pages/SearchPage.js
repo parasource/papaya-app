@@ -22,6 +22,7 @@ const SearchPage = ({
     clearHistoryHandler, 
     topicsRecommended, 
     topicsPopular, 
+    searchItems,
     isFetching}) => {
     const isFocused = route.params?.isFocused
     const hiddenButtonRef = useRef(null)
@@ -101,7 +102,7 @@ const SearchPage = ({
                     setValue(newVal)
                     requestAutofill(value)
                 }}
-                placeholder={!isFocus ? "Искать" : "Например: черный Егор"}
+                placeholder={!isFocus ? "Искать" : "Рубашка с брюками"}
                 placeholderTextColor="#888"
                 cancelButtonTitle="Отмена"
                 value={value}
@@ -126,7 +127,7 @@ const SearchPage = ({
                                 hiddenButtonRef.current.blur()
                             }}/>
                         </View>}
-                    {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching}/>}
+                    {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching} searchItems={searchItems}/>}
                     {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                 </View>
             </ScrollView>
@@ -166,6 +167,7 @@ const mapStateToProps = (state) => ({
     topicsPopular: state.search.topicsPopular,
     autofill: state.search.autofill,
     isFetching: state.search.isFetching,
+    searchItems: state.search.searchItems
 })
 
 export default connect(mapStateToProps, { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler})(SearchPage);

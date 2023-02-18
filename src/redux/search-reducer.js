@@ -6,6 +6,7 @@ const SET_SEARCH_HISTORY = 'SET_SEARCH_HISTORY'
 const SET_AUTOFILL = 'SET_AUTOFILL'
 const SET_RECOMMENDED_TOPICS = 'SET_RECOMMENDED_TOPICS'
 const SET_POPULAR_TOPICS = 'SET_POPULAR_TOPICS'
+const SET_SEARCH_ITEMS = 'SET_SEARCH_ITEMS'
 
 let initialState = {
     isFetching: false,
@@ -13,6 +14,7 @@ let initialState = {
     topicsRecommended: [],
     topicsPopular: [],
     searchHistory: [],
+    searchItems: [],
     autofill: []
 }
 
@@ -22,6 +24,8 @@ export const searchReducer = (state = initialState, action) => {
             return {...state, searchResultLooks: action.searchResultLooks}
         case SET_SEARCH_HISTORY: 
             return {...state, searchHistory: action.searchHistory}
+        case SET_SEARCH_ITEMS: 
+            return {...state, searchItems: action.searchItems}
         case TOGGLE_IS_FETCHING: 
             return {...state, isFetching: action.isFetching}
         case SET_POPULAR_TOPICS: 
@@ -41,6 +45,7 @@ const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching
 const setRecommendedTopics = (topicsRecommended) => ({ type: SET_RECOMMENDED_TOPICS, topicsRecommended })
 const setPopularTopics = (topicsPopular) => ({ type: SET_POPULAR_TOPICS, topicsPopular })
 const setAutofill = (autofill) => ({ type: SET_AUTOFILL, autofill })
+const setSearchItems = (searchItems) => ({ type: SET_SEARCH_ITEMS, searchItems })
 
 export const requestSearchHistory = () => async (dispatch) => {
     dispatch(toggleIsFetching(true))
@@ -68,9 +73,12 @@ export const requestAutofill = (string) => async (dispatch) => {
 export const requestSearchResultLooks = (string) => async (dispatch) => {
     const response = await feedAPI.getSearchResult(string)
     if(response.status == 200){
-        dispatch(setSearchResultLooks(
-            response.data.looks.map(el => ({...el, type: 'look'})).concat(response.data.topics.map(el => ({...el, type: 'topic'}))).sort((a, b) => a.rank - b.rank)
+        dispatch(setSearchResultLooks(response.data.looks ? 
+            response.data.looks.map(el => ({...el, type: 'look'}))
+            : []
+            // .concat(response.data.topics.map(el => ({...el, type: 'topic'}))).sort((a, b) => a.rank - b.rank)
         ))
+        dispatch(setSearchItems(response.data.wardrobe_items))
     }else{
         console.log(response);
     }

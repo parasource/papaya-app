@@ -4,6 +4,7 @@ import { TEXT_COLOR } from '../../theme'
 import { Image } from 'react-native-elements'
 import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
+import { BlurView } from 'expo-blur'
 
 const TopicCard = ({navigation, item, small}) => {
   return (
@@ -17,9 +18,9 @@ const TopicCard = ({navigation, item, small}) => {
                 style = {{height: '100%'}}
                 PlaceholderContent={<ActivityIndicator />}/>  
             </SharedElement>
-            <View style={styles.dark}>
+            <BlurView intensity={8} style={styles.dark}>
               <Text style={styles.text}>{item.name}</Text>
-            </View>
+            </BlurView>
           </View>
     </TouchableHighlight>
   )
@@ -32,9 +33,6 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       position: 'relative'
     },
-    wrapper: {
-        marginTop: 12,
-    },
     dark: {
       width: '100%',
       height: '100%',
@@ -43,12 +41,14 @@ const styles = StyleSheet.create({
       left: 0,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, .45)'
+      backgroundColor: 'rgba(0, 0, 0, .6)'
     },
     text: {
         color: TEXT_COLOR,
         fontSize: 13,
         fontFamily: 'SFsemibold',
+        textAlign: 'center',
+        marginHorizontal: 10
     }
 })
 

@@ -14,9 +14,9 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
   })
 
   return (
-    <View>
-      {autofill?.tags?.length > 0 && 
-        <ScrollView horizontal style={{marginBottom: 12}}>
+    <TouchableOpacity activeOpacity={1}>
+      {autofill?.tags && 
+        <ScrollView horizontal style={{marginBottom: 12}} showsHorizontalScrollIndicator={false}>
           {autofill.tags.map((item, index) => 
             <TouchableOpacity style={styles.tag} key={`tags_${index}`} onPress={() => onTagPress(item)}>
                 <Text style={{color: TEXT_COLOR}}>
@@ -70,7 +70,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
           <Text style={styles.footerText}>Больше образов нет</Text>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

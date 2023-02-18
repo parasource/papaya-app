@@ -8,8 +8,7 @@ import RenderHtml from 'react-native-render-html';
 const ArticlePage = ({
         route,
         currentArticle,
-        getCurrentArticle,
-        isFetching
+        getCurrentArticle
     }) => {
   const { articleSlug } = route.params;
 
