@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import { SearchBar } from "@rneui/themed";
-import { GRAY_COLOR } from '../theme';
+import { GRAY_COLOR, TEXT_COLOR } from '../theme';
 import { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler } from '../redux/search-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
@@ -83,13 +83,17 @@ const SearchPage = ({
         setIsResult(true)
     }
 
+    const onTagPress = (tag) => {
+        setValue(value.trim() + ' ' + tag)
+    }
+
     return (
         <SafeAreaView>
             <SearchBar
                 platform="ios"
                 containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
                 inputContainerStyle={{backgroundColor: '#1F1F1F'}}
-                inputStyle={{backgroundColor: '#1F1F1F', color: GRAY_COLOR}}
+                inputStyle={{backgroundColor: '#1F1F1F', color: TEXT_COLOR}}
                 onChangeText={newVal => {
                     if(isResult){
                         setIsResult(false)
@@ -97,7 +101,7 @@ const SearchPage = ({
                     setValue(newVal)
                     requestAutofill(value)
                 }}
-                placeholder="Искать"
+                placeholder={!isFocus ? "Искать" : "Например: черный Егор"}
                 placeholderTextColor="#888"
                 cancelButtonTitle="Отмена"
                 value={value}
@@ -115,7 +119,7 @@ const SearchPage = ({
             <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     {(isFocus && !isResult) && <View>
-                            <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onClick={(prop) => {
+                            <SearchFocus feed={history} autofill={autofill} navigation={navigation} onClear={clearHistoryHandler} onTagPress={onTagPress} onClick={(prop) => {
                                 setValue(prop)
                                 requestSearchResultLooks(prop)
                                 setIsResult(true)

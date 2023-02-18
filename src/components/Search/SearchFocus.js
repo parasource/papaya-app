@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, ScrollView } from "react-native";
 import { View, StyleSheet } from "react-native";
-import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
+import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
 
-const SearchFocus = ({feed, onClick, onClear, autofill}) => {
+const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
   const setHistory = feed.history.filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
@@ -15,11 +15,20 @@ const SearchFocus = ({feed, onClick, onClear, autofill}) => {
 
   return (
     <View>
+      {autofill?.tags?.length > 0 && 
+        <ScrollView horizontal style={{marginBottom: 12}}>
+          {autofill.tags.map((item, index) => 
+            <TouchableOpacity style={styles.tag} key={`tags_${index}`} onPress={() => onTagPress(item)}>
+                <Text style={{color: TEXT_COLOR}}>
+                    {item.toLowerCase()}
+                </Text>
+            </TouchableOpacity>)}
+        </ScrollView>}
       {feed ? (
         <View>
-          {autofill.length ?  
+          {autofill?.suggestions ?  
           <View>
-            {autofill.map((item, index) => {
+            {autofill.suggestions.map((item, index) => {
               if(item.query ){
                 return  <SearchItem key={index} item={item} onClick={(value) => onClick(value)} icon={'search-outline'}/>
               }
@@ -97,6 +106,13 @@ const styles = StyleSheet.create({
     fontFamily: 'SFregular',
     fontSize: 17,
     color: TEXT_COLOR
+  },
+  tag: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: INPUTS_BG,
+    marginRight: 8,
   }
 });
 
