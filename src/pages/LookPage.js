@@ -106,7 +106,7 @@ const LookPage = ({
         </View>
         <View style={styles.bar}>
             <View style={styles.iconsGroup}>
-                <BlurView intensity={20} style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255,71,71,.4)' : 'rgba(31,31,31,.4)'}}>
+                <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? '#A23535' : 'rgba(31,31,31, 1)'}}>
                     <BounceAnimation onPress={() => {
                             if(isLiked){
                                 unlikeLook(lookSlug)
@@ -125,8 +125,8 @@ const LookPage = ({
                             <Text style={{color: TEXT_COLOR, marginLeft: 4, fontSize: 14}}>Нравится</Text>
                         </View>
                     }/>
-                </BlurView>
-                <BlurView intensity={20} style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgba(31,31,31,.4)'}}>
+                </View>
+                <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
                         <BounceAnimation onPress={() => {
                                 if(isDisliked){
                                     undislikeLook(lookSlug)
@@ -145,10 +145,10 @@ const LookPage = ({
                             <FontAwesomeIcon name="ban" 
                             style={{...styles.icon, color: '#F15A28'}}/>
                         }/>
-                    </BlurView>
+                    </View>
                 </View>
                 <View style={styles.iconsGroup}>
-                <BlurView intensity={20} style={{...styles.iconWrapper, marginHorizontal: 4}}>
+                <View style={{...styles.iconWrapper, marginHorizontal: 4}}>
                     <BounceAnimation onPress={() => {
                             if(isSaved){
                                 unsaveLook(lookSlug)
@@ -160,10 +160,10 @@ const LookPage = ({
                         }} component={
                         <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
                     }/>
-                </BlurView>
-                <BlurView intensity={20} style={styles.iconWrapper}>
+                </View>
+                <View style={styles.iconWrapper}>
                     <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.icon}/>}/>
-                </BlurView>
+                </View>
             </View>
         </View>
         <View style={styles.container}>
@@ -192,9 +192,11 @@ const LookPage = ({
             {currentLook?.items?.length ? 
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
-                {currentLook?.items?.map(item => (
-                    <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
-                ))}
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {currentLook?.items?.map(item => (
+                        <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
+                    ))}
+                </ScrollView>
             </View> : 
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>
@@ -207,7 +209,7 @@ const LookPage = ({
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
-        paddingVertical: 16,
+        paddingVertical: 12,
         position: 'relative',
     },
     wrapper: {
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 8,
         borderRadius: 12,
-        backgroundColor: 'rgba(31,31,31,.4)',
+        backgroundColor: 'rgb(31,31,31)',
     },
     iconsGroup: {
         flexDirection: 'row'
@@ -249,8 +251,8 @@ const styles = StyleSheet.create({
     title: {
         color: TEXT_COLOR,
         fontFamily: 'SFsemibold',
-        fontSize: 24,
-        marginTop: 12
+        fontSize: 16,
+        marginTop: 20
     },
     message: {
         color: GRAY_COLOR,

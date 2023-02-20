@@ -172,19 +172,11 @@ const Feed = ({
                   onProgressChange={(_, absoluteProgress) =>
                     (progressValue.value = absoluteProgress)
                   }        
-                  renderItem={({ item, index }) => {
-                    if(index === 0){
-                      return (
-                        <View style={{flex: 1, marginLeft: 10}} key={'articles-item_' + item.slug}>
-                          <ArticlesCard item={item} navigation={navigation}/>
-                        </View>)
-                    }else{
-                      return (
+                  renderItem={({ item }) => 
                         <View style={{flex: 1}} key={'articles-item_' + item.slug}>
                           <ArticlesCard item={item} navigation={navigation}/>
-                        </View>)
-                    }
-                  }}
+                        </View>
+                  }
               />
               {(!!progressValue && (articles.length > 0)) && (
                 <View
@@ -272,6 +264,7 @@ const styles = StyleSheet.create({
     sliderWrapper: {
       marginTop: 24,
       width: "100%",
+      marginLeft: 10
     },
     text: {
       color: TEXT_COLOR,

@@ -5,33 +5,19 @@ import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 import { storage } from '../const';
 
 export const LookItem = ({lookSlug, item, navigation}) => {
- const urlsArr = item.urls.slice(0,2)
-
   return (
     <TouchableOpacity activeOpacity={.6} onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
         <View style={styles.wrapper}>
-        <Image source={{uri: `${storage}/${item.image}`}} 
+            <Image source={{uri: `${storage}/${item.image}`}} 
                 resizeMode = "cover"
-                style = {{height: 95, width: 70, flex: 1, borderRadius: 12}}
+                style = {{height: 114, width: 97, flex: 1, borderRadius: 8}}
                 PlaceholderContent={<ActivityIndicator />}/>
-            <View style={styles.content}>
-                <Text style={styles.title}>{item.name}</Text>
-                <Text style={styles.mute}>Бренды</Text>
-                <View style={styles.linksWrapper}>
-                    {urlsArr.map(url => (
-                        <TouchableOpacity key={url.ID} 
-                        onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}
-                        style={styles.linkWrapper}>
-                            <Text style={styles.link}>{url.brand.name}</Text>
-                        </TouchableOpacity>
-                    ))}
-                    {(item.urls.length >= 2) && 
-                        <TouchableOpacity onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
-                            <Text style={styles.moreBtn}>Ещё</Text>
-                        </TouchableOpacity>
-                    }
-                </View>
-            </View>
+            <Text style={styles.title}>{item.name}</Text>
+            {item.urls.length > 0 &&
+            <Text style={styles.mute}>{item.urls.length}
+            {item.urls.length === 1 ? ' магазин' : 
+            <>{item.urls.length > 4 ? ' магазинов' : ' магазина'}</>}
+            </Text>}
         </View>
     </TouchableOpacity>
   )
@@ -39,51 +25,25 @@ export const LookItem = ({lookSlug, item, navigation}) => {
 
 const styles = StyleSheet.create({
     wrapper: {
-        width: '100%',
-        borderRadius: 12,
+        width: 113,
+        borderRadius: 8,
         backgroundColor: '#1F1F1F',
-        padding: 6,
-        flexDirection: 'row',
-        marginTop: 12,
-        flex: 1
-    },
-    content: {
-        marginLeft: 20,
+        padding: 8,
+        marginRight: 8,
         flex: 1,
-        paddingVertical: 6
+        marginTop: 12
     },
     title: {
         fontFamily: 'SFmedium',
-        fontSize: 17,
+        fontSize: 12,
+        marginTop: 8,
+        flex: 1,
         color: TEXT_COLOR,
-        marginBottom: 7,
     },
     mute: {
         fontFamily: 'SFregular',
-        fontSize: 13,
+        marginTop: 2,
+        fontSize: 11,
         color: GRAY_COLOR
-    },
-    linksWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 4,
-    },
-    link: {
-        fontFamily: 'SFregular',
-        fontSize: 13,
-        color: TEXT_COLOR,
-    },
-    linkWrapper: {
-        paddingVertical: 4,
-        paddingHorizontal: 12,
-        borderRadius: 8,
-        backgroundColor: '#282828',
-        marginRight: 8
-    },
-    moreBtn: {
-        paddingHorizontal: 8,
-        fontFamily: 'SFregular',
-        fontSize: 13,
-        color: TEXT_COLOR,
     }
 })
