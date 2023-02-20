@@ -177,7 +177,7 @@ const AppContainer = (props) => {
                 name="TopicPage"
                 component={TopicPage}
                 options={({ route }) => ({ 
-                  title: route.params.topicName,
+                  title: '',
                   headerBackTitleVisible: false,
                   headerTransparent: true,
                   headerBlurEffect: '',

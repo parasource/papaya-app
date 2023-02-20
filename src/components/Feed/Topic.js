@@ -1,13 +1,14 @@
 import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, Linking, TouchableOpacity, Share } from 'react-native'
 import React, {useEffect, useState} from 'react'
-import { GRAY_COLOR, TEXT_COLOR } from '../../theme';
+import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG } from '../../theme';
 import FeedCard from './FeedCard';
 import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
-import { LinearGradient } from 'expo-linear-gradient';
 import { BounceAnimation } from '../UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { LooksFeed } from './LooksFeed';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
@@ -55,22 +56,23 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
             <View style={{paddingBottom: 100, height: '100%'}}>
             <Image source={{uri: `${storage}/${currentTopic?.topic?.image}`}} 
              resizeMode = "cover"
-             style = {{height: 358, flex: 1}}
-             PlaceholderContent={<ActivityIndicator />}/>
-             <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}/>
-              <View style={{paddingHorizontal: 16}}>
-                <View style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
-                  <Text style={styles.title}>
-                    {currentTopic?.topic?.name}
-                  </Text>
-                  <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
-                </View>
-               <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
+             style = {{height: 282, flex: 1, borderBottomLeftRadius: 12, borderBottomRightRadius: 12}}
+             PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
+            <LinearGradient colors={['rgba(0, 0, 0, 0) 0%', 'rgba(0, 0, 0, 0.4)']} style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'flex-end', height: 166, marginTop: -166, paddingHorizontal: 16}}>
+              <View>
+                <Text style={styles.title}>
+                  {/[a-zа-яё]+/i.exec(currentTopic?.topic?.name.toUpperCase().trim())}
+                </Text>
+                <Text style={styles.titleSecond}>
+                  {currentTopic?.topic?.name.toUpperCase().replace(/[a-zа-яё]+/i, '').trim()}
+                </Text>
               </View>
-            <View style={styles.row}>
-              {currentTopic?.looks?.map(item => (
-                <FeedCard item={item} key={item.ID} navigation={navigation}/>
-              ))}
+              <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+            </LinearGradient>
+            <View style={{paddingHorizontal: 16}}>
+              <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
+              <LooksFeed looks={currentTopic.looks} 
+                navigation={navigation} isListEnd={true} page={0}/>
             </View>
           </View>
       }
@@ -96,16 +98,22 @@ const styles = StyleSheet.create({
     title: {
         color: TEXT_COLOR,
         fontFamily: 'SFbold',
-        fontSize: 34,
-        flex: 1,
+        fontSize: 20,
         marginRight: 10,
+        marginBottom: 4
+    },
+    titleSecond: {
+        color: TEXT_COLOR,
+        fontFamily: 'SFbold',
+        fontSize: 28,
+        marginRight: 10,
+        marginBottom: 16
     },
     desc: {
-        color: GRAY_COLOR,
+        color: TEXT_COLOR,
         fontFamily: 'SFregular',
-        fontSize: 17,
-        marginTop:8,
-        marginBottom: 16
+        fontSize: 14,
+        marginTop: 16,
     },
     image: {
         width: '100%',
@@ -120,7 +128,8 @@ const styles = StyleSheet.create({
     },
     iconSM: {
       color: TEXT_COLOR,
-      fontSize: 28
+      fontSize: 24,
+      marginBottom: 16,
     },
 })
 

@@ -17,7 +17,6 @@ import * as Analytics from 'expo-firebase-analytics';
 import { BlurView } from 'expo-blur';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements';
-import { LinearGradient } from 'expo-linear-gradient';
 
 const LookPage = ({
         route,
@@ -105,10 +104,7 @@ const LookPage = ({
                     </Animated.View>
             </PinchGestureHandler>
         </View>
-        <View
-         style={styles.bar} 
-        // colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 0.8)']}
-        >
+        <View style={styles.bar}>
             <View style={styles.iconsGroup}>
                 <BlurView intensity={20} style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255,71,71,.4)' : 'rgba(31,31,31,.4)'}}>
                     <BounceAnimation onPress={() => {
@@ -171,7 +167,7 @@ const LookPage = ({
             </View>
         </View>
         <View style={styles.container}>
-            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
+            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginBottom: 16}}>
                 {currentLook?.categories?.map(category => (
                     <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
                         paddingHorizontal: 12,
