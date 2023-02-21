@@ -61,6 +61,7 @@
     "react-native-actionsheet": "^2.4.2",
     "react-native-appmetrica": "^2.0.0",
     "react-native-auto-height-image": "^3.2.4",
+    "react-native-color-matrix-image-filters": "^6.0.3",
     "react-native-dropdownalert": "^4.5.1",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.5.0",

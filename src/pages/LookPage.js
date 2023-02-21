@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Share, TouchableOpacity, Animated } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FeatherAwesomeIcon from 'react-native-vector-icons/Feather';
@@ -14,9 +14,9 @@ import * as Linking from 'expo-linking';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
 import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
-import { BlurView } from 'expo-blur';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements';
+import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 
 const LookPage = ({
         route,
@@ -35,6 +35,7 @@ const LookPage = ({
         isSaved = false
     }) => {
     const { lookSlug } = route.params;
+    const offset = useRef(new Animated.Value(0)).current;
 
     const [link, setLink] = useState('')
 
@@ -88,7 +89,14 @@ const LookPage = ({
 
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View>
+    <ScrollView 
+        showsVerticalScrollIndicator={false}
+        onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: offset } } }],
+            { useNativeDriver: false }
+        )}
+        scrollEventThrottle={16}>
         <View style={styles.wrapper}>
             <PinchGestureHandler
                 onGestureEvent={onPinchGestureEvent}
@@ -161,9 +169,6 @@ const LookPage = ({
                         <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
                     }/>
                 </View>
-                <View style={styles.iconWrapper}>
-                    <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.icon}/>}/>
-                </View>
             </View>
         </View>
         <View style={styles.container}>
@@ -203,6 +208,8 @@ const LookPage = ({
             </View>}
         </View>
     </ScrollView>
+    <AnimatedHeader animValue={offset}/>
+    </View>
   )
 }
 

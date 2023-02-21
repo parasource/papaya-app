@@ -22,6 +22,8 @@ import { FullButton } from './UI/FullButton';
 import * as Analytics from "expo-firebase-analytics";
 import ArticlePage from '../pages/ArticlePage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BounceAnimation } from './UI/BounceAnimation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const prefix = Linking.createURL('/');
 
@@ -137,7 +139,12 @@ const AppContainer = (props) => {
       }}>
         <Share.Navigator screenOptions={{  
           headerShown: true, 
-          headerBackTitleVisible: false  }}>
+          headerBackTitleVisible: false,
+          headerTintColor: '#fff',
+          gestureEnabled: true,
+          gestureResponseDistance: {
+            horizontal: 400
+          }}}>
             <Share.Screen
               name="MainNavigator"
               options={{ 
@@ -145,59 +152,57 @@ const AppContainer = (props) => {
               }}
               >
                 {() => <TabBottomNavigator handelSnapPress={handelSnapPress}/>}
-              </Share.Screen>
-            <Share.Group screenOptions={{ 
-                headerBlurEffect: 'dark',
+            </Share.Screen>
+            <Share.Screen
+              name="LookPage"
+              component={LookPage}
+              options={({ route }) => ({
+                headerBackButtonMenuEnabled: true,
+                headerTransparent: true,
+                headerTitle: route.params.lookName,
+                headerBlurEffect: '',
+                // onPress={shareHandler}
+                headerRight: () => (
+                  <BounceAnimation component={<Icon name="share-outline" style={styles.icon}/>}/>
+                ),
+                headerBackground: () => {
+                  return (
+                    <LinearGradient colors={['rgba(17, 17, 17, .5)', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
+                )},
+              })}
+            />
+            <Share.Screen
+              name="ArticlePage"
+              component={ArticlePage}
+              options={({ route }) => ({
+                title: route.params.articleName,
+                headerBackButtonMenuEnabled: true
+              })}
+            />
+            <Share.Screen
+              name="TopicPage"
+              component={TopicPage}
+              options={({ route }) => ({ 
+                title: '',
                 headerBackTitleVisible: false,
-                headerTintColor: '#fff',
-             }}>
-              <Share.Screen
-                name="LookPage"
-                component={LookPage}
-                options={({ route }) => ({
-                  headerBackButtonMenuEnabled: true,
-                  headerTransparent: true,
-                  headerTitle: '',
-                  headerBlurEffect: '',
-                  headerBackground: () => {
-                    return (
-                      <LinearGradient colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
-                  )},
-                })}
+                headerTransparent: true,
+                headerBlurEffect: '',
+                headerBackground: () => {
+                  return (
+                    <LinearGradient
+                    colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
+                    />
+                )},
+              })}
+            />
+            <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
+            <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
+            <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+            <Share.Screen
+                name="ProfileSettings"
+                component={ProfileSettings}
+                options={{ title: 'Аккаунт'}}
               />
-              <Share.Screen
-                name="ArticlePage"
-                component={ArticlePage}
-                options={({ route }) => ({
-                  title: route.params.articleName,
-                  headerBackButtonMenuEnabled: true
-                })}
-              />
-              <Share.Screen
-                name="TopicPage"
-                component={TopicPage}
-                options={({ route }) => ({ 
-                  title: '',
-                  headerBackTitleVisible: false,
-                  headerTransparent: true,
-                  headerBlurEffect: '',
-                  headerBackground: () => {
-                    return (
-                      <LinearGradient
-                      colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
-                      />
-                  )},
-                })}
-              />
-              <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
-              <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
-              <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
-              <Share.Screen
-                  name="ProfileSettings"
-                  component={ProfileSettings}
-                  options={{ title: 'Аккаунт'}}
-                />
-            </Share.Group>
             
             <Share.Group screenOptions={{ presentation: 'modal' }}>
                 <Share.Screen name="ItemModal" component={ItemScreen} 
@@ -249,6 +254,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: 'center', 
     maxWidth: 288
+  },
+  icon: {
+      color: TEXT_COLOR,
+      fontSize: 24
   },
   gradient: {
     height: '100%',
