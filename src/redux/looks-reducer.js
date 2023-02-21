@@ -17,9 +17,11 @@ const SET_CATEGORIES_LOOKS = 'SET_CATEGORIES_LOOKS'
 const SET_TOPIC = 'SET_TOPIC'
 const TOGGLE_IS_SAVE = 'TOGGLE_IS_SAVE'
 const SET_CURRENT_ARTICLE = 'SET_CURRENT_ARTICLE'
+const SET_ALERTS = 'SET_ALERTS'
 
 let initialState = {
     looks: [],
+    alerts: [],
     categories: [],
     isFetching: false,
     currentLook: {},
@@ -73,6 +75,8 @@ export const looksReducer = (state = initialState, action) => {
             return {...state, isSaved: action.isSaved}
         case SET_TOPIC: 
             return {...state, currentTopic: action.currentTopic}
+        case SET_ALERTS: 
+            return {...state, alerts: action.alerts}
         default: 
             return state
     }
@@ -95,6 +99,7 @@ const toggleIsSavedEnd = (isSavedEnd) => ({ type: TOGGLE_IS_SAVED_END, isSavedEn
 const toggleIsSaved = (isSaved) => ({ type: TOGGLE_IS_SAVE, isSaved })
 const setCurrentTopic = (currentTopic) => ({ type: SET_TOPIC, currentTopic })
 const setBookmarked = (bookmarked) => ({ type: SET_BOOKMARKED, bookmarked })
+const setAlerts = (alerts) => ({ type: SET_ALERTS, alerts })
 
 
 export const requestLooks = (page, onRefresh) => async (dispatch) => {
@@ -103,6 +108,7 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
     if(response.status == 200){
         if(onRefresh){
             dispatch(setLooks(response.data.looks))
+            dispatch(setAlerts(response.data.alerts))
             dispatch(setCategories(response.data.categories))
             dispatch(setArticles(response.data.articles))
             dispatch(setTopics(response.data.topics))
@@ -115,6 +121,7 @@ export const requestLooks = (page, onRefresh) => async (dispatch) => {
             }else{
                 dispatch(setLooksPage(response.data.looks))
                 dispatch(setCategories(response.data.categories))
+                dispatch(setAlerts(response.data.alerts))
                 dispatch(setArticles(response.data.articles))
                 dispatch(setTopics(response.data.topics))
                 dispatch(toggleIsFetching(false))
@@ -167,7 +174,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
-        dispatch(setLook(response.data.look))
+        dispatch(setLook({...response.data.look, similar: response.data.similar}))
         dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleDisliked(response.data.isDisliked))
         dispatch(toggleIsSaved(response.data.isSaved))

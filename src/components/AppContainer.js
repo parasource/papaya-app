@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback, useState, useRef } from 'react'
-import { StatusBar, View, Text, StyleSheet } from 'react-native';
+import { StatusBar, View, Text, Share as rnShare, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -73,6 +73,19 @@ const AppContainer = (props) => {
       }
     }
   };
+
+  const shareHandler = async (slug, name) => {
+    Analytics.logEvent('share', {contentType: 'Share look' + name});
+
+    const options={
+        message: `Посмотри этот образ:\n${name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/looks/${slug}`,
+    }
+    try{
+        await rnShare.share(options)
+    }catch(err){
+        console.log(err);
+    }
+  }
 
   const MyTheme = {
     ...DarkTheme,
@@ -161,9 +174,10 @@ const AppContainer = (props) => {
                 headerTransparent: true,
                 headerTitle: route.params.lookName,
                 headerBlurEffect: '',
-                // onPress={shareHandler}
                 headerRight: () => (
-                  <BounceAnimation component={<Icon name="share-outline" style={styles.icon}/>}/>
+                  <TouchableOpacity activeOpacity={.6} onPress={() => shareHandler(route.params.lookSlug, route.params.lookName)}>
+                    <Icon name="share-outline" style={styles.icon}/>
+                  </TouchableOpacity>
                 ),
                 headerBackground: () => {
                   return (

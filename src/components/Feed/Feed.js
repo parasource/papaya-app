@@ -18,6 +18,7 @@ const wait = timeout => {
 
 const Feed = ({
   onTop,
+  alerts,
   navigation, 
   isFetching, 
   looks, 
@@ -137,6 +138,14 @@ const Feed = ({
                 <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
                 <Text style={styles.searchPlaceholder}>Search</Text>
               </TouchableOpacity>
+            </View>
+            <View>
+              {alerts.length > 0 && alerts.map(item => (
+                <View style={{marginTop: 16, paddingHorizontal: 16}} key={'alert_item_' + item.ID}>
+                  <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>{item.title}</Text>
+                  <Text style={{color: TEXT_COLOR, fontSize: 14}}>{item.text}</Text>
+                </View>
+              ))}
             </View>
             {topics && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -359,7 +368,8 @@ const mapStateToProps = (state) => ({
   categories: state.feed.categories,
   topics: state.feed.topics,
   articles: state.feed.articles,
-  categoriesLooks: state.feed.categoriesLooks
+  categoriesLooks: state.feed.categoriesLooks,
+  alerts: state.feed.alerts
 })
 
 export default connect(mapStateToProps, {requestLooks, requestCategoriesLooks, requestSearchHistory})(Feed)

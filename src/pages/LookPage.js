@@ -18,6 +18,8 @@ import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import { openBrowserAsync } from 'expo-web-browser';
+import { LooksFeed } from '../components/Feed/LooksFeed';
 
 const LookPage = ({
         route,
@@ -39,7 +41,7 @@ const LookPage = ({
     const offset = useRef(new Animated.Value(0)).current;
 
     const [link, setLink] = useState('')
-    const [toolTipVisible, setToolTipVisible] = useState(true)
+    const [toolTipVisible, setToolTipVisible] = useState(false)
 
     useEffect(() => {
             let canGoBack = navigation.canGoBack();
@@ -59,19 +61,6 @@ const LookPage = ({
                 })
             }
     }, [route])
-
-    const shareHandler = async () => {
-        Analytics.logEvent('share', {contentType: 'Share look' + currentLook.name});
-
-        const options={
-            message: `Посмотри этот образ:\n${currentLook.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/looks/${lookSlug}`,
-        }
-        try{
-            const result = await Share.share(options)
-        }catch(err){
-            console.log(err);
-        }
-    }
 
     let baseScale = new Animated.Value(1);
 
@@ -189,14 +178,14 @@ const LookPage = ({
             </View>
         </View>
         <View style={styles.container}>
-            <View style={{flexDirection: 'row', marginTop: 16}}>
+            {(currentLook.authorTag && currentLook.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
                 <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => openBrowserAsync(currentLook.authorUrl)}>
                     <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
-                    @zara
+                        @{currentLook.authorTag}
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View>}
             <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
                 {currentLook?.categories?.map(category => (
                     <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
@@ -213,18 +202,23 @@ const LookPage = ({
                     </TouchableOpacity>
                 ))}
             </View>
-            {currentLook?.items?.length ? 
             <View style={{paddingBottom: 100}}>
+            {currentLook?.items?.length ? 
+            <>
                 <Text style={styles.title}>Элементы образа</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {currentLook?.items?.map(item => (
                         <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
                     ))}
                 </ScrollView>
-            </View> : 
-            <View style={{paddingBottom: 100}}>
-                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>
+            </>
+             : 
+                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
+            {currentLook.similar && <View><Text style={styles.title}>Похожие образы</Text>
+            <LooksFeed looks={currentLook.similar} 
+                navigation={navigation} isListEnd={true} page={0}/>
             </View>}
+            </View>
         </View>
     </ScrollView>
     <AnimatedHeader animValue={offset}/>
