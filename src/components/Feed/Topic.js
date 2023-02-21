@@ -1,7 +1,6 @@
-import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, Linking, TouchableOpacity, Share } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG } from '../../theme';
-import FeedCard from './FeedCard';
+import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, Linking, TouchableOpacity, Share, Dimensions, Animated as rnAnimated } from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG, BG_COLOR } from '../../theme';
 import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
@@ -9,11 +8,19 @@ import { BounceAnimation } from '../UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { LooksFeed } from './LooksFeed';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated from 'react-native-reanimated';
+import { AnimatedTopicHeader } from '../UI/AnimatedTopicHeader';
 
+MAX_HEADER_HEIGHT = 282
+
+const {interpolate, Extrapolate} = Animated
+const {height} = Dimensions.get("window")
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
   const [page, setPage] = useState(0)
   const { topicSlug } = route.params;
+
+  const offset = useRef(new rnAnimated.Value(0)).current
 
   const [link, setLink] = useState('')
 
@@ -45,38 +52,53 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
     }catch(err){
         console.log(err);
     }
-
   }
 
+  const headerScale = offset.interpolate({
+    inputRange: [-MAX_HEADER_HEIGHT, 0],
+    outputRange: [4, 1],
+    extrapolate: 'clamp'
+  })
   
   return (
-    <ScrollView key={topicSlug} showsVerticalScrollIndicator={false}>
-      {isFetching ?
-         <ActivityIndicator/> : 
-            <View style={{paddingBottom: 100, height: '100%'}}>
-            <Image source={{uri: `${storage}/${currentTopic?.topic?.image}`}} 
-             resizeMode = "cover"
-             style = {{height: 282, flex: 1, borderBottomLeftRadius: 12, borderBottomRightRadius: 12}}
-             PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
-            <LinearGradient colors={['rgba(0, 0, 0, 0) 0%', 'rgba(0, 0, 0, 0.4)']} style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'flex-end', height: 166, marginTop: -166, paddingHorizontal: 16}}>
-              <View>
-                <Text style={styles.title}>
-                  {/[a-zа-яё]+/i.exec(currentTopic?.topic?.name.toUpperCase().trim())}
-                </Text>
-                <Text style={styles.titleSecond}>
-                  {currentTopic?.topic?.name.toUpperCase().replace(/[a-zа-яё]+/i, '').trim()}
-                </Text>
+    <View style={{flex: 1}}>
+      <ScrollView 
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            onScroll={rnAnimated.event(
+              [{ nativeEvent: { contentOffset: { y: offset } } }],
+              { useNativeDriver: false }
+          )}>
+        {isFetching ?
+          <ActivityIndicator/> : 
+              <View style={{paddingBottom: 100, height: '100%'}}>
+                <rnAnimated.View style={{...styles.wrapper,flex: 1, transform: [{ scale: headerScale }]}}>
+                  <Image source={{uri: `${storage}/${currentTopic?.topic?.image}`}} 
+                    resizeMode="cover"
+                    style={{flex: 1}}
+                    PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
+                </rnAnimated.View>
+              <LinearGradient colors={['rgba(0, 0, 0, 0) 0%', 'rgba(0, 0, 0, 0.4)']} style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'flex-end', height: 166, marginTop: -166, paddingHorizontal: 16}}>
+                <View>
+                  <Text style={styles.title}>
+                    {/[a-zа-яё]+/i.exec(currentTopic?.topic?.name.toUpperCase().trim())}
+                  </Text>
+                  <Text style={styles.titleSecond}>
+                    {currentTopic?.topic?.name.toUpperCase().replace(/[a-zа-яё]+/i, '').trim()}
+                  </Text>
+                </View>
+                <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
+              </LinearGradient>
+              <View style={{paddingHorizontal: 16, backgroundColor: BG_COLOR}}>
+                <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
+                <LooksFeed looks={currentTopic.looks} 
+                  navigation={navigation} isListEnd={true} page={0}/>
               </View>
-              <BounceAnimation onPress={shareHandler} component={<Icon name="share-outline" style={styles.iconSM}/>}/>
-            </LinearGradient>
-            <View style={{paddingHorizontal: 16}}>
-              <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
-              <LooksFeed looks={currentTopic.looks} 
-                navigation={navigation} isListEnd={true} page={0}/>
             </View>
-          </View>
-      }
-    </ScrollView>
+        }
+      </ScrollView>
+      <AnimatedTopicHeader maxHeight={MAX_HEADER_HEIGHT} animValue={offset} title={currentTopic?.topic?.name}/>
+    </View>
   )
 }
 
@@ -94,6 +116,12 @@ const styles = StyleSheet.create({
     },
     container: {
         paddingHorizontal: 16
+    },
+    wrapper: {
+      height: MAX_HEADER_HEIGHT,
+      borderBottomLeftRadius: 12, 
+      borderBottomRightRadius: 12, 
+      overflow: 'hidden'
     },
     title: {
         color: TEXT_COLOR,

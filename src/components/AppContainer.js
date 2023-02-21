@@ -187,12 +187,6 @@ const AppContainer = (props) => {
                 headerBackTitleVisible: false,
                 headerTransparent: true,
                 headerBlurEffect: '',
-                headerBackground: () => {
-                  return (
-                    <LinearGradient
-                    colors={['#111', 'rgba(17, 17, 17, 0)']} style={styles.gradient}
-                    />
-                )},
               })}
             />
             <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>

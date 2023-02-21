@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Share, TouchableOpacity, Animated } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
+import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FeatherAwesomeIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
@@ -17,6 +17,7 @@ import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { Image } from 'react-native-elements';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 const LookPage = ({
         route,
@@ -38,6 +39,7 @@ const LookPage = ({
     const offset = useRef(new Animated.Value(0)).current;
 
     const [link, setLink] = useState('')
+    const [toolTipVisible, setToolTipVisible] = useState(true)
 
     useEffect(() => {
             let canGoBack = navigation.canGoBack();
@@ -114,26 +116,41 @@ const LookPage = ({
         </View>
         <View style={styles.bar}>
             <View style={styles.iconsGroup}>
-                <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? '#A23535' : 'rgba(31,31,31, 1)'}}>
-                    <BounceAnimation onPress={() => {
-                            if(isLiked){
-                                unlikeLook(lookSlug)
-                            }else{
-                                if(isDisliked){
-                                    undislikeLook(lookSlug)
+                <Tooltip
+                    isVisible={toolTipVisible}
+                    animated
+                    content={<View>
+                        <Text style={{fontSize: 28, color: GREEN_COLOR, fontFamily: 'SFbold'}}>Каждый лайк важен</Text>
+                        <Text style={{fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>
+                            Каждый ваш лайк помогает нам{'\n'}
+                            улучшить рекомендации для вас
+                        </Text>
+                        </View>}
+                    placement="top"
+                    backgroundColor={'rgba(17,17,17, .9)'}
+                    contentStyle={{backgroundColor: 'rgba(0,0,0,0)', paddingHorizontal: 0, width: 'auto'}}
+                    onClose={() => setToolTipVisible(false)}
+                    >
+                    <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}>
+                        <BounceAnimation onPress={() => {
+                                if(isLiked){
+                                    unlikeLook(lookSlug)
+                                }else{
+                                    if(isDisliked){
+                                        undislikeLook(lookSlug)
+                                    }
+                                    likeLook(lookSlug)
+                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
                                 }
-                                likeLook(lookSlug)
-                                Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
-                            }
-                            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-                        }} component={
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                                style = {{...styles.icon, color: isLiked ? 'rgba(255, 71, 71, 1)' : TEXT_COLOR}}/>
-                            <Text style={{color: TEXT_COLOR, marginLeft: 4, fontSize: 14}}>Нравится</Text>
-                        </View>
-                    }/>
-                </View>
+                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+                            }} component={
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                <Icon name = {!isLiked ? "heart-outline" : "heart"}
+                                    style = {{...styles.icon, color: TEXT_COLOR}}/>
+                            </View>
+                        }/>
+                    </View>
+                </Tooltip>
                 <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
                         <BounceAnimation onPress={() => {
                                 if(isDisliked){
@@ -172,7 +189,15 @@ const LookPage = ({
             </View>
         </View>
         <View style={styles.container}>
-            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginBottom: 16}}>
+            <View style={{flexDirection: 'row', marginTop: 16}}>
+                <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
+                <TouchableOpacity>
+                    <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
+                    @zara
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
                 {currentLook?.categories?.map(category => (
                     <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
                         paddingHorizontal: 12,
@@ -188,12 +213,6 @@ const LookPage = ({
                     </TouchableOpacity>
                 ))}
             </View>
-            <Text style={{color: '#B4B7C0', fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
-            <TouchableOpacity style={{marginTop: 4}}>
-                <Text style={{color: TEXT_COLOR, fontSize: 16}}>
-                   @zara
-                </Text>
-            </TouchableOpacity>
             {currentLook?.items?.length ? 
             <View style={{paddingBottom: 100}}>
                 <Text style={styles.title}>Элементы образа</Text>
@@ -216,7 +235,6 @@ const LookPage = ({
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
-        paddingVertical: 12,
         position: 'relative',
     },
     wrapper: {
@@ -247,6 +265,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderRadius: 12,
         backgroundColor: 'rgb(31,31,31)',
+        borderColor: 'rgba(128, 128, 128, 0.2)',
+        borderWidth: .5
     },
     iconsGroup: {
         flexDirection: 'row'
