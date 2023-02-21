@@ -11,8 +11,9 @@ import { storage } from '../../const';
 
 const Tab = createBottomTabNavigator()
 
-export const TabBottomNavigator = ({handelSnapPress}) => {
+export const TabBottomNavigator = (props) => {
   const [onTop, setOnTop] = useState(null)
+  const {handelSnapPress} = props.route.params
 
   return(
     <Tab.Navigator

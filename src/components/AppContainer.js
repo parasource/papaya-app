@@ -24,11 +24,12 @@ import ArticlePage from '../pages/ArticlePage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BounceAnimation } from './UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
 const prefix = Linking.createURL('/');
 
 const Stack = createNativeStackNavigator()
-const Share = createNativeStackNavigator()
+const Share = createSharedElementStackNavigator()
 
 const AppContainer = (props) => {
   useMemo(() => {
@@ -153,19 +154,16 @@ const AppContainer = (props) => {
         <Share.Navigator screenOptions={{  
           headerShown: true, 
           headerBackTitleVisible: false,
-          headerTintColor: '#fff',
-          gestureEnabled: true,
-          gestureResponseDistance: {
-            horizontal: 400
-          }}}>
+          headerTintColor: '#fff'}}>
             <Share.Screen
               name="MainNavigator"
               options={{ 
                 headerShown: false,
               }}
-              >
-                {() => <TabBottomNavigator handelSnapPress={handelSnapPress}/>}
-            </Share.Screen>
+              initialParams={{handelSnapPress}}
+              // children={() => <TabBottomNavigator handelSnapPress={handelSnapPress}/>}
+              component={TabBottomNavigator}
+              />
             <Share.Screen
               name="LookPage"
               component={LookPage}

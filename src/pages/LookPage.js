@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Share, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Animated } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -15,7 +15,7 @@ import { BounceAnimation } from '../components/UI/BounceAnimation';
 import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
-import { Image } from 'react-native-elements';
+// import { Image } from 'react-native-elements';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { openBrowserAsync } from 'expo-web-browser';
@@ -37,7 +37,7 @@ const LookPage = ({
         unsaveLook,
         isSaved = false
     }) => {
-    const { lookSlug } = route.params;
+    const { lookSlug, item } = route.params;
     const offset = useRef(new Animated.Value(0)).current;
 
     const [link, setLink] = useState('')
@@ -94,11 +94,9 @@ const LookPage = ({
                 onHandlerStateChange={onPinchHandlerStateChange}>
                     <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
                         <SharedElement id={`feedCard${lookSlug}`}>
-                            {!isFetching ?
-                            <Image style={styles.image} 
-                                source={{uri: `${storage}/${currentLook.image}`}}
-                                PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/> 
-                            : <View style={{...styles.image, backgroundColor: INPUTS_BG}} ></View>}
+                            <Image 
+                            style={styles.image} 
+                            source={{uri: `${storage}/${item.imageResized}`}}/> 
                         </SharedElement>
                     </Animated.View>
             </PinchGestureHandler>
@@ -312,9 +310,9 @@ LookPage.sharedElements = route => {
     const { lookSlug } = route.params;
     return [
         {
-        id: `feedCard${lookSlug}`,
-        animation: 'fade',
-        resize: 'clip'
+            id: `feedCard${lookSlug}`,
+            animation: 'fade',
+            resize: 'clip'
         }
     ];
 };
