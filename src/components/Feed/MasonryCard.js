@@ -22,16 +22,13 @@ const MasonryCard = ({navigation, item, withPop, modalHandler}) => {
         <View> 
             {item.isFromWardrobe && <TouchableHighlight onPress={modalHandler} style={styles.wardrobeInfo}><Icon name='shirt-outline'style={styles.icon}/></TouchableHighlight>}
             <View style={{...styles.cardWrapper, width: width, aspectRatio: !isNaN(ratio) ? ratio : 2/3}}> 
-              <SharedElement id={`feedCard${item.slug}`} style={{position: 'relative', zIndex: 1}}>
-                  <Image
-                  source={{uri: `${storage}/${item.imageResized}`}}
-                  style={{zIndex: 0, position: 'relative', 
-                  width: width, 
-                  aspectRatio: !isNaN(ratio) ? ratio : 2/3}}
-                  resizeMode="cover"
-                  PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
-              </SharedElement>
-              
+              <Image
+                source={{uri: `${storage}/${item.imageResized}`}}
+                style={{zIndex: 0, position: 'relative', 
+                width: width, 
+                aspectRatio: !isNaN(ratio) ? ratio : 2/3}}
+                resizeMode="cover"
+                PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
             </View>
             <Text style={styles.text}>{item.name}</Text>
         </View>

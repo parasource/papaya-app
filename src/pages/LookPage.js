@@ -93,11 +93,9 @@ const LookPage = ({
                 onGestureEvent={onPinchGestureEvent}
                 onHandlerStateChange={onPinchHandlerStateChange}>
                     <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
-                        <SharedElement id={`feedCard${lookSlug}`}>
-                            <Image 
+                        <Image 
                             style={styles.image} 
                             source={{uri: `${storage}/${item.imageResized}`}}/> 
-                        </SharedElement>
                     </Animated.View>
             </PinchGestureHandler>
         </View>
@@ -305,16 +303,5 @@ const mapStateToProps = (state) => ({
     isDisliked: state.feed.isDisliked,
     isSaved: state.feed.isSaved
 })
-
-LookPage.sharedElements = route => {
-    const { lookSlug } = route.params;
-    return [
-        {
-            id: `feedCard${lookSlug}`,
-            animation: 'fade',
-            resize: 'clip'
-        }
-    ];
-};
 
 export default connect(mapStateToProps, {getCurrentLook, likeLook, dislikeLook, unlikeLook, undislikeLook, saveLook, unsaveLook})(LookPage)

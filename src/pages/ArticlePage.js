@@ -16,7 +16,6 @@ const ArticlePage = ({
 
   useEffect(() => {
     getCurrentArticle(articleSlug)
-    console.log(currentArticle);
   }, [route])
 
   const tagsStyles = {

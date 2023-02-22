@@ -161,9 +161,8 @@ const AppContainer = (props) => {
                 headerShown: false,
               }}
               initialParams={{handelSnapPress}}
-              // children={() => <TabBottomNavigator handelSnapPress={handelSnapPress}/>}
               component={TabBottomNavigator}
-              />
+            />
             <Share.Screen
               name="LookPage"
               component={LookPage}

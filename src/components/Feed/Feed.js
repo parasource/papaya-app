@@ -1,16 +1,13 @@
-import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, FlatList, Platform, Dimensions, Image } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, FlatList, Platform } from 'react-native'
 import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
 import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { requestSearchHistory } from '../../redux/search-reducer';
 import { LooksFeed } from './LooksFeed';
-import TopicCard from '../Search/TopicCard';
-import Carousel from 'react-native-reanimated-carousel';
-import { storage } from '../../const';
-import { ArticlesCard } from './ArticlesCard';
-import { useSharedValue } from 'react-native-reanimated';
-import { PaginationItem } from './PaginationItem';
+import ArticlesCarousel from './ArticlesCarousel';
+import TopicsList from './TopicsList';
+import FakeSearchBar from '../UI/FakeSearchBar';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -22,8 +19,6 @@ const Feed = ({
   navigation, 
   isFetching, 
   looks, 
-  topics,
-  articles,
   requestLooks, 
   isListEnd, 
   categories, 
@@ -44,9 +39,6 @@ const Feed = ({
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
   const [categoriesY, setCategoriesY] = useState(null);
-  const progressValue = useSharedValue(0);
-
-  const width = Dimensions.get('window').width;
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -116,12 +108,6 @@ const Feed = ({
     }
   }, [initCategory, categoriesY])
 
-  const baseOptions = {
-    vertical: false,
-    width: width * 0.85,
-    height: width / 2,
-  };
-
   return (
       <ScrollView 
         ref={scrollRef}
@@ -131,86 +117,17 @@ const Feed = ({
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
-            <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginTop: 16}}>
-              <Image source={require('../../../assets/logo-transparent.png')} style={{height: 40, width: 35, marginRight: 12}}/>
-              <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
-              onPress={() => navigation.navigate('Search', {isFocused: true})}>
-                <Image source={{uri: storage + "/ui/search.png"}} style={{width: 20, height: 20, opacity: 0.5}}/>
-                <Text style={styles.searchPlaceholder}>Search</Text>
-              </TouchableOpacity>
-            </View>
-            <View>
+            <FakeSearchBar {...{navigation}}/>
+            {/* <View>
               {alerts.length > 0 && alerts.map(item => (
                 <View style={{marginTop: 16, paddingHorizontal: 16}} key={'alert_item_' + item.ID}>
                   <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>{item.title}</Text>
                   <Text style={{color: TEXT_COLOR, fontSize: 14}}>{item.text}</Text>
                 </View>
               ))}
-            </View>
-            {topics && (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.scrollRow}>
-                  {topics.map((card, index) => {
-                    if(index == 0){
-                      return(
-                        <View key={'main-feed-topic_' + index} style={{marginLeft: 10}}>
-                          <TopicCard 
-                            item={card} navigation={navigation} 
-                            small={true}/>
-                        </View>)
-                    }else{
-                    return(<TopicCard 
-                      key={'feed-topic_' + index} 
-                      item={card} navigation={navigation} 
-                      small={true}/>)
-                  }})}
-                </View>
-              </ScrollView>
-            )}
-              <Carousel
-                  {...baseOptions}
-                  loop={false}
-                  width={width - 32}
-                  height={width / 3.125}
-                  data={articles}
-                  style={styles.sliderWrapper}
-                  pagingEnabled={true}
-                  snapEnabled={true}
-                  overscrollEnabled={true}
-                  enabled={true}
-                  onProgressChange={(_, absoluteProgress) =>
-                    (progressValue.value = absoluteProgress)
-                  }        
-                  renderItem={({ item }) => 
-                        <View style={{flex: 1}} key={'articles-item_' + item.slug}>
-                          <ArticlesCard item={item} navigation={navigation}/>
-                        </View>
-                  }
-              />
-              {(!!progressValue && (articles.length > 0)) && (
-                <View
-                  style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      alignSelf: "center",
-                      marginBottom: 12,
-                      marginTop: 12
-                  }}
-                >
-                  {articles.map((_,index) => {
-                    return (
-                      <View key={'slider-pagination_' + index}>
-                        <PaginationItem
-                          animValue={progressValue}
-                          index={index}
-                          length={articles.length}
-                        />
-                      </View>
-                    );
-                  })}
-                </View>
-              )}
+            </View> */}
+            <TopicsList {...{navigation}}/>
+            <ArticlesCarousel {...{navigation}}/>
             <FlatList
               ref={categoriesRef}
               data={[{ID: null}, ...categories]}
@@ -270,11 +187,6 @@ const styles = StyleSheet.create({
       paddingHorizontal: 16,
       paddingRight: 16
     },
-    sliderWrapper: {
-      marginTop: 24,
-      width: "100%",
-      marginLeft: 10
-    },
     text: {
       color: TEXT_COLOR,
       fontSize: 16,
@@ -330,35 +242,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       height: 34
     },
-    logo: {
-      width: 135,
-      height: 30,
-      resizeMode: 'contain',
-      alignSelf: 'center',
-      marginBottom: 20,
-      marginTop: 20
-    },
-    scrollRow: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      width: 'auto',
-      height: 120,
-      marginTop: 16
-    },
-    searchPlaceholder: {
-      color: '#888',
-      fontSize: 18,
-      marginLeft: 12
-    },
-    searchWrapper: {
-      flex: 1,
-      paddingHorizontal: 8,
-      paddingVertical: 12,
-      borderRadius: 8,
-      backgroundColor: '#1F1F1F',
-      flexDirection: 'row',
-      alignItems: 'center'
-    }
 })
 
 const mapStateToProps = (state) => ({
@@ -366,8 +249,6 @@ const mapStateToProps = (state) => ({
   isFetching: state.feed.isFetching,
   isListEnd: state.feed.isListEnd,
   categories: state.feed.categories,
-  topics: state.feed.topics,
-  articles: state.feed.articles,
   categoriesLooks: state.feed.categoriesLooks,
   alerts: state.feed.alerts
 })
