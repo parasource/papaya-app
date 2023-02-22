@@ -8,6 +8,7 @@ import { LooksFeed } from './LooksFeed';
 import ArticlesCarousel from './ArticlesCarousel';
 import TopicsList from './TopicsList';
 import FakeSearchBar from '../UI/FakeSearchBar';
+import { Alert } from '../UI/Alert';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -118,14 +119,11 @@ const Feed = ({
         scrollEventThrottle={16}>
           <View style={{paddingBottom: 100, height: '100%', width: '100%'}}>
             <FakeSearchBar {...{navigation}}/>
-            {/* <View>
+            <View style={{paddingHorizontal: 16}}>
               {alerts.length > 0 && alerts.map(item => (
-                <View style={{marginTop: 16, paddingHorizontal: 16}} key={'alert_item_' + item.ID}>
-                  <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>{item.title}</Text>
-                  <Text style={{color: TEXT_COLOR, fontSize: 14}}>{item.text}</Text>
-                </View>
+                <View key={'alert_item_' + item.ID}><Alert {...{item}}/></View>
               ))}
-            </View> */}
+            </View>
             <TopicsList {...{navigation}}/>
             <ArticlesCarousel {...{navigation}}/>
             <FlatList
