@@ -9,6 +9,7 @@ import ArticlesCarousel from './ArticlesCarousel';
 import TopicsList from './TopicsList';
 import FakeSearchBar from '../UI/FakeSearchBar';
 import { Alert } from '../UI/Alert';
+import { FeedCategories } from './FeedCategories';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -29,7 +30,6 @@ const Feed = ({
   handelSnapPress,
   route
 }) => {
-  const categoriesRef = useRef(null)
   const scrollRef = useRef(null)
 
   const initCategory = route?.params?.initCategory
@@ -76,13 +76,6 @@ const Feed = ({
   useEffect(() => {
     requestSearchHistory()
   }, [])
-
-  useEffect(() => {
-    categoriesRef.current?.scrollToIndex({
-      index: index, 
-      animated: true, 
-      viewOffset: 16})
-  }, [index])
   
   useEffect(() => {
     requestLooks(page, false)
@@ -126,46 +119,7 @@ const Feed = ({
             </View>
             <TopicsList {...{navigation}}/>
             <ArticlesCarousel {...{navigation}}/>
-            <FlatList
-              ref={categoriesRef}
-              data={[{ID: null}, ...categories]}
-              horizontal 
-              keyExtractor={(item) => 'category'+item.ID}
-              initialScrollIndex={index}
-              onScrollToIndexFailed={info => {
-                const wait = new Promise(resolve => setTimeout(resolve, 500));
-                wait.then(() => {
-                  categoriesRef.current?.scrollToIndex({ index: info.index, animated: true });
-                });
-              }}
-              renderItem={({item, index}) => {
-                if(item.ID === null){
-                  return (
-                    <TouchableOpacity
-                    accessibilityRole="button"
-                    onPress={() => onPress(null)}
-                    style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
-                  >
-                    <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
-                      Для вас
-                    </Text>
-                  </TouchableOpacity>
-                  )
-                }
-                return(
-                  <TouchableOpacity
-                    accessibilityRole="button"
-                    onPress={() => onPress(item.ID, item.slug, index)}
-                    style={{...styles.btnWrapper, backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
-                  >
-                    <Text style={{...styles.btnAnimated, color: isActive == item.ID ? BG_COLOR : GRAY_COLOR}}>
-                      {item.name}
-                    </Text>
-                  </TouchableOpacity>
-                )}}
-              showsHorizontalScrollIndicator={false} 
-              style={styles.tabWrapper}
-            />
+            <FeedCategories {...{categories, index, onPress, isActive}}/>
             <View style={styles.container} onLayout={(event) => {
                 const { layout } = event.nativeEvent;
                 setCategoriesY(layout.y)
@@ -221,24 +175,6 @@ const styles = StyleSheet.create({
       fontSize: 24,
       marginTop: 0,
       marginBottom: 12
-    },
-    tabWrapper:{
-      marginTop: 20,
-      marginLeft: 8,
-      maxHeight: 34,
-    },
-    btnWrapper: { 
-      minWidth: 120,
-      paddingHorizontal: 28,
-      borderRadius: 12,
-      marginLeft: 8,
-      height: 34
-    },
-    btnAnimated: {
-      textAlign: 'center',
-      fontFamily: 'SFmedium',
-      fontSize: 16,
-      height: 34
     },
 })
 

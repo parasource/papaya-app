@@ -1,13 +1,17 @@
 import React, { useCallback, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image, Platform, Dimensions } from 'react-native';
 import { BG_COLOR, GRAY_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { Video } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const FirstScreen = ({googleLogin, appleLogin}) => {
   const video = useRef(null)
+
+  const inset = useSafeAreaInsets()
+  const {width} = Dimensions.get('window')
 
   const [_, __, promptAsync] = Google.useAuthRequest({
     expoClientId: '514770009692-qjgk66iibo568l92bn4c0qo6hppjh5gl.apps.googleusercontent.com',
@@ -36,14 +40,14 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}> 
+      <View style={{...styles.wrapper, paddingTop: inset.top + 40}}> 
         <Video 
           ref={video}
           source={require('../../assets/video/slider.mov')}
           repeat={true}
-          resizeMode={"contain"}
+          resizeMode={"cover"}
           isLooping
-          style={styles.video}
+          style={{...styles.video, width}}
           shouldPlay
           rate={1}/>
         <View style={styles.textBlock}>
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'row',
       marginTop: 16,
+      marginBottom: 16,
       backgroundColor: "#fff",
       width: '100%',
       paddingVertical: 13,
@@ -140,6 +145,8 @@ const styles = StyleSheet.create({
     marginHorizontal: -16,
    },
    textBlock: {
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 1,
+    marginTop: 40
    }
 })

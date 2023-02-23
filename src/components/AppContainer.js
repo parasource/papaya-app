@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback, useState, useRef } from 'react'
+import React, { useMemo, useCallback, useState, useRef } from 'react'
 import { StatusBar, View, Text, Share as rnShare, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -22,7 +22,6 @@ import { FullButton } from './UI/FullButton';
 import * as Analytics from "expo-firebase-analytics";
 import ArticlePage from '../pages/ArticlePage';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BounceAnimation } from './UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 
@@ -99,139 +98,142 @@ const AppContainer = (props) => {
 
   if(!props.isAuth || props.isFirstTime){
     return(<>
-      <StatusBar barStyle="light-content"/>
-      <NavigationContainer theme={MyTheme} linking={linking}>
-          {!props.isAuth ? <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="FirstScreen">
-                {() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>}
-            </Stack.Screen> 
-          </Stack.Navigator>
-          :
-          <Stack.Navigator screenOptions={{ 
-            headerBlurEffect: 'dark',
-            headerBackTitleVisible: false,
-            headerTintColor: '#fff',
-         }}>
-              <Stack.Screen
-                name="ProfileSettings"
-                options={{headerShown: false}}>
-                {({navigation}) => <ProfileSettings firstTime={true} navigation={navigation}/>}
-              </Stack.Screen>
-              <Stack.Screen 
-                name="Wardrobe" 
-                options={{ 
-                  title: "Гардероб",
-                }}>
-                {({navigation}) => <Wardrobe firstTime={true} navigation={navigation}/>}
-              </Stack.Screen>
-              <Stack.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
-          </Stack.Navigator>}
-      </NavigationContainer>
+        <StatusBar barStyle="light-content"/>
+        <NavigationContainer theme={MyTheme} linking={linking}>
+            {!props.isAuth ? <Stack.Navigator screenOptions={{headerShown: false}}>
+              <Stack.Screen name="FirstScreen">
+                  {() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>}
+              </Stack.Screen> 
+            </Stack.Navigator>
+            :
+            <Stack.Navigator screenOptions={{ 
+              headerBlurEffect: 'dark',
+              headerBackTitleVisible: false,
+              headerTintColor: '#fff',
+          }}>
+                <Stack.Screen
+                  name="ProfileSettings"
+                  options={{headerShown: false}}>
+                  {({navigation}) => <ProfileSettings firstTime={true} navigation={navigation}/>}
+                </Stack.Screen>
+                <Stack.Screen 
+                  name="Wardrobe" 
+                  options={{ 
+                    title: "Гардероб",
+                  }}>
+                  {({navigation}) => <Wardrobe firstTime={true} navigation={navigation}/>}
+                </Stack.Screen>
+                <Stack.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+            </Stack.Navigator>}
+        </NavigationContainer>
     </>
     )
   }
 
   return (
     <InternetConnectionAlert useInternetReachability={false}>
-    <SafeAreaProvider>
-      <StatusBar barStyle="light-content"/>
-      <NavigationContainer theme={MyTheme} linking={linking}
-      ref={navigationRef}
-      onReady={() => {
-        routeNameRef.current = navigationRef.getCurrentRoute().name;
-      }}
-      onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.getCurrentRoute().name;
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content"/>
+        <NavigationContainer theme={MyTheme} linking={linking}
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute().name;
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.getCurrentRoute().name;
 
-        if (previousRouteName !== currentRouteName) {
-          routeNameRef.current = currentRouteName;
-          await Analytics.logEvent("screen_view",{
-            "prev_screen_name": previousRouteName,
-            "screen_name": currentRouteName,});
-        }
-      }}>
-        <Share.Navigator screenOptions={{  
-          headerShown: true, 
-          headerBackTitleVisible: false,
-          headerTintColor: '#fff'}}>
-            <Share.Screen
-              name="MainNavigator"
-              options={{ 
-                headerShown: false,
-              }}
-              initialParams={{handelSnapPress}}
-              component={TabBottomNavigator}
-            />
-            <Share.Screen
-              name="LookPage"
-              component={LookPage}
-              options={({ route }) => ({
-                headerBackButtonMenuEnabled: true,
-                headerTransparent: true,
-                headerTitle: route.params.lookName,
-                headerBlurEffect: '',
-                headerRight: () => (
-                  <TouchableOpacity activeOpacity={.6} onPress={() => shareHandler(route.params.lookSlug, route.params.lookName)}>
-                    <Icon name="share-outline" style={styles.icon}/>
-                  </TouchableOpacity>
-                ),
-                headerBackground: () => {
-                  return (
-                    <LinearGradient colors={['rgba(17, 17, 17, .5)', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
-                )},
-              })}
-            />
-            <Share.Screen
-              name="ArticlePage"
-              component={ArticlePage}
-              options={({ route }) => ({
-                title: route.params.articleName,
-                headerBackButtonMenuEnabled: true
-              })}
-            />
-            <Share.Screen
-              name="TopicPage"
-              component={TopicPage}
-              options={({ route }) => ({ 
-                title: '',
-                headerBackTitleVisible: false,
-                headerTransparent: true,
-                headerBlurEffect: '',
-              })}
-            />
-            <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
-            <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
-            <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
-            <Share.Screen
-                name="ProfileSettings"
-                component={ProfileSettings}
-                options={{ title: 'Аккаунт'}}
+          if (previousRouteName !== currentRouteName) {
+            routeNameRef.current = currentRouteName;
+            await Analytics.logEvent("screen_view",{
+              "prev_screen_name": previousRouteName,
+              "screen_name": currentRouteName,});
+          }
+        }}>
+          <Share.Navigator screenOptions={{  
+            headerShown: true, 
+            headerBackTitleVisible: false,
+            headerTintColor: '#fff',
+            headerLeftContainerStyle: {paddingLeft: 8},
+            headerTitleContainerStyle: {flex: 6}
+            }}>
+              <Share.Screen
+                name="MainNavigator"
+                options={{ 
+                  headerShown: false,
+                }}
+                initialParams={{handelSnapPress}}
+                component={TabBottomNavigator}
               />
-            
-            <Share.Group screenOptions={{ presentation: 'modal' }}>
-                <Share.Screen name="ItemModal" component={ItemScreen} 
+              <Share.Screen
+                name="LookPage"
+                component={LookPage}
+                options={({ route }) => ({
+                  headerBackButtonMenuEnabled: true,
+                  headerTransparent: true,
+                  headerTitle: route.params.lookName,
+                  headerBlurEffect: '',
+                  headerRight: () => (
+                    <TouchableOpacity style={{marginRight: 8}} activeOpacity={.6} onPress={() => shareHandler(route.params.lookSlug, route.params.lookName)}>
+                      <Icon name="share-outline" style={styles.icon}/>
+                    </TouchableOpacity>
+                  ),
+                  headerBackground: () => {
+                    return (
+                      <LinearGradient colors={['rgba(17, 17, 17, .5)', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
+                  )},
+                })}
+              />
+              <Share.Screen
+                name="ArticlePage"
+                component={ArticlePage}
+                options={({ route }) => ({
+                  title: route.params.articleName,
+                  headerBackButtonMenuEnabled: true
+                })}
+              />
+              <Share.Screen
+                name="TopicPage"
+                component={TopicPage}
                 options={({ route }) => ({ 
-                  title: route.params.itemName,
-                })}/>
-            </Share.Group>
-        </Share.Navigator>
-      </NavigationContainer>
-      <BottomSheet 
-      ref={sheetRef} 
-      index={-1}
-      snapPoints={snapPoints}
-      enablePanDownToClose={true}
-      backgroundStyle={{backgroundColor: INPUTS_BG}}
-      onClose={() => setIsOpen(false)}
-      backdropComponent={renderBackdrop}>
-        <View style={styles.bottomSheet}>
-            <Text style={styles.sheetTitle}>Образ подобран на основе вашего гардероба</Text>
-            <Text style={styles.sheetText}>Этой иконкой обозначены образы, которые были рекомендованы на основе вашего гардероба. В них есть как минимум одна вещь, которая есть у вас.</Text>
-            <FullButton label="Отлично!" style={{marginTop: 40}} pressHandler={() => sheetRef.current?.close()}/>
-        </View>
-      </BottomSheet>
-    </SafeAreaProvider>
+                  title: '',
+                  headerBackTitleVisible: false,
+                  headerTransparent: true,
+                  headerBlurEffect: '',
+                })}
+              />
+              <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
+              <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
+              <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+              <Share.Screen
+                  name="ProfileSettings"
+                  component={ProfileSettings}
+                  options={{ title: 'Аккаунт'}}
+                />
+              
+              <Share.Group screenOptions={{ presentation: 'modal' }}>
+                  <Share.Screen name="ItemModal" component={ItemScreen} 
+                  options={({ route }) => ({ 
+                    title: route.params.itemName,
+                  })}/>
+              </Share.Group>
+          </Share.Navigator>
+        </NavigationContainer>
+        <BottomSheet 
+        ref={sheetRef} 
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        backgroundStyle={{backgroundColor: INPUTS_BG}}
+        onClose={() => setIsOpen(false)}
+        backdropComponent={renderBackdrop}>
+          <View style={styles.bottomSheet}>
+              <Text style={styles.sheetTitle}>Образ подобран на основе вашего гардероба</Text>
+              <Text style={styles.sheetText}>Этой иконкой обозначены образы, которые были рекомендованы на основе вашего гардероба. В них есть как минимум одна вещь, которая есть у вас.</Text>
+              <FullButton label="Отлично!" style={{marginTop: 40}} pressHandler={() => sheetRef.current?.close()}/>
+          </View>
+        </BottomSheet>
+      </SafeAreaProvider>
     </InternetConnectionAlert>
   );
 }

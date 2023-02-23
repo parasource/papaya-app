@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Animated } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FeatherAwesomeIcon from 'react-native-vector-icons/Feather';
@@ -8,22 +8,20 @@ import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
 
 import { LookItem } from '../components/LookItem';
-import { SharedElement } from 'react-navigation-shared-element';
 import { storage } from '../const';
 import * as Linking from 'expo-linking';
 import { BounceAnimation } from '../components/UI/BounceAnimation';
 import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
-// import { Image } from 'react-native-elements';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { openBrowserAsync } from 'expo-web-browser';
 import { LooksFeed } from '../components/Feed/LooksFeed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LookPage = ({
         route,
-        isFetching,
         currentLook,
         getCurrentLook,
         isLiked,
@@ -39,27 +37,62 @@ const LookPage = ({
     }) => {
     const { lookSlug, item } = route.params;
     const offset = useRef(new Animated.Value(0)).current;
+    const fadeAnim = new Animated.Value(0)
 
     const [link, setLink] = useState('')
-    const [toolTipVisible, setToolTipVisible] = useState(false)
+    const [toolTip, setToolTip] = useState('')
+    const [ready, setReady] = useState(false)
+
+    const getToolTips = async () => {
+        try {
+            const val = await AsyncStorage.getItem('@tooltips');
+            if(val){
+                setToolTip(val)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const closeToolTips = async (tip) => {
+        try {
+            await AsyncStorage.setItem('@tooltips', toolTip + tip)
+            setToolTip(toolTip + tip)
+        } catch (e) {
+            console.log(e); 
+        }
+    }
 
     useEffect(() => {
-            let canGoBack = navigation.canGoBack();
-            getCurrentLook(lookSlug)
-            Linking.getInitialURL().then((url) => {
-            if (url) {
-                setLink(url)
-            }
-            }).catch(err => console.error('An error occurred', err));
-            if(!canGoBack) {
-                navigation.setOptions({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.navigate('MainNavigator')}>
-                            <Icon name="chevron-back-outline" style={{fontSize: 24, color: '#fff'}}/>
-                        </TouchableOpacity>
-                    ),
-                })
-            }
+        getToolTips()
+        setTimeout(() => {
+            setReady(true)
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 200,
+                useNativeDriver: true
+              }).start();
+        }, 1000)
+    })
+
+
+    useEffect(() => {
+        let canGoBack = navigation.canGoBack();
+        getCurrentLook(lookSlug)
+        Linking.getInitialURL().then((url) => {
+        if (url) {
+            setLink(url)
+        }
+        }).catch(err => console.error('An error occurred', err));
+        if(!canGoBack) {
+            navigation.setOptions({
+                headerLeft: () => (
+                    <TouchableOpacity onPress={() => navigation.navigate('MainNavigator')}>
+                        <Icon name="chevron-back-outline" style={{fontSize: 24, color: '#fff'}}/>
+                    </TouchableOpacity>
+                ),
+            })
+        }
     }, [route])
 
     let baseScale = new Animated.Value(1);
@@ -102,19 +135,18 @@ const LookPage = ({
         <View style={styles.bar}>
             <View style={styles.iconsGroup}>
                 <Tooltip
-                    isVisible={toolTipVisible}
-                    animated
-                    content={<View>
+                    isVisible={toolTip.indexOf('Like') === -1 && ready}
+                    content={<Animated.View style={{opacity: fadeAnim}}>
                         <Text style={{fontSize: 28, color: GREEN_COLOR, fontFamily: 'SFbold'}}>Каждый лайк важен</Text>
                         <Text style={{fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>
                             Каждый ваш лайк помогает нам{'\n'}
                             улучшить рекомендации для вас
                         </Text>
-                        </View>}
+                    </Animated.View>}
                     placement="top"
                     backgroundColor={'rgba(17,17,17, .9)'}
                     contentStyle={{backgroundColor: 'rgba(0,0,0,0)', paddingHorizontal: 0, width: 'auto'}}
-                    onClose={() => setToolTipVisible(false)}
+                    onClose={() => closeToolTips('Like')}
                     >
                     <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}>
                         <BounceAnimation onPress={() => {
@@ -136,26 +168,42 @@ const LookPage = ({
                         }/>
                     </View>
                 </Tooltip>
-                <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
-                        <BounceAnimation onPress={() => {
-                                if(isDisliked){
-                                    undislikeLook(lookSlug)
-                                }else{
-                                    if(isLiked){
-                                        unlikeLook(lookSlug)
+                <Tooltip
+                    isVisible={toolTip.indexOf('Ban') === -1 && toolTip.indexOf('Like') !== -1}
+                    animated
+                    content={<View>
+                        <Text style={{fontSize: 28, color: GREEN_COLOR, fontFamily: 'SFbold'}}>Убери лишнее</Text>
+                        <Text style={{fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>
+                            Если не нравиться образ - нажми{'\n'}
+                            и мы больше не покажем тебе его
+                        </Text>
+                        </View>}
+                    placement="top"
+                    backgroundColor={'rgba(17,17,17, .9)'}
+                    contentStyle={{backgroundColor: 'rgba(0,0,0,0)', paddingHorizontal: 0, width: 'auto'}}
+                    onClose={() => closeToolTips('Ban')}
+                    >
+                        <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
+                            <BounceAnimation onPress={() => {
+                                    if(isDisliked){
+                                        undislikeLook(lookSlug)
+                                    }else{
+                                        if(isLiked){
+                                            unlikeLook(lookSlug)
+                                        }
+                                        dislikeLook(lookSlug)
+                                        Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
                                     }
-                                    dislikeLook(lookSlug)
-                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
-                                }
-                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-                            }} component={
-                            !isDisliked ?
-                            <FeatherAwesomeIcon name="slash" 
-                            style={styles.icon}/> :
-                            <FontAwesomeIcon name="ban" 
-                            style={{...styles.icon, color: '#F15A28'}}/>
-                        }/>
-                    </View>
+                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+                                }} component={
+                                !isDisliked ?
+                                <FeatherAwesomeIcon name="slash" 
+                                style={styles.icon}/> :
+                                <FontAwesomeIcon name="ban" 
+                                style={{...styles.icon, color: '#F15A28'}}/>
+                            }/>
+                        </View>
+                    </Tooltip>
                 </View>
                 <View style={styles.iconsGroup}>
                 <View style={{...styles.iconWrapper, marginHorizontal: 4}}>
@@ -209,7 +257,7 @@ const LookPage = ({
                 </ScrollView>
             </>
              : 
-                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
+            <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
             {currentLook.similar && <View><Text style={styles.title}>Похожие образы</Text>
             <LooksFeed looks={currentLook.similar} 
                 navigation={navigation} isListEnd={true} page={0}/>
