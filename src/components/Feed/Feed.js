@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity, FlatList, Platform } from 'react-native'
 import React, {useEffect, useState, useCallback, useRef, useMemo} from 'react'
-import { TEXT_COLOR, GREEN_COLOR, GRAY_COLOR, BG_COLOR, INPUTS_BG } from '../../theme';
+import { TEXT_COLOR, GREEN_COLOR, INPUTS_BG } from '../../theme';
 import { connect } from 'react-redux';
 import { requestLooks, requestCategoriesLooks } from '../../redux/looks-reducer';
 import { requestSearchHistory } from '../../redux/search-reducer';
@@ -10,6 +10,7 @@ import TopicsList from './TopicsList';
 import FakeSearchBar from '../UI/FakeSearchBar';
 import { Alert } from '../UI/Alert';
 import { FeedCategories } from './FeedCategories';
+import VersionCheck from 'react-native-version-check-expo';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -40,6 +41,7 @@ const Feed = ({
   const [index, setIndex] = useState(0);
   const [secondFetch, setSecondFetch] = useState(false);
   const [categoriesY, setCategoriesY] = useState(null);
+  const [needUpdate, setNeedUpdate] = useState(null);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -79,6 +81,11 @@ const Feed = ({
   
   useEffect(() => {
     requestLooks(page, false)
+    VersionCheck.needUpdate().then(res => {
+      if(res.isNeeded){
+        setNeedUpdate(res.storeUrl)
+      }
+    })
   }, [page])
 
   useEffect(() => {
@@ -116,6 +123,8 @@ const Feed = ({
               {alerts.length > 0 && alerts.map(item => (
                 <View key={'alert_item_' + item.ID}><Alert {...{item}}/></View>
               ))}
+              {needUpdate && <Alert item={{title: 'Вышло обновление',
+                  text: 'Необходимо обновить приложение, для этого перейдите по ссылке'}} navigateTo={needUpdate}/>}
             </View>
             <TopicsList {...{navigation}}/>
             <ArticlesCarousel {...{navigation}}/>
@@ -184,7 +193,7 @@ const mapStateToProps = (state) => ({
   isListEnd: state.feed.isListEnd,
   categories: state.feed.categories,
   categoriesLooks: state.feed.categoriesLooks,
-  alerts: state.feed.alerts
+  alerts: state.feed.alerts,
 })
 
 export default connect(mapStateToProps, {requestLooks, requestCategoriesLooks, requestSearchHistory})(Feed)

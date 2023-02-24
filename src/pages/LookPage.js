@@ -128,7 +128,7 @@ const LookPage = ({
                     <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
                         <Image 
                             style={styles.image} 
-                            source={{uri: `${storage}/${item.imageResized}`}}/> 
+                            source={{uri: `${storage}/${item.image}`}}/> 
                     </Animated.View>
             </PinchGestureHandler>
         </View>

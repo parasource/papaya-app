@@ -83,6 +83,7 @@
     "react-native-svg": "12.3.0",
     "react-native-tab-view": "^3.3.4",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-version-check-expo": "^3.4.7",
     "react-native-video": "^6.0.0-alpha.4",
     "react-native-vkontakte-login": "^1.0.1",
     "react-native-walkthrough-tooltip": "^1.5.0",
