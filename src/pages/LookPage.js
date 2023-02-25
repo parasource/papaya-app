@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Animated } from 'react-native'
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FeatherAwesomeIcon from 'react-native-vector-icons/Feather';
@@ -15,10 +15,9 @@ import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import { openBrowserAsync } from 'expo-web-browser';
 import { LooksFeed } from '../components/Feed/LooksFeed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
 const LookPage = ({
         route,
@@ -39,32 +38,30 @@ const LookPage = ({
     const offset = useRef(new Animated.Value(0)).current;
     const fadeAnim = new Animated.Value(0)
 
+    const sheetRef = useRef(null)
+    const [isOpen, setIsOpen] = useState(false);
+    const [sheetInfo, setSheetInfo] = useState(null);
+    const snapPoints = [314]
+
     const [link, setLink] = useState('')
-    const [toolTip, setToolTip] = useState('')
     const [ready, setReady] = useState(false)
 
-    const getToolTips = async () => {
-        try {
-            const val = await AsyncStorage.getItem('@tooltips');
-            if(val){
-                setToolTip(val)
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    const handelSnapPress = useCallback((index) => {
+        sheetRef.current?.snapToIndex(index)
+        setIsOpen(true)
+    }, [])
 
-    const closeToolTips = async (tip) => {
-        try {
-            await AsyncStorage.setItem('@tooltips', toolTip + tip)
-            setToolTip(toolTip + tip)
-        } catch (e) {
-            console.log(e); 
-        }
-    }
-
+    const renderBackdrop = useCallback(
+        props => (
+            <BottomSheetBackdrop
+                {...props}
+                appearsOnIndex={1}
+                disappearsOnIndex={-1}
+                enableTouchThrough={true}
+            />
+        ),[]
+    );
     useEffect(() => {
-        getToolTips()
         setTimeout(() => {
             setReady(true)
             Animated.timing(fadeAnim, {
@@ -114,75 +111,45 @@ const LookPage = ({
 
   return (
     <View>
-    <ScrollView 
-        showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: offset } } }],
-            { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}>
-        <View style={styles.wrapper}>
-            <PinchGestureHandler
-                onGestureEvent={onPinchGestureEvent}
-                onHandlerStateChange={onPinchHandlerStateChange}>
-                    <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
-                        <Image 
-                            style={styles.image} 
-                            source={{uri: `${storage}/${item.image}`}}/> 
-                    </Animated.View>
-            </PinchGestureHandler>
-        </View>
-        <View style={styles.bar}>
-            <View style={styles.iconsGroup}>
-                <Tooltip
-                    isVisible={toolTip.indexOf('Like') === -1 && ready}
-                    content={<Animated.View style={{opacity: fadeAnim}}>
-                        <Text style={{fontSize: 28, color: GREEN_COLOR, fontFamily: 'SFbold'}}>Каждый лайк важен</Text>
-                        <Text style={{fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>
-                            Каждый ваш лайк помогает нам{'\n'}
-                            улучшить рекомендации для вас
-                        </Text>
-                    </Animated.View>}
-                    placement="top"
-                    backgroundColor={'rgba(17,17,17, .9)'}
-                    contentStyle={{backgroundColor: 'rgba(0,0,0,0)', paddingHorizontal: 0, width: 'auto'}}
-                    onClose={() => closeToolTips('Like')}
-                    >
-                    <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}>
-                        <BounceAnimation onPress={() => {
-                                if(isLiked){
-                                    unlikeLook(lookSlug)
-                                }else{
-                                    if(isDisliked){
-                                        undislikeLook(lookSlug)
+        <ScrollView 
+            showsVerticalScrollIndicator={false}
+            onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { y: offset } } }],
+                { useNativeDriver: false }
+            )}
+            scrollEventThrottle={16}>
+            <View style={styles.wrapper}>
+                <PinchGestureHandler
+                    onGestureEvent={onPinchGestureEvent}
+                    onHandlerStateChange={onPinchHandlerStateChange}>
+                        <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
+                            <Image 
+                                style={styles.image} 
+                                source={{uri: `${storage}/${item.image}`}}/> 
+                        </Animated.View>
+                </PinchGestureHandler>
+            </View>
+            <View style={styles.bar}>
+                    <View style={styles.iconsGroup}>
+                        <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}>
+                            <BounceAnimation onPress={() => {
+                                    if(isLiked){
+                                        unlikeLook(lookSlug)
+                                    }else{
+                                        if(isDisliked){
+                                            undislikeLook(lookSlug)
+                                        }
+                                        likeLook(lookSlug)
+                                        Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
                                     }
-                                    likeLook(lookSlug)
-                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
-                                }
-                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-                            }} component={
-                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                                    style = {{...styles.icon, color: TEXT_COLOR}}/>
-                            </View>
-                        }/>
-                    </View>
-                </Tooltip>
-                <Tooltip
-                    isVisible={toolTip.indexOf('Ban') === -1 && toolTip.indexOf('Like') !== -1}
-                    animated
-                    content={<View>
-                        <Text style={{fontSize: 28, color: GREEN_COLOR, fontFamily: 'SFbold'}}>Убери лишнее</Text>
-                        <Text style={{fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>
-                            Если не нравиться образ - нажми{'\n'}
-                            и мы больше не покажем тебе его
-                        </Text>
-                        </View>}
-                    placement="top"
-                    backgroundColor={'rgba(17,17,17, .9)'}
-                    contentStyle={{backgroundColor: 'rgba(0,0,0,0)', paddingHorizontal: 0, width: 'auto'}}
-                    onClose={() => closeToolTips('Ban')}
-                    >
+                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+                                }} component={
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Icon name = {!isLiked ? "heart-outline" : "heart"}
+                                        style = {{...styles.icon, color: TEXT_COLOR}}/>
+                                </View>
+                            }/>
+                        </View>
                         <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
                             <BounceAnimation onPress={() => {
                                     if(isDisliked){
@@ -203,69 +170,94 @@ const LookPage = ({
                                 style={{...styles.icon, color: '#F15A28'}}/>
                             }/>
                         </View>
-                    </Tooltip>
-                </View>
-                <View style={styles.iconsGroup}>
-                <View style={{...styles.iconWrapper, marginHorizontal: 4}}>
-                    <BounceAnimation onPress={() => {
-                            if(isSaved){
-                                unsaveLook(lookSlug)
-                            }else{
-                                saveLook(lookSlug)
-                                Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});
-                            }
-                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                        }} component={
-                        <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
-                    }/>
+                    </View>
+                    <View style={styles.iconsGroup}>
+                    <View style={{...styles.iconWrapper, marginHorizontal: 4}}>
+                        <BounceAnimation onPress={() => {
+                                if(isSaved){
+                                    unsaveLook(lookSlug)
+                                }else{
+                                    saveLook(lookSlug)
+                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});
+                                }
+                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                            }} component={
+                            <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
+                        }/>
+                    </View>
                 </View>
             </View>
-        </View>
-        <View style={styles.container}>
-            {(currentLook.authorTag && currentLook.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
-                <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
-                <TouchableOpacity onPress={() => openBrowserAsync(currentLook.authorUrl)}>
-                    <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
-                        @{currentLook.authorTag}
-                    </Text>
-                </TouchableOpacity>
-            </View>}
-            <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
-                {currentLook?.categories?.map(category => (
-                    <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
-                        paddingHorizontal: 12,
-                        paddingVertical: 6,
-                        borderRadius: 8,
-                        backgroundColor: INPUTS_BG,
-                        marginRight: 8,
-                        marginTop: 8
-                    }}>
-                        <Text style={{color: TEXT_COLOR}}>
-                            {category.name.toLowerCase().split(' ').join('')}
+            <View style={styles.container}>
+                {(currentLook.authorTag && currentLook.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
+                    <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
+                    <TouchableOpacity onPress={() => openBrowserAsync(currentLook.authorUrl)}>
+                        <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
+                            @{currentLook.authorTag}
                         </Text>
                     </TouchableOpacity>
-                ))}
-            </View>
-            <View style={{paddingBottom: 100}}>
-            {currentLook?.items?.length ? 
-            <>
-                <Text style={styles.title}>Элементы образа</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {currentLook?.items?.map(item => (
-                        <LookItem lookSlug={lookSlug} item={item} key={item.slug} navigation={navigation}/>
+                </View>}
+                <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginTop: 8}}>
+                    {currentLook?.categories?.map(category => (
+                        <TouchableOpacity key={`categories_in_look-${category.slug}`} style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 6,
+                            borderRadius: 8,
+                            backgroundColor: INPUTS_BG,
+                            marginRight: 8,
+                            marginTop: 8
+                        }}>
+                            <Text style={{color: TEXT_COLOR}}>
+                                {category.name.toLowerCase().split(' ').join('')}
+                            </Text>
+                        </TouchableOpacity>
                     ))}
-                </ScrollView>
-            </>
-             : 
-            <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
-            {currentLook.similar && <View><Text style={styles.title}>Похожие образы</Text>
-            <LooksFeed looks={currentLook.similar} 
-                navigation={navigation} isListEnd={true} page={0}/>
-            </View>}
+                </View>
+                <View style={{paddingBottom: 100}}>
+                {currentLook?.items?.length ? 
+                <>
+                    <Text style={styles.title}>Элементы образа</Text>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {currentLook?.items?.map(item => (
+                            <LookItem lookSlug={lookSlug} item={item} key={item.slug} handelSnapPress={() => {
+                                handelSnapPress(0)
+                                setSheetInfo(item)
+                            }}/>
+                        ))}
+                    </ScrollView>
+                </>
+                : 
+                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
+                {currentLook.similar && <View><Text style={styles.title}>Похожие образы</Text>
+                <LooksFeed looks={currentLook.similar} 
+                    navigation={navigation} isListEnd={true} page={0}/>
+                </View>}
+                </View>
             </View>
-        </View>
-    </ScrollView>
-    <AnimatedHeader animValue={offset}/>
+        </ScrollView>
+        <BottomSheet 
+            ref={sheetRef} 
+            index={-1}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            backgroundStyle={{backgroundColor: INPUTS_BG}}
+            onClose={() => setIsOpen(false)}
+            backdropComponent={renderBackdrop}>
+            <View style={styles.bottomSheet}>
+                <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View style={styles.row}>
+                        {sheetInfo?.urls?.map(url => (
+                            <TouchableOpacity key={url.ID} onPress={() => openBrowserAsync(url.url)} style={styles.linkWrapper}>
+                                <Image style={styles.img} source={{uri: `${storage}/${url.brand.image}`}}/>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </ScrollView>
+                <TouchableOpacity onPress={() => navigation.navigate('Search', {isFocused: false, searchValue: sheetInfo.name})} 
+                style={{width: '100%', height: 45, backgroundColor: GREEN_COLOR}}/>
+            </View>
+        </BottomSheet>
+        <AnimatedHeader animValue={offset}/>
     </View>
   )
 }
@@ -342,6 +334,36 @@ const styles = StyleSheet.create({
         bottom: 0,
         paddingHorizontal: 20
     },
+    bottomSheet: {
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        paddingHorizontal: 16,
+        paddingBottom: 36,
+        alignItems: 'center'
+    },
+    sheetTitle: {
+            fontFamily: 'SFbold',
+            fontSize: 22,
+            color: TEXT_COLOR,
+            textAlign: 'center',
+            marginTop: 15,
+            maxWidth: 291
+        },
+        img: {
+            width: 80,
+            height: 80,
+            borderRadius: 12,
+            resizeMode: 'cover'
+        },
+        linkWrapper: {
+            marginLeft: 8,
+        },
+        row: {
+            width: '100%',
+            flexDirection: 'row',
+            marginHorizontal: 8,
+            marginVertical: 16
+        }
 })
 
 const mapStateToProps = (state) => ({

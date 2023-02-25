@@ -180,7 +180,7 @@ const AppContainer = (props) => {
                   ),
                   headerBackground: () => {
                     return (
-                      <LinearGradient colors={['rgba(17, 17, 17, .5)', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
+                      <LinearGradient colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 0)']} style={styles.gradient}/>
                   )},
                 })}
               />

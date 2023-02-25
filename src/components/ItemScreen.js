@@ -1,7 +1,6 @@
 import { openBrowserAsync } from 'expo-web-browser';
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
-import { Grayscale } from 'react-native-color-matrix-image-filters';
 import { connect } from 'react-redux';
 import { storage } from '../const';
 import { requestItem } from '../redux/looks-reducer';

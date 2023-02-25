@@ -4,9 +4,9 @@ import { Image } from 'react-native-elements'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 import { storage } from '../const';
 
-export const LookItem = ({lookSlug, item, navigation}) => {
+export const LookItem = ({item, handelSnapPress}) => {
   return (
-    <TouchableOpacity activeOpacity={.6} onPress={() => navigation.navigate('ItemModal', { lookSlug: lookSlug, itemId: item.id, itemName: item.name})}>
+    <TouchableOpacity activeOpacity={.6} onPress={handelSnapPress}>
         <View style={styles.wrapper}>
             <Image source={{uri: `${storage}/${item.image}`}} 
                 resizeMode = "cover"

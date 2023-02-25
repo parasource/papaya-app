@@ -24,6 +24,7 @@ const SearchPage = ({
     searchItems,
     isFetching}) => {
     const isFocused = route.params?.isFocused
+    const searchValue = route.params?.searchValue
     const hiddenButtonRef = useRef(null)
     
     const [value, setValue] = useState("");
@@ -35,6 +36,12 @@ const SearchPage = ({
             hiddenButtonRef.current.focus()
         }else{
             hiddenButtonRef.current.blur()
+        }
+
+        if(searchValue){
+            setValue(searchValue)
+            requestSearchResultLooks(searchValue)
+            setIsResult(true)
         }
     }
 
@@ -50,7 +57,7 @@ const SearchPage = ({
         });
 
         const unsubscribeBlur = navigation.addListener('blur', () => {
-            navigation.dispatch(CommonActions.setParams({ isFocused: false }));
+            navigation.dispatch(CommonActions.setParams({ isFocused: false, searchValue: null }));
         });
 
         return () => {

@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Pressable, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TEXT_COLOR } from '../../theme';
 
-export const Alert = ({item, navigateTo}) => {
+export const Alert = ({item}) => {
     const colorSchema = {
         tintColor: '',
         backgroundColor: '',
@@ -39,11 +39,11 @@ export const Alert = ({item, navigateTo}) => {
     }
 
     return (
-        <Pressable onPress={() => {if(navigateTo) Linking.openURL(navigateTo)}} style={{...styles.wrapper, backgroundColor: colorSchema.backgroundColor}} key={'alert_item_' + item.ID}>
+        <Pressable onPress={() => {if(item.linkUrl) Linking.openURL(item.linkUrl)}} style={{...styles.wrapper, backgroundColor: colorSchema.backgroundColor}} key={'alert_item_' + item.ID}>
             <Icon name={colorSchema.iconName} style={{fontSize: 20, marginTop: -1, marginRight: 4, color: colorSchema.tintColor}}/>
             <View style={{flex: 1}}>
-                <Text style={{color: TEXT_COLOR, fontSize: 14, fontFamily: 'SFsemibold', flex: 1}}>{item.title}</Text>
-                <Text style={{color: TEXT_COLOR, fontSize: 14, flex: 1}}>{item.text}</Text>
+                {item.title && <Text style={{color: TEXT_COLOR, fontSize: 14, fontFamily: 'SFsemibold', flex: 1}}>{item.title}</Text>}
+                {item.text && <Text style={{color: TEXT_COLOR, fontSize: 14, flex: 1}}>{item.text}</Text>}
             </View>
         </Pressable>
     );

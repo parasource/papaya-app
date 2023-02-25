@@ -123,8 +123,7 @@ const Feed = ({
               {alerts.length > 0 && alerts.map(item => (
                 <View key={'alert_item_' + item.ID}><Alert {...{item}}/></View>
               ))}
-              {needUpdate && <Alert item={{title: 'Вышло обновление',
-                  text: 'Необходимо обновить приложение, для этого перейдите по ссылке'}} navigateTo={needUpdate}/>}
+              {needUpdate && <Alert item={{title: 'Требуется обновление', linkUrl: needUpdate}}/>}
             </View>
             <TopicsList {...{navigation}}/>
             <ArticlesCarousel {...{navigation}}/>
