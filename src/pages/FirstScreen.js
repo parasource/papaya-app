@@ -1,11 +1,12 @@
 import React, { useCallback, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, Platform, Dimensions } from 'react-native';
-import { BG_COLOR, GRAY_COLOR } from '../theme';
+import { View, StyleSheet, Text, TouchableOpacity, Image, Platform, Dimensions, ImageBackground } from 'react-native';
+import { BG_COLOR, GRAY_COLOR, TEXT_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
 import { Video } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export const FirstScreen = ({googleLogin, appleLogin}) => {
   const video = useRef(null)
@@ -40,16 +41,10 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
 
   return (
     <View style={styles.container}>
+      <ImageBackground style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} source={{uri: 'https://images.unsplash.com/photo-1532332248682-206cc786359f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZmFzaGlvbiUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'}}/>
+      <LinearGradient colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 1)']} style={styles.gradient}/>
+      <View style={styles.dark}></View>
       <View style={{...styles.wrapper, paddingTop: inset.top + 40}}> 
-        <Video 
-          ref={video}
-          source={require('../../assets/video/slider.mov')}
-          repeat={true}
-          resizeMode={"cover"}
-          isLooping
-          style={{...styles.video, width}}
-          shouldPlay
-          rate={1}/>
         <View style={styles.textBlock}>
           <Text style={styles.h1}>Одеваться стильно просто</Text>
           <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
@@ -67,6 +62,7 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
             </Text>
         </TouchableOpacity>}
       </View>
+      
     </View>
   )
 };
@@ -75,6 +71,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BG_COLOR,
+  },
+  gradient: {
+    flex: 1,
+    height: 200,
+    position: 'absolute',
+    left: 0, 
+    bottom: 0, 
+    right: 0,
+  },
+  dark: {
+    position: 'absolute',
+    top: 0,
+    left: 0, 
+    bottom: 0, 
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,.4)'
   },
   googleBtnText: {
     fontFamily: 'SFsemibold',
@@ -87,17 +99,17 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   googleBtn: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      marginTop: 16,
-      backgroundColor: null,
-      borderStyle: "solid",
-      borderWidth:  1,
-      borderColor:  "#fff",
-      width: '100%',
-      paddingVertical: 13,
-      borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 16,
+    backgroundColor: null,
+    borderStyle: "solid",
+    borderWidth:  1,
+    borderColor:  "#fff",
+    width: '100%',
+    paddingVertical: 13,
+    borderRadius: 12,
   },
   appleBtnText: {
     fontFamily: 'SFsemibold',
@@ -109,26 +121,26 @@ const styles = StyleSheet.create({
     marginTop: -3
   },
   appleBtn: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      marginTop: 16,
-      marginBottom: 16,
-      backgroundColor: "#fff",
-      width: '100%',
-      paddingVertical: 13,
-      borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 16,
+    marginBottom: 16,
+    backgroundColor: "#fff",
+    width: '100%',
+    paddingVertical: 13,
+    borderRadius: 12,
   },
    h1: {
-     fontSize: 32,
-     color: '#fff',
-     fontFamily: 'SFbold',
-     textAlign: 'center',
-     textTransform: 'uppercase'
+    fontSize: 32,
+    color: '#fff',
+    fontFamily: 'SFbold',
+    textAlign: 'center',
+    textTransform: 'uppercase'
    },
    text: {
     fontSize: 16,
-    color: GRAY_COLOR,
+    color: TEXT_COLOR,
     marginTop: 8,
     width: 175,
     fontFamily: 'SFregular',
@@ -140,13 +152,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 32
    },
-   video: {
-    flex: 1,
-    marginHorizontal: -16,
-   },
    textBlock: {
     alignItems: 'center',
-    flex: 1,
-    marginTop: 40
+    marginBottom: 32,
    }
 })
