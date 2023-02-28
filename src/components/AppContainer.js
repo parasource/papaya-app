@@ -24,6 +24,7 @@ import ArticlePage from '../pages/ArticlePage';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import GenderSelectionPage from '../pages/GenderSelectionPage';
 
 const prefix = Linking.createURL('/');
 
@@ -97,7 +98,7 @@ const AppContainer = (props) => {
   };
 
   if(!props.isAuth || props.isFirstTime){
-    return(<>
+    return(<SafeAreaProvider>
         <StatusBar barStyle="light-content"/>
         <NavigationContainer theme={MyTheme} linking={linking}>
             {!props.isAuth ? <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -106,27 +107,11 @@ const AppContainer = (props) => {
               </Stack.Screen> 
             </Stack.Navigator>
             :
-            <Stack.Navigator screenOptions={{ 
-              headerBlurEffect: 'dark',
-              headerBackTitleVisible: false,
-              headerTintColor: '#fff',
-          }}>
-                <Stack.Screen
-                  name="ProfileSettings"
-                  options={{headerShown: false}}>
-                  {({navigation}) => <ProfileSettings firstTime={true} navigation={navigation}/>}
-                </Stack.Screen>
-                <Stack.Screen 
-                  name="Wardrobe" 
-                  options={{ 
-                    title: "Гардероб",
-                  }}>
-                  {({navigation}) => <Wardrobe firstTime={true} navigation={navigation}/>}
-                </Stack.Screen>
-                <Stack.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
+            <Stack.Navigator screenOptions={{ headerShown: false}}>
+              <Stack.Screen name="GenderSelectPage" component={GenderSelectionPage}/>
             </Stack.Navigator>}
         </NavigationContainer>
-    </>
+      </SafeAreaProvider>
     )
   }
 

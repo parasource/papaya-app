@@ -5,9 +5,8 @@ import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { updateUser } from '../redux/auth-reducer';
 import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
-import { LinearGradient } from 'expo-linear-gradient';
 
-const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, firstTime, navigation, toggleNotification}) => {
+const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, navigation, toggleNotification}) => {
     const [stateSex, setSex] = useState(sex)
     const [stateName, setName] = useState(name)
 
@@ -48,11 +47,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-            {firstTime && <>
-            <Text style={{fontFamily: 'SFsemibold', fontSize: 28, color: TEXT_COLOR, marginTop: 32}}>Настройка аккаунта</Text>
-            <Text style={{fontFamily: 'SFregular', fontSize: 16, color: TEXT_COLOR, marginTop: 8, marginBottom: 24}}>Настройте ваш аккаунт, чтобы мы подбирали подходящие для вас образы</Text>
-            </>}
-            {firstTime || <><Text style={styles.label}>Имя пользователя</Text>
+            <Text style={styles.label}>Имя пользователя</Text>
             <TextInput
                 style={styles.listItem}
                 placeholder="Имя"
@@ -62,7 +57,6 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
                 value={stateName}
               />
             <Text style={styles.label}>Учетные данные</Text>
-            </>}
             <TouchableOpacity style={styles.listItem} onPress={showActionSheet}>
               <Text style={styles.listItemLabel}>Ваш пол</Text>
               <View style={{flexDirection: 'row'}}>
@@ -70,13 +64,6 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
                 <Chevron style={styles.chevron}/>
               </View>
             </TouchableOpacity>
-            {firstTime && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
-                  <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
-                    <Text style={{fontFamily: 'SFsemibold', fontSize: 16, lineHeight: 20}}>
-                        Продолжить
-                    </Text>
-                  </TouchableOpacity>
-            </LinearGradient>}
         </View>
       </TouchableWithoutFeedback>
     )

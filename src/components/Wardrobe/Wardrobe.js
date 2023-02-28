@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react'
 import { connect } from "react-redux"
-import { checkToken } from '../../redux/auth-reducer';
 import { requestCategories } from '../../redux/wardrobe-reducer';
-import { View, StyleSheet, ActivityIndicator, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, ScrollView } from 'react-native';
 import WardrobeCard from "./WardrobeCard";
-import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR, GRAY_COLOR } from '../../theme';
-import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../../theme';
 
-const Wardrobe = ({navigation, parentCategories, categories, requestCategories, checkToken, selectedWardrobeId, isFetching, firstTime, sex}) => {
+const Wardrobe = ({navigation, parentCategories, categories, requestCategories, isFetching}) => {
     useEffect(() => {
         requestCategories()
     }, [sex])
@@ -17,12 +14,6 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
       <View style={{paddingHorizontal: 16, flex: 1}}>
         {isFetching ? <ActivityIndicator /> :
         <ScrollView showsVerticalScrollIndicator={false}>
-            {firstTime && 
-                <>
-                    <Text style={{fontFamily: 'SFsemibold', fontSize: 28, color: TEXT_COLOR, marginTop: 24}}>Выберите 5 вещей {selectedWardrobeId.length > 0 && `(выбрано ${selectedWardrobeId.length})`}</Text>
-                    <Text style={{fontFamily: 'SFregular', fontSize: 16, color: TEXT_COLOR, marginTop: 8}}>Наша рекомендательная система будет подбирать образы на основе вашего гардероба</Text>
-                </>
-            }
             {parentCategories.map((parent, index) => (
                 <View key={'wardrobe-parent-category' + index}>
                     <Text style={styles.parentTitle}>{parent}</Text>
@@ -35,16 +26,6 @@ const Wardrobe = ({navigation, parentCategories, categories, requestCategories, 
             <View style={{height: 100}}></View>
         </ScrollView>
         }
-        {(selectedWardrobeId.length >= 5 && firstTime) && <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
-              <TouchableOpacity style={styles.addBtn} onPress={() => {
-                    checkToken()
-                    AsyncStorage.setItem('notification', 'on')
-                }}>
-                <Text style={{fontFamily: 'SFsemibold', fontSize: 16, lineHeight: 20}}>
-                    Продолжить
-                </Text>
-              </TouchableOpacity>
-        </LinearGradient>}
       </View>
     )
   }
@@ -144,8 +125,6 @@ const mapStateToProps = (state) => ({
     categories: state.wardrobe.categories,
     isFetching: state.wardrobe.isFetching,
     selectedWardrobe: state.wardrobe.selectedWardrobe,
-    selectedWardrobeId: state.wardrobe.selectedWardrobeId,
-    sex: state.auth.sex,
 })
 
-export default connect(mapStateToProps, {requestCategories, checkToken})(Wardrobe)
+export default connect(mapStateToProps, {requestCategories})(Wardrobe)
