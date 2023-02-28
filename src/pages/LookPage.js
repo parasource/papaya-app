@@ -18,6 +18,7 @@ import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import { openBrowserAsync } from 'expo-web-browser';
 import { LooksFeed } from '../components/Feed/LooksFeed';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import ButtonWithBounceAnimation from '../components/UI/ButtonWithBounceAnimation';
 
 const LookPage = ({
         route,
@@ -131,60 +132,46 @@ const LookPage = ({
             </View>
             <View style={styles.bar}>
                     <View style={styles.iconsGroup}>
-                        <View style={{...styles.iconWrapper, marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}>
-                            <BounceAnimation onPress={() => {
-                                    if(isLiked){
-                                        unlikeLook(lookSlug)
-                                    }else{
-                                        if(isDisliked){
-                                            undislikeLook(lookSlug)
-                                        }
-                                        likeLook(lookSlug)
-                                        Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
-                                    }
-                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-                                }} component={
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <Icon name = {!isLiked ? "heart-outline" : "heart"}
-                                        style = {{...styles.icon, color: TEXT_COLOR}}/>
-                                </View>
-                            }/>
-                        </View>
-                        <View style={{...styles.iconWrapper, backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}>
-                            <BounceAnimation onPress={() => {
+                        <ButtonWithBounceAnimation onPress={() => {
+                                if(isLiked){
+                                    unlikeLook(lookSlug)
+                                }else{
                                     if(isDisliked){
                                         undislikeLook(lookSlug)
-                                    }else{
-                                        if(isLiked){
-                                            unlikeLook(lookSlug)
-                                        }
-                                        dislikeLook(lookSlug)
-                                        Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
                                     }
-                                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
-                                }} component={
-                                !isDisliked ?
+                                    likeLook(lookSlug)
+                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
+                                }
+                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+                            }} label={'Нравится'} iconName={!isLiked ? "heart-outline" : "heart"} iconStyle={{...styles.icon ,color: TEXT_COLOR}} stylesBtn={{marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}/>
+                        <ButtonWithBounceAnimation onPress={() => {
+                                if(isDisliked){
+                                    undislikeLook(lookSlug)
+                                }else{
+                                    if(isLiked){
+                                        unlikeLook(lookSlug)
+                                    }
+                                    dislikeLook(lookSlug)
+                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
+                                }
+                                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+                            }}
+                            stylesBtn={{backgroundColor: isDisliked ? '#fff' : 'rgb(31,31,31)'}}
+                            icon={!isDisliked ?
                                 <FeatherAwesomeIcon name="slash" 
                                 style={styles.icon}/> :
                                 <FontAwesomeIcon name="ban" 
-                                style={{...styles.icon, color: '#F15A28'}}/>
-                            }/>
-                        </View>
-                    </View>
-                    <View style={styles.iconsGroup}>
-                    <View style={{...styles.iconWrapper, marginHorizontal: 4}}>
-                        <BounceAnimation onPress={() => {
-                                if(isSaved){
-                                    unsaveLook(lookSlug)
-                                }else{
-                                    saveLook(lookSlug)
-                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});
-                                }
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                            }} component={
-                            <Icon name = {!isSaved ? "bookmark-outline" : "bookmark"} style={styles.icon}/>
+                                style={{...styles.icon, color: '#F15A28'}}/> 
                         }/>
                     </View>
+                    <View style={styles.iconsGroup}>
+                    <ButtonWithBounceAnimation onPress={() => {
+                                if(isSaved){unsaveLook(lookSlug)}
+                                else{
+                                    saveLook(lookSlug)
+                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});}
+                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                            }} iconName={!isSaved ? "bookmark-outline" : "bookmark"} styleBtn={{marginHorizontal: 4}} iconStyle={styles.icon}/>
                 </View>
             </View>
             <View style={styles.container}>
@@ -342,28 +329,28 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     sheetTitle: {
-            fontFamily: 'SFbold',
-            fontSize: 22,
-            color: TEXT_COLOR,
-            textAlign: 'center',
-            marginTop: 15,
-            maxWidth: 291
-        },
-        img: {
-            width: 80,
-            height: 80,
-            borderRadius: 12,
-            resizeMode: 'cover'
-        },
-        linkWrapper: {
-            marginLeft: 8,
-        },
-        row: {
-            width: '100%',
-            flexDirection: 'row',
-            marginHorizontal: 8,
-            marginVertical: 16
-        }
+        fontFamily: 'SFbold',
+        fontSize: 22,
+        color: TEXT_COLOR,
+        textAlign: 'center',
+        marginTop: 15,
+        maxWidth: 291
+    },
+    img: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+        resizeMode: 'cover'
+    },
+    linkWrapper: {
+        marginLeft: 8,
+    },
+    row: {
+        width: '100%',
+        flexDirection: 'row',
+        marginHorizontal: 8,
+        marginVertical: 16
+    }
 })
 
 const mapStateToProps = (state) => ({

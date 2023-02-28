@@ -1,6 +1,5 @@
-import { View, Animated, Pressable } from 'react-native'
-import React, { Children, useEffect, useRef } from 'react'
-import { GREEN_COLOR, BG_COLOR, GRAY_COLOR } from '../../theme'
+import { Animated, Pressable } from 'react-native'
+import React, { useEffect, useRef } from 'react'
 
 export const BounceAnimation = ({children, component, onPress, style}) => {
   const animationScale = useRef(new Animated.Value(0)).current
@@ -18,6 +17,7 @@ export const BounceAnimation = ({children, component, onPress, style}) => {
           useNativeDriver: true
       }).start()
   }
+  
   return (
     <Pressable style={{...style}} onPress={() => {
         pressHandler()
