@@ -5,7 +5,7 @@ import { View, StyleSheet, ActivityIndicator, Text, ScrollView } from 'react-nat
 import WardrobeCard from "./WardrobeCard";
 import { GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../../theme';
 
-const Wardrobe = ({navigation, parentCategories, categories, requestCategories, isFetching}) => {
+const Wardrobe = ({navigation, parentCategories, categories, requestCategories, isFetching, sex}) => {
     useEffect(() => {
         requestCategories()
     }, [sex])
@@ -125,6 +125,7 @@ const mapStateToProps = (state) => ({
     categories: state.wardrobe.categories,
     isFetching: state.wardrobe.isFetching,
     selectedWardrobe: state.wardrobe.selectedWardrobe,
+    sex: state.auth.sex
 })
 
 export default connect(mapStateToProps, {requestCategories})(Wardrobe)

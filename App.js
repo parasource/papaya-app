@@ -8,6 +8,7 @@ import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Device from 'expo-device'
 import { authAPI } from './src/api/api';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const defaultErrorHandler = ErrorUtils.getGlobalHandler()
 
@@ -78,7 +79,9 @@ export default function App() {
 
   return (
     <Provider store={store}>
-        <AppContainer/>
+        <ActionSheetProvider>
+          <AppContainer/>
+        </ActionSheetProvider>
     </Provider>
   );
 }

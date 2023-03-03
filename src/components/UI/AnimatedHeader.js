@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Animated, View } from 'react-native';
+import { StyleSheet, Animated, View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,9 +26,11 @@ export const AnimatedHeader = ({animValue}) => {
                         opacity: headerOpacity
                     }}
                 >
-                    <BlurView
+                    {Platform.OS === 'ios' ? <BlurView
                     blurType="dark"
-                    intensity={20} style={{width: '100%', height: '100%', backgroundColor: 'rgba(17,17,17, .9)'}}/>
+                    intensity={20} style={{width: '100%', height: '100%', backgroundColor: 'rgba(17,17,17, .9)'}}/> :
+                    <View style={{width: '100%', height: '100%', backgroundColor: 'rgba(17,17,17, .9)'}}/>
+                    }
             </Animated.View>
             <LinearGradient colors={['rgba(17, 17, 17, .9)', 'rgba(17, 17, 17, 0.3)', 'rgba(17, 17, 17, 0)']} style={{
                 flex: 1,

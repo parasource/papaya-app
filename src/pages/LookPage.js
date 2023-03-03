@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../theme';
+import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR, BG_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FeatherAwesomeIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsaveLook, saveLook } from '../redux/looks-reducer';
 
 import { LookItem } from '../components/LookItem';
 import { storage } from '../const';
 import * as Linking from 'expo-linking';
-import { BounceAnimation } from '../components/UI/BounceAnimation';
 import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
@@ -42,7 +42,7 @@ const LookPage = ({
     const sheetRef = useRef(null)
     const [isOpen, setIsOpen] = useState(false);
     const [sheetInfo, setSheetInfo] = useState(null);
-    const snapPoints = [314]
+    const snapPoints = [320]
 
     const [link, setLink] = useState('')
     const [ready, setReady] = useState(false)
@@ -230,9 +230,25 @@ const LookPage = ({
             onClose={() => setIsOpen(false)}
             backdropComponent={renderBackdrop}>
             <View style={styles.bottomSheet}>
-                <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
+                <View style={{flexDirection: 'row', backgroundColor: BG_COLOR, borderRadius: 12, padding: 16, marginHorizontal: -12}}>
+                    <Image source={{uri: storage + sheetInfo?.image}} style={{width: 90, height: 100, borderRadius: 8}}/>
+                    <View style={{flex: 1, marginLeft: 8, justifyContent: 'space-between'}}>
+                        <View style={{flex: 1}}>
+                            <Text style={styles.sheetMute}>{sheetInfo?.category_id}</Text>
+                            <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
+                        </View>
+                        <View>
+                            <TouchableOpacity onPress={() => navigation.navigate('Search', {isFocused: false, searchValue: sheetInfo.name})} 
+                            style={styles.sheetBtnWrapper}>
+                                <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>Найти образы</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                {sheetInfo?.urls?.length > 0 ? <> 
+                <Text style={{...styles.sheetTitle, marginTop: 16}}>Купить в магазине</Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <View style={styles.row}>
+                    <View style={{...styles.row, marginLeft: Platform.OS === 'ios' ? -4 : 0, marginRight: Platform.OS === 'ios' ? -8 : 0}}>
                         {sheetInfo?.urls?.map(url => (
                             <TouchableOpacity key={url.ID} onPress={() => openBrowserAsync(url.url)} style={styles.linkWrapper}>
                                 <Image style={styles.img} source={{uri: `${storage}/${url.brand.image}`}}/>
@@ -240,8 +256,8 @@ const LookPage = ({
                         ))}
                     </View>
                 </ScrollView>
-                <TouchableOpacity onPress={() => navigation.navigate('Search', {isFocused: false, searchValue: sheetInfo.name})} 
-                style={{width: '100%', height: 45, backgroundColor: GREEN_COLOR}}/>
+                </> : 
+                <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>Мы пока не нашли где можно купить эту вещь</Text>}
             </View>
         </BottomSheet>
         <AnimatedHeader animValue={offset}/>
@@ -326,19 +342,27 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 12,
         paddingHorizontal: 16,
         paddingBottom: 36,
-        alignItems: 'center'
     },
     sheetTitle: {
-        fontFamily: 'SFbold',
-        fontSize: 22,
+        fontFamily: 'SFsemibold',
+        fontSize: 16,
         color: TEXT_COLOR,
-        textAlign: 'center',
-        marginTop: 15,
-        maxWidth: 291
+    },
+    sheetMute: {
+        fontSize: 16,
+        color: GRAY_COLOR,
+    },
+    sheetBtnWrapper: { 
+        width: 128, 
+        height: 28, 
+        backgroundColor: INPUTS_BG, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        borderRadius: 8
     },
     img: {
-        width: 80,
-        height: 80,
+        width: 70,
+        height: 70,
         borderRadius: 12,
         resizeMode: 'cover'
     },
@@ -347,9 +371,9 @@ const styles = StyleSheet.create({
     },
     row: {
         width: '100%',
+        flex: 1,
         flexDirection: 'row',
-        marginHorizontal: 8,
-        marginVertical: 16
+        marginVertical: 8
     }
 })
 

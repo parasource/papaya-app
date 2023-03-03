@@ -48,7 +48,7 @@ export const TabBottomNavigator = (props) => {
             }}
             >
               <Image source={{uri: storage + "/ui/" + iconName}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
-              <Text style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
+              <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
             </Pressable>
           )
         },
@@ -58,6 +58,7 @@ export const TabBottomNavigator = (props) => {
         tabBarStyle: styles.tab,
         tabBarLabel: () => {return null},
         headerShown: false,
+        tabBarHideOnKeyboard: true,
         tabBarBackground: () => (
           <BlurView tint="dark" intensity={Platform.OS === 'ios' ? 100 : 150} style={StyleSheet.absoluteFill} />
         ),
@@ -69,6 +70,7 @@ export const TabBottomNavigator = (props) => {
         <Tab.Screen
           name="Search"
           component={SearchPage}
+          screenOptions={{tabBarHideOnKeyboard: true}}
         />
         <Tab.Screen
           name="Favorites"

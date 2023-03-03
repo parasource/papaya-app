@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text,  StyleSheet,  ActionSheetIOS, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text,  StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { GRAY_COLOR, GREEN_COLOR, INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { updateUser } from '../redux/auth-reducer';
 import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, navigation, toggleNotification}) => {
     const [stateSex, setSex] = useState(sex)
     const [stateName, setName] = useState(name)
+    
+    const { showActionSheetWithOptions } = useActionSheet();
 
     const BUTTONS = [
       "Mужской", 
@@ -17,7 +20,7 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     ]
 
       const showActionSheet = () => {
-        ActionSheetIOS.showActionSheetWithOptions({
+        showActionSheetWithOptions({
           options: BUTTONS,
           cancelButtonIndex: 2,
           title: 'Выберите свой пол'
@@ -29,7 +32,6 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
             if(sex !== (buttonIndex === 0 ? "male" : "female")){
               requestCategories()
               requestSelectedWardrobe()
-              console.log('reload');
             }
           }
         });

@@ -1,6 +1,7 @@
 import React from "react";
-import { Text, TouchableOpacity, ScrollView } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { View, StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
 
@@ -15,15 +16,17 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
 
   return (
     <TouchableOpacity activeOpacity={1}>
+      {/* <View> */}
       {autofill?.tags && 
-        <ScrollView horizontal style={{marginBottom: 12}} showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal style={{marginBottom: 12, flex: 1}} showsHorizontalScrollIndicator={false}>
           {autofill.tags.map((item, index) => 
-            <TouchableOpacity style={styles.tag} key={`tags_${index}`} onPress={() => onTagPress(item)}>
+            <TouchableOpacity onStartShouldSetResponder={() => true} style={styles.tag} key={`tags_${index}`} onPress={() => onTagPress(item)}>
                 <Text style={{color: TEXT_COLOR}}>
                     {item.toLowerCase()}
                 </Text>
             </TouchableOpacity>)}
         </ScrollView>}
+      {/* </View> */}
       {feed ? (
         <View>
           {autofill?.suggestions ?  

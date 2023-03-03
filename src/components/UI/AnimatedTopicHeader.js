@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Text } from 'react-native';
+import { Animated, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { TEXT_COLOR } from '../../theme';
@@ -25,6 +25,7 @@ export const AnimatedTopicHeader = ({maxHeight, animValue, title}) => {
                 opacity: headerOpacity,
             }}
         >
+            {Platform.OS === 'ios' ?
             <BlurView
              blurType="dark"
             intensity={20} style={{width: '100%', height: '100%', backgroundColor: 'rgba(17,17,17, .9)'}}>
@@ -35,7 +36,17 @@ export const AnimatedTopicHeader = ({maxHeight, animValue, title}) => {
                     fontFamily: 'SFsemibold',
                     marginTop: insets.top + 8
                 }}>{title}</Text>
-            </BlurView>
+            </BlurView> :
+            <View style={{width: '100%', height: '100%', backgroundColor: 'rgba(17,17,17, .9)'}}>
+                <Text style={{
+                    textAlign: 'center',
+                    color: TEXT_COLOR,
+                    fontSize: 16,
+                    fontFamily: 'SFsemibold',
+                    marginTop: insets.top + 8
+                }}>{title}</Text>
+            </View>
+            }
       </Animated.View>
     );
 }

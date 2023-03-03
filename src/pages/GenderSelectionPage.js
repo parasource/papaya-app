@@ -3,13 +3,14 @@ import { View, StyleSheet, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import GenderButton from '../components/UI/GenderButton';
-import {updateUser} from '../redux/auth-reducer'
+import {checkToken, updateUser} from '../redux/auth-reducer'
 import { BG_COLOR, GRAY_COLOR } from '../theme';
 
-const GenderSelectionPage = ({updateUser, name}) => {
+const GenderSelectionPage = ({updateUser, name, checkToken}) => {
     
     const selectGender = (gender) => {
-        updateUser({"sex": gender, "name": name, "receive_push_notifications": true})    
+        updateUser({"sex": gender, "name": name, "receive_push_notifications": true}) 
+        checkToken()
     }
 
     return (
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         height: 120, 
         alignItems: 'center', 
         justifyContent: 'center', 
-        borderRadius: '100%', 
+        borderRadius: 120, 
         borderWidth: 3, 
         borderColor: 'rgba(255, 255, 255, .2)', 
         borderStyle: 'dashed'
@@ -68,4 +69,4 @@ const mapStateToProps = (state) => ({
     name: state.auth.name,
 })
 
-export default connect(mapStateToProps, {updateUser})(GenderSelectionPage);
+export default connect(mapStateToProps, {updateUser, checkToken})(GenderSelectionPage);

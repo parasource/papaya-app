@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react'
-import { StatusBar, View, Text, Share as rnShare, StyleSheet, TouchableOpacity } from 'react-native';
+import { StatusBar, View, Text, ShareasrnShare, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -41,6 +41,8 @@ const AppContainer = (props) => {
   const snapPoints = [314]
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
+
+  const { width, height } = Dimensions.get("window")
 
   const handelSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index)
@@ -140,7 +142,12 @@ const AppContainer = (props) => {
             headerBackTitleVisible: false,
             headerTintColor: '#fff',
             headerLeftContainerStyle: {paddingLeft: 8},
-            headerTitleContainerStyle: {flex: 6}
+            headerTitleContainerStyle:{
+              width:'60%',
+              alignItems:'center'
+            },
+            headerTitleAlign: 'center',
+            tabBarHideOnKeyboard: true,
             }}>
               <Share.Screen
                 name="MainNavigator"
