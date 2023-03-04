@@ -1,18 +1,14 @@
 import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Image, Platform, Dimensions, ImageBackground } from 'react-native';
-import { BG_COLOR, GRAY_COLOR, TEXT_COLOR } from '../theme';
+import { BG_COLOR, TEXT_COLOR } from '../theme';
 import * as Google from 'expo-auth-session/providers/google'
 import * as AppleAuthentication from 'expo-apple-authentication'
-import { Video } from 'expo-av';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export const FirstScreen = ({googleLogin, appleLogin}) => {
-  const video = useRef(null)
-
   const inset = useSafeAreaInsets()
-  const {width} = Dimensions.get('window')
 
   const [_, __, promptAsync] = Google.useAuthRequest({
     expoClientId: '514770009692-qjgk66iibo568l92bn4c0qo6hppjh5gl.apps.googleusercontent.com',
@@ -41,7 +37,7 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} source={{uri: 'https://images.unsplash.com/photo-1532332248682-206cc786359f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZmFzaGlvbiUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60'}}/>
+      <ImageBackground style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} source={{uri: 'http://static.papaya.parasource.tech/ui/welcome-background.jpg'}}/>
       <LinearGradient colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 1)']} style={styles.gradient}/>
       <View style={styles.dark}></View>
       <View style={{...styles.wrapper, paddingTop: inset.top + 40}}> 

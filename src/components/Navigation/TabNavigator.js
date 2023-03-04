@@ -3,11 +3,12 @@ import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
-import { Image, Platform, Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
-import { storage } from '../../const';
+import Icon from 'react-native-vector-icons/Octicons';
+
 
 const Tab = createBottomTabNavigator()
 
@@ -22,16 +23,16 @@ export const TabBottomNavigator = (props) => {
           let iconName;
           let title;
           if (route.name === "Home") {
-            iconName = 'home.png';
+            iconName = 'home';
             title = "Главная"
           } else if (route.name === "Search") {
-            iconName = 'search.png';
+            iconName = 'search';
             title = "Поиск"
           } else if (route.name === "Favorites") {
-            iconName = 'bookmark.png';
+            iconName = 'bookmark';
             title = "Сохраненные"
           } else if (route.name === "Profile") {
-            iconName = 'user.png';
+            iconName = 'person';
             title = "Профиль"
           }
           return (
@@ -47,7 +48,7 @@ export const TabBottomNavigator = (props) => {
               navigation.navigate(route.name)
             }}
             >
-              <Image source={{uri: storage + "/ui/" + iconName}} style={{width: 28, height: 28, opacity: focused ? 1.0 : 0.5}}/>
+              <Icon name={iconName} size={24} style={{color: TEXT_COLOR, opacity: focused ? 1.0 : 0.5}}/>
               <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
             </Pressable>
           )

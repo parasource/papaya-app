@@ -1,5 +1,5 @@
 import {  View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';

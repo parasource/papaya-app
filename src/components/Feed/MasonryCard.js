@@ -1,7 +1,6 @@
 import { View, TouchableHighlight, StyleSheet, Text, Dimensions} from 'react-native'
 import React, { useState } from 'react'
 import { INPUTS_BG, TEXT_COLOR } from '../../theme'
-import { SharedElement } from 'react-navigation-shared-element'
 import { storage } from '../../const';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Image} from 'react-native-elements'

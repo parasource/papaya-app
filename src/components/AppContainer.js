@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback, useState, useRef } from 'react'
-import { StatusBar, View, Text, ShareasrnShare, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
+import { StatusBar, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
@@ -25,6 +25,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import GenderSelectionPage from '../pages/GenderSelectionPage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const prefix = Linking.createURL('/');
 
@@ -32,21 +33,35 @@ const Stack = createNativeStackNavigator()
 const Share = createSharedElementStackNavigator()
 
 const AppContainer = (props) => {
-  useMemo(() => {
-    props.checkToken()
-  }, [])
-
   const sheetRef = useRef(null)
   const [isOpen, setIsOpen] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(null);
   const snapPoints = [314]
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
+  
+  const checkForFirstTimeLoaded = async () => {
+    const result = await AsyncStorage.getItem('isFirstTime')
+    if(result == null) setIsFirstTime(null);
+    else setIsFirstTime(true)
+  }
 
-  const { width, height } = Dimensions.get("window")
+  const changeIsFirstTime = async () => {
+    await AsyncStorage.setItem('isFirstTime', 'false')
+    setIsFirstTime(true)
+  }
 
   const handelSnapPress = useCallback((index) => {
     sheetRef.current?.snapToIndex(index)
     setIsOpen(true)
+  }, [])
+
+  useMemo(() => {
+    props.checkToken()
+  }, [])
+
+  useEffect(() => {
+    checkForFirstTimeLoaded()
   }, [])
 
   const renderBackdrop = useCallback(
@@ -99,7 +114,7 @@ const AppContainer = (props) => {
     },
   };
 
-  if(!props.isAuth || props.isFirstTime){
+  if(!props.isAuth || !isFirstTime){
     return(<SafeAreaProvider>
         <StatusBar barStyle="light-content"/>
         <NavigationContainer theme={MyTheme} linking={linking}>
@@ -110,7 +125,9 @@ const AppContainer = (props) => {
             </Stack.Navigator>
             :
             <Stack.Navigator screenOptions={{ headerShown: false}}>
-              <Stack.Screen name="GenderSelectPage" component={GenderSelectionPage}/>
+              <Stack.Screen name="GenderSelectPage">
+                {() => <GenderSelectionPage onSelect={changeIsFirstTime}/>}
+              </Stack.Screen>
             </Stack.Navigator>}
         </NavigationContainer>
       </SafeAreaProvider>

@@ -6,11 +6,11 @@ import GenderButton from '../components/UI/GenderButton';
 import {checkToken, updateUser} from '../redux/auth-reducer'
 import { BG_COLOR, GRAY_COLOR } from '../theme';
 
-const GenderSelectionPage = ({updateUser, name, checkToken}) => {
+const GenderSelectionPage = ({updateUser, name, checkToken, onSelect}) => {
     
     const selectGender = (gender) => {
         updateUser({"sex": gender, "name": name, "receive_push_notifications": true}) 
-        checkToken()
+        onSelect()
     }
 
     return (
