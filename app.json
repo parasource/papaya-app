@@ -4,7 +4,7 @@
     "name": "Papaya",
     "slug": "papaya",
     "privacy": "unlisted",
-    "version": "1.0.3",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,12 +21,15 @@
           "color": "#ffffff"
         }
       ],
-      ["expo-build-properties",
-      {
-        "ios": {
-          "useFrameworks": "static"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static",
+            "deploymentTarget": "13.0"
+          }
         }
-      }]
+      ]
     ],
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -37,7 +40,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "tech.parasource.papaya.ios",
-      "buildNumber": "16",
+      "buildNumber": "17",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "associatedDomains": [
@@ -49,7 +52,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#111111"
       },
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "package": "tech.parasource.papaya.ios"
     },
     "web": {
       "favicon": "./assets/favicon.png",
