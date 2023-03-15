@@ -89,8 +89,6 @@ const styles = StyleSheet.create({
   tab: {
     paddingVertical: 8,
     minHeight: 60,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
     position: 'absolute',
     bottom: 0,
     left: 0,

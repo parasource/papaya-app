@@ -1,13 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import { View, StyleSheet, SafeAreaView, Image, Text, TouchableOpacity } from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler'
 import { SearchBar } from "@rneui/themed";
-import { GRAY_COLOR, TEXT_COLOR } from '../theme';
+import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG, BG_COLOR } from '../theme';
 import { requestSearchResultLooks, requestSearchHistory, requestAutofill, clearHistoryHandler } from '../redux/search-reducer';
 import { connect } from 'react-redux';
 import SearchResult from '../components/Search/SearchResult';
 import SearchBlur from '../components/Search/SearchBlur';
 import SearchFocus from '../components/Search/SearchFocus';
 import { CommonActions } from '@react-navigation/native';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { storage } from '../const';
+import { openBrowserAsync } from 'expo-web-browser';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SearchPage = ({
     navigation, 
@@ -26,10 +31,35 @@ const SearchPage = ({
     const isFocused = route.params?.isFocused
     const searchValue = route.params?.searchValue
     const hiddenButtonRef = useRef(null)
+    const sheetRef = useRef(null)
+
+    const [sheetInfo, setSheetInfo] = useState(null);
+    const snapPoints = [440]
     
     const [value, setValue] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
     const [isResult, setIsResult] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
+
+    const handleSnapPress = useCallback((index) => {
+        sheetRef.current?.snapToIndex(index)
+        setIsOpen(true)
+    }, [])
+
+    const renderBackdrop = useCallback(
+        props => (
+            <BottomSheetBackdrop
+                {...props}
+                appearsOnIndex={1}
+                disappearsOnIndex={-1}
+                enableTouchThrough={true}
+            />
+        ),[]
+    );
+
+    useEffect(() => {
+        console.log(sheetInfo);
+    }, [sheetInfo])
 
     const checkParams = () => {
         if (isFocused) {
@@ -119,10 +149,54 @@ const SearchPage = ({
                                 hiddenButtonRef.current.blur()
                             }}/>
                         </View>}
-                    {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching} searchItems={searchItems}/>}
+                    {(isResult && !isFocus) && <SearchResult feed={feed} navigation={navigation} isFetching={isFetching} searchItems={searchItems} handleSnapPress={handleSnapPress} setSheetInfo={setSheetInfo}/>}
                     {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                 </View>
             </ScrollView>
+            {isResult && <BottomSheet 
+                ref={sheetRef} 
+                index={-1}
+                snapPoints={snapPoints}
+                enablePanDownToClose={true}
+                backgroundStyle={{backgroundColor: INPUTS_BG}}
+                onClose={() => setIsOpen(false)}
+                backdropComponent={renderBackdrop}>
+                <View style={styles.bottomSheet}>
+                    <View style={{flexDirection: 'row', backgroundColor: BG_COLOR, borderRadius: 12, padding: 16, marginHorizontal: -12}}>
+                        <Image source={{uri: storage + sheetInfo?.image}} style={{width: 90, height: 100, borderRadius: 8}}/>
+                        <View style={{flex: 1, marginLeft: 8, justifyContent: 'space-between'}}>
+                            <View style={{flex: 1}}>
+                                <Text style={styles.sheetMute}>{sheetInfo?.category?.name}</Text>
+                                <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
+                            </View>
+                            <View>
+                                <TouchableOpacity onPress={() => {
+                                    setValue(sheetInfo.name)
+                                    requestSearchResultLooks(sheetInfo.name)
+                                    setIsResult(true)
+                                    sheetRef.current.close()
+                                }} 
+                                style={styles.sheetBtnWrapper}>
+                                    <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>Найти образы</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                    {sheetInfo?.urls?.length > 0 ? <> 
+                        <Text style={{...styles.sheetTitle, marginTop: 16}}>Купить в магазине</Text>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                            <View style={{...styles.linksRow, marginLeft: Platform.OS === 'ios' ? -4 : 0, marginRight: Platform.OS === 'ios' ? -8 : 0}}>
+                                {sheetInfo?.urls?.map(url => (
+                                    <TouchableOpacity key={'bottomsheet_url_in_search_page_' + url.ID} onPress={() => openBrowserAsync(url.url)} style={styles.linkWrapper}>
+                                        <Image style={styles.img} source={{uri: `${storage}/${url.brand.image}`}}/>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </ScrollView>
+                    </> : 
+                    <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>Мы пока не нашли где можно купить эту вещь</Text>}
+                </View>
+            </BottomSheet>}
         </SafeAreaView>
     );
 }
@@ -149,6 +223,46 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
         paddingBottom: 150
+    },
+    bottomSheet: {
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        paddingHorizontal: 16,
+        paddingBottom: 36,
+    },
+    sheetTitle: {
+        fontFamily: 'SFsemibold',
+        fontSize: 16,
+        color: TEXT_COLOR,
+    },
+    sheetMute: {
+        fontSize: 12,
+        fontFamily: 'SFregular',
+        color: GRAY_COLOR,
+        textTransform: 'uppercase'
+    },
+    sheetBtnWrapper: { 
+        width: 128, 
+        height: 28, 
+        backgroundColor: INPUTS_BG, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        borderRadius: 8
+    },
+    img: {
+        width: 70,
+        height: 70,
+        borderRadius: 12,
+        resizeMode: 'cover'
+    },
+    linkWrapper: {
+        marginLeft: 8,
+    },
+    linksRow: {
+        width: '100%',
+        flex: 1,
+        flexDirection: 'row',
+        marginVertical: 8
     }
 })
 

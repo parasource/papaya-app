@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { View, StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
 
@@ -18,14 +17,14 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
     <TouchableOpacity activeOpacity={1}>
       {/* <View> */}
       {autofill?.tags && 
-        <ScrollView horizontal style={{marginBottom: 12, flex: 1}} showsHorizontalScrollIndicator={false}>
+        <View style={{marginBottom: 8, flex: 1, flexDirection: 'row', flexWrap: 'wrap'}} showsHorizontalScrollIndicator={false}>
           {autofill.tags.map((item, index) => 
             <TouchableOpacity onStartShouldSetResponder={() => true} style={styles.tag} key={`tags_${index}`} onPress={() => onTagPress(item)}>
                 <Text style={{color: TEXT_COLOR}}>
                     {item.toLowerCase()}
                 </Text>
             </TouchableOpacity>)}
-        </ScrollView>}
+        </View>}
       {/* </View> */}
       {feed ? (
         <View>
@@ -114,6 +113,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
+    marginBottom: 8,
     backgroundColor: INPUTS_BG,
     marginRight: 8,
   }

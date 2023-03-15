@@ -1,6 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Text } from "react-native";
-import { View, StyleSheet } from "react-native";
+import { ActivityIndicator, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import TopicCard from "./TopicCard";
@@ -8,7 +7,7 @@ import MasonryCard from "../Feed/MasonryCard";
 import { Image } from "react-native-elements";
 import { storage } from '../../const';
 
-const SearchResult = ({feed, navigation, isFetching, searchItems}) => {
+const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPress, setSheetInfo}) => {
   const renderItem = ({item}) => {
     if (item.type == "look") {
       return (
@@ -30,14 +29,21 @@ const SearchResult = ({feed, navigation, isFetching, searchItems}) => {
               <Text style={{color: TEXT_COLOR, fontSize: 14, fontFamily: 'SFsemibold'}}>Ищем по вещам</Text>
               <View style={{flexDirection: 'row', marginTop: 8}}>
               {searchItems.map(item =>
-                <Image style={{width: 46, height: 58, borderRadius: 4, marginRight: 8, overflow: 'hidden'}} resizeMode='cover' key={`search_item-${item.ID}`} source={{uri: `${storage}/${item.image}`}}
-                PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}/>}/>
+                <TouchableOpacity key={`search_item_in_result-${item.id}`}
+                 onPress={() => {
+                  setSheetInfo(item)
+                  handleSnapPress(0)
+                }}>
+                  <Image style={{width: 46, height: 58, borderRadius: 4, marginRight: 8, overflow: 'hidden'}} resizeMode='cover' source={{uri: `${storage}/${item.image}`}}
+                  PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}/>}/>
+                </TouchableOpacity>
               )}
               </View>
             </>
           )}
           {feed.length > 0 ? (
             <>
+
               <Text style={{color: TEXT_COLOR, fontSize: 17, fontFamily: 'SFsemibold', marginTop: 18}}>Результат поиска</Text>
               <MasonryList
                   contentContainerStyle={{
@@ -45,7 +51,7 @@ const SearchResult = ({feed, navigation, isFetching, searchItems}) => {
                     marginHorizontal: -8
                   }}
                   numColumns={2}
-                  data={feed}
+                  data={[...new Map(feed.map((item) => [item["ID"], item])).values()]}
                   renderItem={renderItem}
                   scrollEnabled={false}
               />

@@ -6,26 +6,27 @@ import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@reac
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { checkToken, googleLogin, appleLogin } from '../redux/auth-reducer';
 import { FirstScreen } from '../pages/FirstScreen';
-import ItemScreen from './ItemScreen';
-import LookPage from '../pages/LookPage';
 import { ProfileSettings } from '../pages/ProfileSettings';
 import { TabBottomNavigator } from './Navigation/TabNavigator';
 import { BG_COLOR, INPUTS_BG, TEXT_COLOR, GRAY_COLOR } from '../theme';
+import { TopicPage } from '../pages/TopicPage';
+import { FullButton } from './UI/FullButton';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import ItemScreen from './ItemScreen';
+import LookPage from '../pages/LookPage';
 import Wardrobe from './Wardrobe/Wardrobe';
 import WardrobeDetail from './Wardrobe/WardrobeDetail';
-import { TopicPage } from '../pages/TopicPage';
 import * as Linking from 'expo-linking';
 import MyWardrobe from './Wardrobe/MyWardrobe';
 import InternetConnectionAlert from 'react-native-internet-connection-alert';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
-import { FullButton } from './UI/FullButton';
 import * as Analytics from "expo-firebase-analytics";
 import ArticlePage from '../pages/ArticlePage';
-import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import GenderSelectionPage from '../pages/GenderSelectionPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as StoreReview from 'expo-store-review';
 
 const prefix = Linking.createURL('/');
 
@@ -105,6 +106,17 @@ const AppContainer = (props) => {
     }
   }
 
+  useEffect(() => {
+    if(props.isAuth && isFirstTime){
+      console.log('for');
+      try {
+        StoreReview.requestReview();
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }, []);
+
   const MyTheme = {
     ...DarkTheme,
     colors: {
@@ -157,6 +169,9 @@ const AppContainer = (props) => {
           <Share.Navigator screenOptions={{  
             headerShown: true, 
             headerBackTitleVisible: false,
+            headerBackImage: () => (
+              <Icon name="chevron-back-outline" size={28} style={{color: TEXT_COLOR}}/>
+            ),
             headerTintColor: '#fff',
             headerLeftContainerStyle: {paddingLeft: 8},
             headerTitleContainerStyle:{

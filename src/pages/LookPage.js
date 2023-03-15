@@ -109,6 +109,10 @@ const LookPage = ({
           }
     };
 
+    useEffect(() => {
+        console.log(sheetInfo);
+    }, [sheetInfo])
+
 
   return (
     <View>
@@ -234,7 +238,7 @@ const LookPage = ({
                     <Image source={{uri: storage + sheetInfo?.image}} style={{width: 90, height: 100, borderRadius: 8}}/>
                     <View style={{flex: 1, marginLeft: 8, justifyContent: 'space-between'}}>
                         <View style={{flex: 1}}>
-                            <Text style={styles.sheetMute}>{sheetInfo?.category_id}</Text>
+                            <Text style={styles.sheetMute}>{sheetInfo?.category?.name}</Text>
                             <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
                         </View>
                         <View>
@@ -349,8 +353,10 @@ const styles = StyleSheet.create({
         color: TEXT_COLOR,
     },
     sheetMute: {
-        fontSize: 16,
+        fontSize: 12,
+        fontFamily: 'SFregular',
         color: GRAY_COLOR,
+        textTransform: 'uppercase'
     },
     sheetBtnWrapper: { 
         width: 128, 
