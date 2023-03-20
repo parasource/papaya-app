@@ -81,11 +81,13 @@ const Feed = ({
   
   useEffect(() => {
     requestLooks(page, false)
-    VersionCheck.needUpdate().then(res => {
-      if(res.isNeeded){
-        setNeedUpdate(res.storeUrl)
-      }
-    })
+    if(Platform.OS === 'ios'){
+      VersionCheck.needUpdate().then(res => {
+        if(res.isNeeded){
+          setNeedUpdate(res.storeUrl)
+        }
+      })
+    }
   }, [page])
 
   useEffect(() => {
