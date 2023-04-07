@@ -10,12 +10,13 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2565DBFBCCBF482AB2E431AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1B34C2A202EF473687637281 /* GoogleService-Info.plist */; };
+		163FCF4FF5B148B1B7FA8FE8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B49F65D3F7B74415A83B16CB /* GoogleService-Info.plist */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		4879DC877B3FBAABB651B1DE /* Pods_Papaya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D21943F8B1AD143A76CE57E /* Pods_Papaya.framework */; };
+		4CE804965481431AB04F405B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E339FBC6FF7D432D805AA567 /* InfoPlist.strings */; };
+		B062FD4DA5949704EAF81C9E /* Pods_Papaya.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E942730CE25ABAC745C5381D /* Pods_Papaya.framework */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		D01B869F5B7E4A3D9898477A /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C2F06078E4E29A7265664 /* noop-file.swift */; };
+		C1C59B2C8DB445359C587270 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277085F80296462F8EFAE5A8 /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,13 +27,14 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Papaya/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Papaya/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Papaya/main.m; sourceTree = "<group>"; };
-		1B34C2A202EF473687637281 /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Papaya/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		3D21943F8B1AD143A76CE57E /* Pods_Papaya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Papaya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A1C2F06078E4E29A7265664 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Papaya/noop-file.swift"; sourceTree = "<group>"; };
+		277085F80296462F8EFAE5A8 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Papaya/noop-file.swift"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-Papaya.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papaya.debug.xcconfig"; path = "Target Support Files/Pods-Papaya/Pods-Papaya.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Papaya.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papaya.release.xcconfig"; path = "Target Support Files/Pods-Papaya/Pods-Papaya.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Papaya/SplashScreen.storyboard; sourceTree = "<group>"; };
+		B49F65D3F7B74415A83B16CB /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Papaya/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		E339FBC6FF7D432D805AA567 /* InfoPlist.strings */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E942730CE25ABAC745C5381D /* Pods_Papaya.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Papaya.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Papaya/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -42,13 +44,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4879DC877B3FBAABB651B1DE /* Pods_Papaya.framework in Frameworks */,
+				B062FD4DA5949704EAF81C9E /* Pods_Papaya.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0927E226D85F47358E970E72 /* ru.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				E339FBC6FF7D432D805AA567 /* InfoPlist.strings */,
+			);
+			name = ru.lproj;
+			path = "";
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* Papaya */ = {
 			isa = PBXGroup;
 			children = (
@@ -60,8 +71,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				1B34C2A202EF473687637281 /* GoogleService-Info.plist */,
-				5A1C2F06078E4E29A7265664 /* noop-file.swift */,
+				B49F65D3F7B74415A83B16CB /* GoogleService-Info.plist */,
+				277085F80296462F8EFAE5A8 /* noop-file.swift */,
 			);
 			name = Papaya;
 			sourceTree = "<group>";
@@ -70,7 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				3D21943F8B1AD143A76CE57E /* Pods_Papaya.framework */,
+				E942730CE25ABAC745C5381D /* Pods_Papaya.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -117,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
+				0927E226D85F47358E970E72 /* ru.lproj */,
 			);
 			name = Supporting;
 			path = Papaya/Supporting;
@@ -153,7 +165,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				5C8E7E94B174101641976503 /* [CP] Embed Pods Frameworks */,
+				09650599C5C35407070D468F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -203,7 +215,8 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				2565DBFBCCBF482AB2E431AA /* GoogleService-Info.plist in Resources */,
+				4CE804965481431AB04F405B /* InfoPlist.strings in Resources */,
+				163FCF4FF5B148B1B7FA8FE8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +259,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5C8E7E94B174101641976503 /* [CP] Embed Pods Frameworks */ = {
+		09650599C5C35407070D468F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -350,7 +363,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				D01B869F5B7E4A3D9898477A /* noop-file.swift in Sources */,
+				C1C59B2C8DB445359C587270 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,10 +393,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = tech.parasource.papaya.ios;
-				PRODUCT_NAME = "Papaya";
+				PRODUCT_NAME = Papaya;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -406,9 +419,9 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = tech.parasource.papaya.ios;
-				PRODUCT_NAME = "Papaya";
+				PRODUCT_NAME = Papaya;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
