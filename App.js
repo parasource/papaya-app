@@ -45,18 +45,20 @@ export default function App() {
   };
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => {
-      setExpoPushToken(token)
-      authAPI.setAPNS(token)
-    });
-
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    if (Platform.OS !== 'android') {
+      registerForPushNotificationsAsync().then(token => {
+          setExpoPushToken(token)
+          authAPI.setAPNS(token)
+      });
+  
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+  
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log(response);
+      });
+    }
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
