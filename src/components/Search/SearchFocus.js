@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from "../../theme";
 import SearchItem from "./SearchItem";
+import { useKeyboard } from '../../hooks/useKeyboards';
 
 const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
+	const keyboardHeight = useKeyboard()
+
   const setHistory = feed.history.filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
@@ -72,6 +75,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
           <Text style={styles.footerText}>Больше образов нет</Text>
         </View>
       )}
+			{keyboardHeight !== 0 ? <View style={{height: keyboardHeight}}></View> : <></>}
     </TouchableOpacity>
   );
 };

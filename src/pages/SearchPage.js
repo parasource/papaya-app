@@ -12,7 +12,6 @@ import { CommonActions } from '@react-navigation/native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { storage } from '../const';
 import { openBrowserAsync } from 'expo-web-browser';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SearchPage = ({
     navigation, 
