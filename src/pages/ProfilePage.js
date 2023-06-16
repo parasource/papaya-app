@@ -1,4 +1,4 @@
-import {  View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView } from 'react-native'
+import {  View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import React, { useState } from 'react'
 import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -76,6 +76,9 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
           <TouchableOpacity style={styles.listItemWithSwitch}>
             <Text style={styles.listItemLabel}>Push-уведомления</Text>
             <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:stmeteu@gmail.com') }>
+            <Text style={styles.listItemLabel}>Написать в поддержку</Text>
           </TouchableOpacity>
           <Text style={styles.logout} onPress={logoutAlert}>Выйти из аккаунта</Text>
           <Text style={styles.remove} onPress={removeAlert}>Удалить аккаунт</Text>
