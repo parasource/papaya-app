@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
-import { StatusBar, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StatusBar, View, Text, StyleSheet, TouchableOpacity, Share as rnShare } from 'react-native';
 import { connect } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DarkTheme, NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';

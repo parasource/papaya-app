@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator, Linking, TouchableOpacity, Share, Dimensions, Animated as rnAnimated } from 'react-native'
 import React, {useEffect, useRef, useState} from 'react'
-import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG, BG_COLOR } from '../../theme';
+import { TEXT_COLOR, INPUTS_BG, BG_COLOR } from '../../theme';
 import { connect } from 'react-redux';
 import { getCurrentTopic } from '../../redux/looks-reducer';
 import { storage } from '../../const';
@@ -8,13 +8,9 @@ import { BounceAnimation } from '../UI/BounceAnimation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { LooksFeed } from './LooksFeed';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated from 'react-native-reanimated';
 import { AnimatedTopicHeader } from '../UI/AnimatedTopicHeader';
 
 MAX_HEADER_HEIGHT = 282
-
-const {interpolate, Extrapolate} = Animated
-const {height} = Dimensions.get("window")
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
   const [page, setPage] = useState(0)
@@ -22,13 +18,9 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
 
   const offset = useRef(new rnAnimated.Value(0)).current
 
-  const [link, setLink] = useState('')
-
   useEffect(() => {
     getCurrentTopic(topicSlug, page)
     let canGoBack = navigation.canGoBack();
-    Linking.getInitialURL().then((url) => {if(url) setLink(url)})
-    .catch(err => console.error('An error occurred', err));
 
     if(!route.params.topicName) navigation.setOptions({title: currentTopic.topic.name})
     if(!canGoBack) {
@@ -48,9 +40,9 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
         message: `Посмотри эту подборку образов:\n${currentTopic.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}`,
     }
     try{
-        const result = await Share.share(options)
+      await Share.share(options)
     }catch(err){
-        console.log(err);
+    	console.log(err);
     }
   }
 
@@ -69,7 +61,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
               [{ nativeEvent: { contentOffset: { y: offset } } }],
               { useNativeDriver: false }
           )}>
-        {isFetching ?
+        {(isFetching && currentTopic) ?
           <ActivityIndicator/> : 
               <View style={{paddingBottom: 100, height: '100%'}}>
                 <rnAnimated.View style={{...styles.wrapper,flex: 1, transform: [{ scale: headerScale }]}}>
@@ -91,7 +83,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
               </LinearGradient>
               <View style={{paddingHorizontal: 16, backgroundColor: BG_COLOR}}>
                 <Text style={styles.desc}>{currentTopic?.topic?.desc}</Text>
-                <LooksFeed looks={currentTopic.looks} 
+                <LooksFeed looks={currentTopic?.looks} 
                   navigation={navigation} isListEnd={true} page={0}/>
               </View>
             </View>

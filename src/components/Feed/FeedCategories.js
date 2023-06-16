@@ -45,7 +45,11 @@ export const FeedCategories = ({categories, index, onPress, isActive}) => {
                 <TouchableOpacity
                     accessibilityRole="button"
                     onPress={() => onPress(item.ID, item.slug, index)}
-                    style={{...styles.btnWrapper, backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
+                    style={{
+											...styles.btnWrapper, 
+											backgroundColor: isActive == item.ID ? TEXT_COLOR : INPUTS_BG, 
+											paddingVertical: Platform.OS === 'ios' ? 8 : 4,
+											marginRight: index === categories?.length && 16 }}
                     >
                     <Text style={{...styles.btnAnimated, color: isActive == item.ID ? BG_COLOR : GRAY_COLOR}}>
                         {item.name}

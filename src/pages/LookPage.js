@@ -10,7 +10,6 @@ import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsav
 
 import { LookItem } from '../components/LookItem';
 import { storage } from '../const';
-import * as Linking from 'expo-linking';
 import * as Haptics from 'expo-haptics'
 import * as Analytics from 'expo-firebase-analytics';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
@@ -40,16 +39,11 @@ const LookPage = ({
     const fadeAnim = new Animated.Value(0)
 
     const sheetRef = useRef(null)
-    const [isOpen, setIsOpen] = useState(false);
     const [sheetInfo, setSheetInfo] = useState(null);
     const snapPoints = [320]
 
-    const [link, setLink] = useState('')
-    const [ready, setReady] = useState(false)
-
     const handelSnapPress = useCallback((index) => {
         sheetRef.current?.snapToIndex(index)
-        setIsOpen(true)
     }, [])
 
     const renderBackdrop = useCallback(
@@ -64,7 +58,6 @@ const LookPage = ({
     );
     useEffect(() => {
         setTimeout(() => {
-            setReady(true)
             Animated.timing(fadeAnim, {
                 toValue: 1,
                 duration: 200,
@@ -77,11 +70,6 @@ const LookPage = ({
     useEffect(() => {
         let canGoBack = navigation.canGoBack();
         getCurrentLook(lookSlug)
-        Linking.getInitialURL().then((url) => {
-        if (url) {
-            setLink(url)
-        }
-        }).catch(err => console.error('An error occurred', err));
         if(!canGoBack) {
             navigation.setOptions({
                 headerLeft: () => (
@@ -108,11 +96,6 @@ const LookPage = ({
             }).start()
           }
     };
-
-    useEffect(() => {
-        console.log(sheetInfo);
-    }, [sheetInfo])
-
 
   return (
     <View>
@@ -231,7 +214,6 @@ const LookPage = ({
             snapPoints={snapPoints}
             enablePanDownToClose={true}
             backgroundStyle={{backgroundColor: INPUTS_BG}}
-            onClose={() => setIsOpen(false)}
             backdropComponent={renderBackdrop}>
             <View style={styles.bottomSheet}>
                 <View style={{flexDirection: 'row', backgroundColor: BG_COLOR, borderRadius: 12, padding: 16, marginHorizontal: -12}}>

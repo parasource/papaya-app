@@ -20,7 +20,7 @@ const ArticlesCarousel = ({articles, navigation}) => {
             <Carousel
                   {...baseOptions}
                   loop={false}
-                  width={width - 32}
+                  width={width - 24}
                   data={articles}
                   style={styles.sliderWrapper}
                   pagingEnabled={true}

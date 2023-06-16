@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         width: 'auto',
         height: 120,
-        marginTop: 16
+        marginTop: 16,
+				marginRight: 8
     },
 })
 

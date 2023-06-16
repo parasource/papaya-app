@@ -33,6 +33,8 @@ Notifications.setNotificationHandler({
   }
 })
 
+
+
 export default function App() {
   const [IsReady, SetIsReady] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState('');
