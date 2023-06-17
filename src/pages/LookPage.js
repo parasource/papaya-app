@@ -18,6 +18,7 @@ import { openBrowserAsync } from 'expo-web-browser';
 import { LooksFeed } from '../components/Feed/LooksFeed';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import ButtonWithBounceAnimation from '../components/UI/ButtonWithBounceAnimation';
+import { i18n } from '../../i18n/i18n';
 
 const LookPage = ({
         route,
@@ -130,7 +131,7 @@ const LookPage = ({
                                     Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
                                 }
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-                            }} label={'Нравится'} iconName={!isLiked ? "heart-outline" : "heart"} iconStyle={{...styles.icon ,color: TEXT_COLOR}} stylesBtn={{marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}/>
+                            }} label={i18n.t('look.like')} iconName={!isLiked ? "heart-outline" : "heart"} iconStyle={{...styles.icon ,color: TEXT_COLOR}} stylesBtn={{marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}/>
                         <ButtonWithBounceAnimation onPress={() => {
                                 if(isDisliked){
                                     undislikeLook(lookSlug)
@@ -163,7 +164,7 @@ const LookPage = ({
             </View>
             <View style={styles.container}>
                 {(currentLook.authorTag && currentLook.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
-                    <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>Автор образа</Text>
+                    <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>{i18n.t('look.author')}</Text>
                     <TouchableOpacity onPress={() => openBrowserAsync(currentLook.authorUrl)}>
                         <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
                             @{currentLook.authorTag}
@@ -189,7 +190,7 @@ const LookPage = ({
                 <View style={{paddingBottom: 100}}>
                 {currentLook?.items?.length ? 
                 <>
-                    <Text style={styles.title}>Элементы образа</Text>
+                    <Text style={styles.title}>{i18n.t('look.items')}</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {currentLook?.items?.map(item => (
                             <LookItem lookSlug={lookSlug} item={item} key={item.slug} handelSnapPress={() => {
@@ -200,8 +201,8 @@ const LookPage = ({
                     </ScrollView>
                 </>
                 : 
-                <Text style={styles.message}>Мы пока еще не нашли вещи с фотографии, но скоро обязательно найдем!</Text>}
-                {currentLook.similar && <View><Text style={styles.title}>Похожие образы</Text>
+                <Text style={styles.message}>{i18n.t('look.notFound')}</Text>}
+                {currentLook.similar && <View><Text style={styles.title}>{i18n.t('look.lookLike')}</Text>
                 <LooksFeed looks={currentLook.similar} 
                     navigation={navigation} isListEnd={true} page={0}/>
                 </View>}
@@ -226,13 +227,13 @@ const LookPage = ({
                         <View>
                             <TouchableOpacity onPress={() => navigation.navigate('Search', {isFocused: false, searchValue: sheetInfo.name})} 
                             style={styles.sheetBtnWrapper}>
-                                <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>Найти образы</Text>
+                                <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>{i18n.t('look.searchLooks')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 </View>
                 {sheetInfo?.urls?.length > 0 ? <> 
-                <Text style={{...styles.sheetTitle, marginTop: 16}}>Купить в магазине</Text>
+                <Text style={{...styles.sheetTitle, marginTop: 16}}>{i18n.t('look.buyInShop')}</Text>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <View style={{...styles.row, marginLeft: Platform.OS === 'ios' ? -4 : 0, marginRight: Platform.OS === 'ios' ? -8 : 0}}>
                         {sheetInfo?.urls?.map(url => (
@@ -243,7 +244,7 @@ const LookPage = ({
                     </View>
                 </ScrollView>
                 </> : 
-                <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>Мы пока не нашли где можно купить эту вещь</Text>}
+                <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>{i18n.t('look.shopNotFound')}</Text>}
             </View>
         </BottomSheet>
         <AnimatedHeader animValue={offset}/>

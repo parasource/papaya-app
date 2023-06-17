@@ -11,6 +11,7 @@ import FakeSearchBar from '../UI/FakeSearchBar';
 import { Alert } from '../UI/Alert';
 import { FeedCategories } from './FeedCategories';
 import VersionCheck from 'react-native-version-check-expo';
+import { i18n } from '../../../i18n/i18n';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -125,7 +126,7 @@ const Feed = ({
               {alerts.length > 0 && alerts.map(item => (
                 <View key={'alert_item_' + item.ID}><Alert {...{item}}/></View>
               ))}
-              {needUpdate && <Alert item={{title: 'Требуется обновление', linkUrl: needUpdate}}/>}
+              {needUpdate && <Alert item={{title: i18n.t('home.update'), linkUrl: needUpdate}}/>}
             </View>
             <TopicsList {...{navigation}}/>
             <ArticlesCarousel {...{navigation}}/>

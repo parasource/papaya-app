@@ -7,6 +7,7 @@ import { WardrobeThingCard } from './WardrobeThingCard';
 import { LinearGradient } from 'expo-linear-gradient';
 import MasonryList from '@react-native-seoul/masonry-list';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { i18n } from '../../../i18n/i18n';
 
 const MyWardrobe = ({
     isFetching,
@@ -86,7 +87,7 @@ const MyWardrobe = ({
         color: GRAY_COLOR,
         textAlign: 'center',
         marginTop: 20
-      }}>Ваш гардероб пуст {"\n"}Добавьте элементы гардероба</Text> :
+      }}>{i18n.t('wardrobe.empty')}</Text> :
       <ScrollView showsVerticalScrollIndicator={false}>
           <FlatList
             ref={wardrobeRef}
@@ -126,7 +127,7 @@ const MyWardrobe = ({
             <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
               <Icon name="add-outline" style={{fontSize: 24}}/>
               <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
-                Добавить одежду
+                {i18n.t('wardrobe.addItem')}
               </Text>
             </TouchableOpacity>
       </LinearGradient>

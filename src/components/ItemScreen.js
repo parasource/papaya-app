@@ -6,6 +6,7 @@ import { storage } from '../const';
 import { requestItem } from '../redux/looks-reducer';
 import { TEXT_COLOR } from '../theme';
 import FeedCard from './Feed/FeedCard';
+import { i18n } from '../../i18n/i18n';
 
 const ItemScreen = ({ route, navigation, item, requestItem }) => {
     const { lookSlug, itemId } = route.params;
@@ -16,7 +17,7 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={{...styles.title, paddingHorizontal: 16}}>Купить в магазине</Text>
+          <Text style={{...styles.title, paddingHorizontal: 16}}>{i18n.t('item.buyInShop')}</Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.row}>
             {item?.item?.urls?.map(url => (
@@ -27,7 +28,7 @@ const ItemScreen = ({ route, navigation, item, requestItem }) => {
           </View>
           </ScrollView>
           <View style={styles.container}>
-            <Text style={styles.title}>Образы с этим элементом</Text>
+            <Text style={styles.title}>{i18n.t('item.looksWith')}</Text>
             <View style={styles.feed}>
               {item.looks && item.looks.map((item,index) => (
                 <FeedCard item={item} key={index} navigation={navigation} withPop={true}/>

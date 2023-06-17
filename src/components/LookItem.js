@@ -3,6 +3,7 @@ import { View, Text, Linking, StyleSheet, ActivityIndicator, TouchableOpacity } 
 import { Image } from 'react-native-elements'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 import { storage } from '../const';
+import { i18n } from '../../i18n/i18n';
 
 export const LookItem = ({item, handelSnapPress}) => {
   return (
@@ -15,8 +16,8 @@ export const LookItem = ({item, handelSnapPress}) => {
             <Text style={styles.title}>{item.name}</Text>
             {item.urls.length > 0 &&
             <Text style={styles.mute}>{item.urls.length}
-            {item.urls.length === 1 ? ' магазин' : 
-            <>{item.urls.length > 4 ? ' магазинов' : ' магазина'}</>}
+            {item.urls.length === 1 ? i18n.t('item.shop') : 
+            <>{item.urls.length > 4 ? i18n.t('item.shops') : i18n.t('item.shops2')}</>}
             </Text>}
         </View>
     </TouchableOpacity>

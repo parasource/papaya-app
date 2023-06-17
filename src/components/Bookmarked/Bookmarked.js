@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { requestBookmarked } from '../../redux/looks-reducer';
 import { TEXT_COLOR } from '../../theme';
 import { LooksFeed } from '../Feed/LooksFeed';
+import { i18n } from '../../../i18n/i18n';
 
 const wait = timeout => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -50,7 +51,7 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation, isSavedEnd, isFe
         refreshControl={<RefreshControl tintColor={TEXT_COLOR} refreshing={refreshing} onRefresh={onRefresh} />}
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
-            <Text style={styles.title}>Сохраненные</Text>
+            <Text style={styles.title}>{i18n.t('favorite.title')}</Text>
             <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={isSavedEnd}/>
             <View style={{height: 100}}></View>
         </ScrollView>

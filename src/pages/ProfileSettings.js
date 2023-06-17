@@ -6,6 +6,7 @@ import { updateUser } from '../redux/auth-reducer';
 import { requestSelectedWardrobe, requestCategories } from '../redux/wardrobe-reducer';
 import { connect } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { i18n } from '../../i18n/i18n';
 
 const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, requestSelectedWardrobe, navigation, toggleNotification}) => {
     const [stateSex, setSex] = useState(sex)
@@ -14,16 +15,16 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     const { showActionSheetWithOptions } = useActionSheet();
 
     const BUTTONS = [
-      "Mужской", 
-      "Женский", 
-      "Отмена"
+      i18n.t('settings.male'), 
+			i18n.t('settings.female'), 
+			i18n.t('settings.cancel'), 
     ]
 
       const showActionSheet = () => {
         showActionSheetWithOptions({
           options: BUTTONS,
           cancelButtonIndex: 2,
-          title: 'Выберите свой пол'
+          title: i18n.t('settings.sheetTitle')
         },
         (buttonIndex) => {
           if(buttonIndex !== 2){
@@ -49,20 +50,22 @@ const ProfileSettingsContainer = ({ name, sex, updateUser, requestCategories, re
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-            <Text style={styles.label}>Имя пользователя</Text>
+            <Text style={styles.label}>{i18n.t('settings.userName')}</Text>
             <TextInput
                 style={styles.listItem}
-                placeholder="Имя"
+                placeholder={i18n.t('settings.name')}
                 placeholderTextColor={GRAY_COLOR}
                 onBlur={handleChange}
                 onChangeText={text => setName(text)}
                 value={stateName}
               />
-            <Text style={styles.label}>Учетные данные</Text>
+            <Text style={styles.label}>{i18n.t('settings.settingsData')}</Text>
             <TouchableOpacity style={styles.listItem} onPress={showActionSheet}>
-              <Text style={styles.listItemLabel}>Ваш пол</Text>
+              <Text style={styles.listItemLabel}>{i18n.t('settings.yourSex')}</Text>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.mute}>{sex === "male" ? "Муж." : "Жен."}</Text>
+                <Text style={styles.mute}>{sex === "male" ? 
+								i18n.t('settings.male').substring(0,3) + '.' : 
+      					i18n.t('settings.female').substring(0,3) + '.'}</Text>
                 <Chevron style={styles.chevron}/>
               </View>
             </TouchableOpacity>

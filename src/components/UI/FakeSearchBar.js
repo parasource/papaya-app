@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { i18n } from '../../../i18n/i18n';
 
 const FakeSearchBar = ({navigation}) => {
     return (
@@ -9,7 +10,7 @@ const FakeSearchBar = ({navigation}) => {
             <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
                 onPress={() => navigation.navigate('Search', {isFocused: true})}>
                 <Icon name="search" style={{fontSize: 20, color: '#888'}}/>
-                <Text style={styles.searchPlaceholder}>Искать</Text>
+                <Text style={styles.searchPlaceholder}>{i18n.t('home.search')}</Text>
             </TouchableOpacity>
         </View>
     );

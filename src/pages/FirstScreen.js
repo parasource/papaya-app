@@ -6,6 +6,7 @@ import * as AppleAuthentication from 'expo-apple-authentication'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { i18n } from '../../i18n/i18n';
 
 export const FirstScreen = ({googleLogin, appleLogin}) => {
   const inset = useSafeAreaInsets()
@@ -42,8 +43,8 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
       <View style={styles.dark}></View>
       <View style={{...styles.wrapper, paddingTop: inset.top + 40}}> 
         <View style={styles.textBlock}>
-          <Text style={styles.h1}>Одеваться стильно просто</Text>
-          <Text style={styles.text}>Выбери себе образ из тысячи доступных</Text>
+          <Text style={styles.h1}>{i18n.t('welcome.title')}</Text>
+          <Text style={styles.text}>{i18n.t('welcome.subtitle')}</Text>
         </View>
        {Platform.OS === 'ios' && <TouchableOpacity style={styles.appleBtn} onPress={appleHandler}>
             <Icon name="logo-apple" style={styles.appleIcon}/>

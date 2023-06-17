@@ -6,6 +6,7 @@ import TopicCard from "./TopicCard";
 import MasonryCard from "../Feed/MasonryCard";
 import { Image } from "react-native-elements";
 import { storage } from '../../const';
+import { i18n } from "../../../i18n/i18n";
 
 const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPress, setSheetInfo}) => {
   const renderItem = ({item}) => {
@@ -26,7 +27,7 @@ const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPres
         <View>
           {searchItems && (
             <>
-              <Text style={{color: TEXT_COLOR, fontSize: 14, fontFamily: 'SFsemibold'}}>Ищем по вещам</Text>
+              <Text style={{color: TEXT_COLOR, fontSize: 14, fontFamily: 'SFsemibold'}}>{i18n.t('search.searchByItem')}</Text>
               <View style={{flexDirection: 'row', marginTop: 8}}>
               {searchItems.map(item =>
                 <TouchableOpacity key={`search_item_in_result-${item.id}`}
@@ -44,7 +45,7 @@ const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPres
           {feed.length > 0 ? (
             <>
 
-              <Text style={{color: TEXT_COLOR, fontSize: 17, fontFamily: 'SFsemibold', marginTop: 18}}>Результат поиска</Text>
+              <Text style={{color: TEXT_COLOR, fontSize: 17, fontFamily: 'SFsemibold', marginTop: 18}}>{i18n.t('search.result')}</Text>
               <MasonryList
                   contentContainerStyle={{
                     alignSelf: 'stretch',
@@ -58,7 +59,7 @@ const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPres
             </>
           ) : (
             <View style={styles.footer}>
-              <Text style={styles.footerText}>По вашему ничего не нашлось</Text>
+              <Text style={styles.footerText}>{i18n.t('search.noResult')}</Text>
             </View>
           )}
         </View>

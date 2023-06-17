@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import GenderButton from '../components/UI/GenderButton';
 import {checkToken, updateUser} from '../redux/auth-reducer'
 import { BG_COLOR, GRAY_COLOR } from '../theme';
+import { i18n } from '../../i18n/i18n';
 
 const GenderSelectionPage = ({updateUser, name, checkToken, onSelect}) => {
     
@@ -19,13 +20,13 @@ const GenderSelectionPage = ({updateUser, name, checkToken, onSelect}) => {
                 <View style={styles.dashedCircle}>
                     <Icon name="male-female" style={{fontSize: 60, color: '#F4CA41'}}/>
                 </View>
-                <Text style={styles.title}>Укажите свой пол</Text>
-                <Text style={styles.text}>Мы будем показывать для вас персональные образы. Пол можно будет поменять позже в настройках</Text>
+                <Text style={styles.title}>{i18n.t('genderSelect.title')}</Text>
+                <Text style={styles.text}>{i18n.t('genderSelect.subtitle')}</Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', paddingBottom: 80}}>
-                <GenderButton iconName={'male-outline'} label={'Парень'} onPress={() => selectGender('male')}/>
-                <Text style={styles.orText}>Или</Text>
-                <GenderButton iconName={'female-outline'} label={'Девушка'} onPress={() => selectGender('female')}/>
+                <GenderButton iconName={'male-outline'} label={i18n.t('genderSelect.male')} onPress={() => selectGender('male')}/>
+                <Text style={styles.orText}>{i18n.t('genderSelect.or')}</Text>
+                <GenderButton iconName={'female-outline'} label={i18n.t('genderSelect.female')} onPress={() => selectGender('female')}/>
             </View>
         </View>
     );

@@ -8,6 +8,7 @@ import SearchPage from '../../pages/SearchPage';
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
 import Icon from 'react-native-vector-icons/Octicons';
+import { i18n } from '../../../i18n/i18n';
 
 
 const Tab = createBottomTabNavigator()
@@ -24,16 +25,16 @@ export const TabBottomNavigator = (props) => {
           let title;
           if (route.name === "Home") {
             iconName = 'home';
-            title = "Главная"
+            title = "tabbar.home"
           } else if (route.name === "Search") {
             iconName = 'search';
-            title = "Поиск"
+            title = "tabbar.search"
           } else if (route.name === "Favorites") {
             iconName = 'bookmark';
-            title = "Сохраненные"
+            title = "tabbar.bookmarked"
           } else if (route.name === "Profile") {
             iconName = 'person';
-            title = "Профиль"
+            title = "tabbar.profile"
           }
           return (
             <Pressable style={{justifyContent: 'center', alignItems: 'center'}} 
@@ -49,7 +50,7 @@ export const TabBottomNavigator = (props) => {
             }}
             >
               <Icon name={iconName} size={24} style={{color: TEXT_COLOR, opacity: focused ? 1.0 : 0.5}}/>
-              <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{title}</Text>
+              <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{i18n.t(title)}</Text>
             </Pressable>
           )
         },

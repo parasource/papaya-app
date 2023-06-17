@@ -4,6 +4,7 @@ import { TEXT_COLOR, INPUTS_BG } from '../../theme'
 import { Image } from 'react-native-elements'
 import { storage } from '../../const';
 import { LinearGradient } from 'expo-linear-gradient';
+import { i18n } from '../../../i18n/i18n';
 
 const TopicCard = ({navigation, item, small}) => {
   return (
@@ -16,7 +17,7 @@ const TopicCard = ({navigation, item, small}) => {
                 style={{height: '100%'}}
                 PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>  
             <LinearGradient colors={['rgba(0, 0, 0, 0)', '#000000']} style={styles.dark}>
-              <Text style={{...styles.text, fontSize: 12, fontFamily: 'SFregular'}}>ПОДБОРКА</Text>
+              <Text style={{...styles.text, fontSize: 12, fontFamily: 'SFregular'}}>{i18n.t('home.topic')}</Text>
               <Text style={styles.text}>{item.name}</Text>
             </LinearGradient>
           </View>

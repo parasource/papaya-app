@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { GRAY_COLOR } from '../../theme';
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from './MasonryCard';
+import { i18n } from '../../../i18n/i18n';
 
 export const LooksFeed = ({looks, isListEnd, navigation, modalHandler}) => {
     return (
@@ -23,7 +24,7 @@ export const LooksFeed = ({looks, isListEnd, navigation, modalHandler}) => {
             </View>
             <View style={styles.footer}>
               {isListEnd ? 
-              <Text style={styles.footerText}>Больше образов нет</Text> 
+              <Text style={styles.footerText}>{i18n.t('looksFeed.noMore')}</Text> 
               : <ActivityIndicator/>}
             </View>
             

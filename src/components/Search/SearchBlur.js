@@ -4,13 +4,14 @@ import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
 import MasonryList from '@react-native-seoul/masonry-list';
 import MasonryCard from "../Feed/MasonryCard";
+import { i18n } from "../../../i18n/i18n";
 
 const SearchBlur = ({ popular, navigation}) => {
   const renderItem = ({item}) => (<MasonryCard key={item.slug} item={item} navigation={navigation}/>);
 
   return (
     <View>
-      <Text style={styles.title}>Популярное на этой неделе</Text>
+      <Text style={styles.title}>{i18n.t('search.popular')}</Text>
       {popular ? (
         <View style={styles.row}>
           <MasonryList
@@ -26,7 +27,7 @@ const SearchBlur = ({ popular, navigation}) => {
         </View>
       ) : (
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Больше образов нет</Text>
+          <Text style={styles.footerText}>{i18n.t('looksFeed.noMore')}</Text>
         </View>
       )}
     </View>

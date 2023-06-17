@@ -28,9 +28,9 @@ const ArticlesCarousel = ({articles, navigation}) => {
                   overscrollEnabled={true}
                   enabled={true}
                   renderItem={({ item }) => 
-                        <View style={{flex: 1}} key={'articles-item_' + item.slug}>
-                          <ArticlesCard item={item} navigation={navigation} height={width / 3.125}/>
-                        </View>
+										<View style={{flex: 1}} key={'articles-item_' + item.slug}>
+											<ArticlesCard item={item} navigation={navigation} height={width / 3.125}/>
+										</View>
                   }
               />
         </View>

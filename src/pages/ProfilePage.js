@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { logout, remove, updateUser } from '../redux/auth-reducer';
 import { Switch } from 'react-native-elements';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
+import { i18n } from '../../i18n/i18n';
 
 const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex, updateUser}) => {
   const [isActive, setIsActive] = useState(toggleNotification)
@@ -22,15 +23,15 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
 
   const logoutAlert = () => {  
       Alert.alert(  
-          'Вы уверены?',  
-          'Вы точно хотите выйте',  
+					i18n.t('profile.alertLogoutTitle'),  
+          i18n.t('profile.alertLogoutSubtitle'),  
           [  
               {  
-                  text: 'Отмена',    
+									text:	i18n.t('profile.alertCancel'),    
                   style: 'cancel'
               },  
               {
-                text: 'Выйти', 
+                text:	i18n.t('profile.alertLogout'),    
                 onPress: () => logout(),
               },  
           ],
@@ -40,15 +41,15 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
 
   const removeAlert = () => {  
       Alert.alert(  
-          'Вы уверены?',  
-          'Вы точно хотите удалить аккаунт',  
+					i18n.t('profile.alertRemoveTitle'),  
+					i18n.t('profile.alertRemoveSubtitle'),  
           [  
               {  
-                  text: 'Отмена',    
+                  text:	i18n.t('profile.alertCancel'),    
                   style: 'cancel'
               },  
               {
-                text: 'Выйти', 
+								text:	i18n.t('profile.alertRemove'),    
                 onPress: () => remove(),
               },  
           ],
@@ -60,28 +61,28 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.wrapper}>
-          <Text style={styles.title}>Профиль</Text>
+          <Text style={styles.title}>{i18n.t('profile.title')}</Text>
           <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('ProfileSettings')}>
             <View>
               <Text style={styles.profileName}>{name}</Text>
-              <Text style={styles.muteText}>Изменить логин и пол</Text>
+              <Text style={styles.muteText}>{i18n.t('profile.settingsSubtitle')}</Text>
             </View>
             <Chevron style={styles.chevron}/>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('MyWardrobe')}>
-            <Text style={styles.listItemLabel}>Мой Гардероб</Text>
+            <Text style={styles.listItemLabel}>{i18n.t('profile.myWardrobeTitle')}</Text>
             <Chevron style={styles.chevron}/>
           </TouchableOpacity>
-          <Text style={{...styles.muteText, marginLeft: 16}}>Редактируй гардероб, чтобы улучшить рекомендации</Text>
+          <Text style={{...styles.muteText, marginLeft: 16}}>{i18n.t('profile.myWardrobeSubtitle')}</Text>
           <TouchableOpacity style={styles.listItemWithSwitch}>
-            <Text style={styles.listItemLabel}>Push-уведомления</Text>
+            <Text style={styles.listItemLabel}>{i18n.t('profile.pushTitle')}</Text>
             <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
           </TouchableOpacity>
           <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:stmeteu@gmail.com') }>
-            <Text style={styles.listItemLabel}>Написать в поддержку</Text>
+            <Text style={styles.listItemLabel}>{i18n.t('profile.support')}</Text>
           </TouchableOpacity>
-          <Text style={styles.logout} onPress={logoutAlert}>Выйти из аккаунта</Text>
-          <Text style={styles.remove} onPress={removeAlert}>Удалить аккаунт</Text>
+          <Text style={styles.logout} onPress={logoutAlert}>{i18n.t('profile.logout')}</Text>
+          <Text style={styles.remove} onPress={removeAlert}>{i18n.t('profile.remove')}</Text>
       </View>
       </ScrollView>
     </SafeAreaView>

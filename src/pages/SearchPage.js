@@ -12,6 +12,7 @@ import { CommonActions } from '@react-navigation/native';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { storage } from '../const';
 import { openBrowserAsync } from 'expo-web-browser';
+import { i18n } from '../../i18n/i18n';
 
 const SearchPage = ({
     navigation, 
@@ -123,9 +124,9 @@ const SearchPage = ({
                     setValue(newVal)
                     requestAutofill(value)
                 }}
-                placeholder={!isFocus ? "Искать" : "Рубашка с брюками"}
+                placeholder={!isFocus ? i18n.t('search.blurPlaceholder') : i18n.t('search.focusPlaceholder')}
                 placeholderTextColor="#888"
-                cancelButtonTitle="Отмена"
+                cancelButtonTitle={i18n.t('search.cancel')}
                 value={value}
                 onSubmitEditing={onSubmit}
                 onFocus={() => {
@@ -176,13 +177,13 @@ const SearchPage = ({
                                     sheetRef.current.close()
                                 }} 
                                 style={styles.sheetBtnWrapper}>
-                                    <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>Найти образы</Text>
+                                    <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>{i18n.t('search.searchLooks')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                     {sheetInfo?.urls?.length > 0 ? <> 
-                        <Text style={{...styles.sheetTitle, marginTop: 16}}>Купить в магазине</Text>
+                        <Text style={{...styles.sheetTitle, marginTop: 16}}>{i18n.t('search.buyInShop')}</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             <View style={{...styles.linksRow, marginLeft: Platform.OS === 'ios' ? -4 : 0, marginRight: Platform.OS === 'ios' ? -8 : 0}}>
                                 {sheetInfo?.urls?.map(url => (
@@ -193,7 +194,7 @@ const SearchPage = ({
                             </View>
                         </ScrollView>
                     </> : 
-                    <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>Мы пока не нашли где можно купить эту вещь</Text>}
+                    <Text style={{...styles.sheetMute, marginTop: 16, textAlign: 'center'}}>{i18n.t('search.notByInShop')}</Text>}
                 </View>
             </BottomSheet>}
         </SafeAreaView>

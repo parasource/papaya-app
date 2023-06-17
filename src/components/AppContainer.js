@@ -27,6 +27,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import GenderSelectionPage from '../pages/GenderSelectionPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as StoreReview from 'expo-store-review';
+import { i18n } from '../../i18n/i18n';
 
 const prefix = Linking.createURL('/');
 
@@ -226,13 +227,13 @@ const AppContainer = (props) => {
                   headerBlurEffect: '',
                 })}
               />
-              <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: "Гардероб"}}/>
-              <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: "Мой гардероб"}}/>
+              <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: i18n.t('headerTitles.wardrobe')}}/>
+              <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: i18n.t('headerTitles.myWardrobe')}}/>
               <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
               <Share.Screen
                   name="ProfileSettings"
                   component={ProfileSettings}
-                  options={{ title: 'Аккаунт'}}
+                  options={{ title: i18n.t('headerTitles.profile')}}
                 />
               
               <Share.Group screenOptions={{ presentation: 'modal' }}>
@@ -252,9 +253,9 @@ const AppContainer = (props) => {
         onClose={() => setIsOpen(false)}
         backdropComponent={renderBackdrop}>
           <View style={styles.bottomSheet}>
-              <Text style={styles.sheetTitle}>Образ подобран на основе вашего гардероба</Text>
-              <Text style={styles.sheetText}>Этой иконкой обозначены образы, которые были рекомендованы на основе вашего гардероба. В них есть как минимум одна вещь, которая есть у вас.</Text>
-              <FullButton label="Отлично!" style={{marginTop: 40}} pressHandler={() => sheetRef.current?.close()}/>
+              <Text style={styles.sheetTitle}>{i18n.t('lookBottomSheet.title')}</Text>
+              <Text style={styles.sheetText}>{i18n.t('lookBottomSheet.subtitle')}</Text>
+              <FullButton label={i18n.t('lookBottomSheet.button')} style={{marginTop: 40}} pressHandler={() => sheetRef.current?.close()}/>
           </View>
         </BottomSheet>
       </SafeAreaProvider>

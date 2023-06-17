@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, Text, Platform } from 'react-native';
 import { GRAY_COLOR, BG_COLOR, TEXT_COLOR, INPUTS_BG } from '../../theme';
+import { i18n } from '../../../i18n/i18n';
 
 export const FeedCategories = ({categories, index, onPress, isActive}) => {
     const categoriesRef = useRef(null)
@@ -36,7 +37,7 @@ export const FeedCategories = ({categories, index, onPress, isActive}) => {
                 style={{...styles.btnWrapper, backgroundColor: isActive == null ? TEXT_COLOR : INPUTS_BG, paddingVertical: Platform.OS === 'ios' ? 8 : 4 }}
                 >
                     <Text style={{...styles.btnAnimated, color: isActive == null ? BG_COLOR : GRAY_COLOR}}>
-                        Для вас
+											{i18n.t('home.forYou')}
                     </Text>
                 </TouchableOpacity>
                 )
