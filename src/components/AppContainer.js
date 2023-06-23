@@ -79,7 +79,7 @@ const AppContainer = (props) => {
   );
 
   const linking = {
-    prefixes: [prefix, 'https://papaya.pw'],
+    prefixes: [prefix, 'https://papaya.pw/'],
     config: {
       screens: {
         LookPage: {

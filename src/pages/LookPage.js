@@ -35,7 +35,7 @@ const LookPage = ({
         unsaveLook,
         isSaved = false
     }) => {
-    const { lookSlug, item } = route.params;
+    const { lookSlug } = route.params;
     const offset = useRef(new Animated.Value(0)).current;
     const fadeAnim = new Animated.Value(0)
 
@@ -114,7 +114,7 @@ const LookPage = ({
                         <Animated.View style={{transform: [{ perspective: 1 }, { scale: baseScale }],}}>
                             <Image 
                                 style={styles.image} 
-                                source={{uri: `${storage}/${item.image}`}}/> 
+                                source={{uri: `${storage}/${currentLook.image}`}}/> 
                         </Animated.View>
                 </PinchGestureHandler>
             </View>
@@ -128,7 +128,7 @@ const LookPage = ({
                                         undislikeLook(lookSlug)
                                     }
                                     likeLook(lookSlug)
-                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook.name});
+                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook?.name});
                                 }
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
                             }} label={i18n.t('look.like')} iconName={!isLiked ? "heart-outline" : "heart"} iconStyle={{...styles.icon ,color: TEXT_COLOR}} stylesBtn={{marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}/>
@@ -140,7 +140,7 @@ const LookPage = ({
                                         unlikeLook(lookSlug)
                                     }
                                     dislikeLook(lookSlug)
-                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook.name});
+                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook?.name});
                                 }
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
                             }}
@@ -157,17 +157,17 @@ const LookPage = ({
                                 if(isSaved){unsaveLook(lookSlug)}
                                 else{
                                     saveLook(lookSlug)
-                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook.name});}
+                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook?.name});}
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                             }} iconName={!isSaved ? "bookmark-outline" : "bookmark"} styleBtn={{marginHorizontal: 4}} iconStyle={styles.icon}/>
                 </View>
             </View>
             <View style={styles.container}>
-                {(currentLook.authorTag && currentLook.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
+                {(currentLook?.authorTag && currentLook?.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
                     <Text style={{color: TEXT_COLOR, fontSize: 16, fontFamily: 'SFsemibold'}}>{i18n.t('look.author')}</Text>
-                    <TouchableOpacity onPress={() => openBrowserAsync(currentLook.authorUrl)}>
+                    <TouchableOpacity onPress={() => openBrowserAsync(currentLook?.authorUrl)}>
                         <Text style={{color: GRAY_COLOR, fontSize: 16, marginLeft: 8}}>
-                            @{currentLook.authorTag}
+                            @{currentLook?.authorTag}
                         </Text>
                     </TouchableOpacity>
                 </View>}
@@ -202,8 +202,8 @@ const LookPage = ({
                 </>
                 : 
                 <Text style={styles.message}>{i18n.t('look.notFound')}</Text>}
-                {currentLook.similar && <View><Text style={styles.title}>{i18n.t('look.lookLike')}</Text>
-                <LooksFeed looks={currentLook.similar} 
+                {currentLook?.similar && <View><Text style={styles.title}>{i18n.t('look.lookLike')}</Text>
+                <LooksFeed looks={currentLook?.similar} 
                     navigation={navigation} isListEnd={true} page={0}/>
                 </View>}
                 </View>

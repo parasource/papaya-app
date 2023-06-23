@@ -1,1 +1,1 @@
-export const storage = "https://static.papaya.parasource.tech"
+export const storage = "https://static.papaya.pw"

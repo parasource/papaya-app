@@ -3,7 +3,7 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 import * as SecureStore from 'expo-secure-store';
 
 const instance = axios.create({
-    baseURL: 'https://api.papaya.parasource.tech/api/v2'
+    baseURL: 'https://api.papaya.pw/api/v2'
 })
 
 instance.interceptors.request.use(
