@@ -22,7 +22,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
     getCurrentTopic(topicSlug, page)
     let canGoBack = navigation.canGoBack();
 
-    if(!route.params.topicName) navigation.setOptions({title: currentTopic.topic.name})
+    if(!route.params.topicName) navigation.setOptions({title: currentTopic?.topic.name})
     if(!canGoBack) {
         navigation.setOptions({
             headerLeft: () => (
@@ -37,7 +37,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
 
   const shareHandler = async () => {
     const options={
-        message: `Посмотри эту подборку образов:\n${currentTopic.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}`,
+        message: `Посмотри эту подборку образов:\n${currentTopic?.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}`,
     }
     try{
       await Share.share(options)

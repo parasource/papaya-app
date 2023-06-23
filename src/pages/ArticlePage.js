@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 16,
         paddingVertical: 20,
+				paddingBottom: 40,
         position: 'relative',
     },
    

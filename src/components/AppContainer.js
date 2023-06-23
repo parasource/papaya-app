@@ -89,6 +89,10 @@ const AppContainer = (props) => {
         TopicPage: {
           path: 'topics/:topicSlug',
           parse: (topicSlug) => `${topicSlug}`
+        },
+        ArticlePage: {
+          path: 'article/:articleSlug',
+          parse: (articleSlug) => `${articleSlug}`
         }
       }
     }

@@ -18,7 +18,7 @@ export const ru = {
 		myWardrobeTitle: 'Мой Гардероб',
 		myWardrobeSubtitle: 'Редактируй гардероб, чтобы улучшить рекомендации',
 		pushTitle: 'Push-уведомления',
-		support: 'Написать в поддержку',
+		support: 'Поддержка',
 		logout: 'Выйти из аккаунта',
 		remove: 'Удалить аккаунт',
 		alertLogoutTitle: 'Вы уверены?',

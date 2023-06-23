@@ -78,7 +78,7 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
             <Text style={styles.listItemLabel}>{i18n.t('profile.pushTitle')}</Text>
             <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:stmeteu@gmail.com') }>
+          <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:support@papaya.pw') }>
             <Text style={styles.listItemLabel}>{i18n.t('profile.support')}</Text>
           </TouchableOpacity>
           <Text style={styles.logout} onPress={logoutAlert}>{i18n.t('profile.logout')}</Text>

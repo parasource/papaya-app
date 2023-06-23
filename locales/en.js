@@ -2,7 +2,7 @@ export const en = {
   tabbar: {
 		home: 'Home',
 		search: 'Search',
-		bookmarked: 'Likes',
+		bookmarked: 'Saved',
 		profile: 'Profile',
 	},
 	home: {
@@ -18,7 +18,7 @@ export const en = {
 		myWardrobeTitle: 'My Wardrobe',
 		myWardrobeSubtitle: 'Edit your wardrobe to improve your recommendations',
 		pushTitle: 'Push-notification',
-		support: 'Write to support',
+		support: 'Support',
 		logout: 'Sign out',
 		remove: 'Remove account',
 		alertLogoutTitle: 'Are you sure?',
@@ -42,7 +42,7 @@ export const en = {
 	wardrobe: {
 		empty: 'Your wardrobe is empty \nAdd wardrobe items',
 		addItem: 'Add clothes',
-		countItems: 'things',
+		countItems: 'items',
 	},
 	headerTitles: {
 		wardrobe: 'Wardrobe',
@@ -51,14 +51,14 @@ export const en = {
 	},
 	item: {
 		buyInShop: 'Buy in the store',
-		looksWith: 'Images with this thing',
+		looksWith: 'Looks with this item',
 		shop: ' shop',
 		shops: ' shops',
 		shops2: ' shops',
 	},
 	lookBottomSheet: {
 		title: 'The look is selected based on your wardrobe',
-		subtitle: 'This icon indicates looks that have been recommended based on your wardrobe. They have at least one thing that you have.',
+		subtitle: 'This icon indicates looks that have been recommended based on your wardrobe. They have at least one item that you have.',
 		button: 'Great!'
 	},
 	favorite: {
@@ -97,7 +97,7 @@ export const en = {
 		like: 'Like',
 		author: 'Image author',
 		items: 'Image elements',
-		notFound: "We haven't found the item in the photo yet, but we will soon!",
+		notFound: "We haven't found items in the photo yet, but we will soon!",
 		lookLike: 'Similar looks',
 		searchLooks: 'Search Looks',
 		buyInShop: 'Buy in shop',
