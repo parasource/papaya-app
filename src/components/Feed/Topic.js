@@ -22,7 +22,6 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
     getCurrentTopic(topicSlug, page)
     let canGoBack = navigation.canGoBack();
 
-    if(!route.params.topicName) navigation.setOptions({title: currentTopic?.topic.name})
     if(!canGoBack) {
         navigation.setOptions({
             headerLeft: () => (
@@ -70,7 +69,16 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
                     style={{flex: 1}}
                     PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
                 </rnAnimated.View>
-              <LinearGradient colors={['rgba(0, 0, 0, 0) 0%', 'rgba(0, 0, 0, 0.4)']} style={{flex: 1,flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'flex-end', height: 166, marginTop: -166, paddingHorizontal: 16}}>
+              <LinearGradient 
+								colors={['rgba(0, 0, 0, 0) 0%', 'rgba(0, 0, 0, 0.4)']} 
+								style={{
+									flex: 1,
+									flexDirection: 'row', 
+									justifyContent: 'space-between', 
+									alignItems: 'flex-end', 
+									height: 166, 
+									marginTop: -166, 
+									paddingHorizontal: 16}}>
                 <View>
                   <Text style={styles.title}>
                     {/[a-zа-яё]+/i.exec(currentTopic?.topic?.name.toUpperCase().trim())}

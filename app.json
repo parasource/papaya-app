@@ -43,7 +43,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "tech.parasource.papaya.ios",
-      "buildNumber": "22",
+      "buildNumber": "23",
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "associatedDomains": [
