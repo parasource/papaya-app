@@ -61,7 +61,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
               [{ nativeEvent: { contentOffset: { y: offset } } }],
               { useNativeDriver: false }
           )}>
-        {(isFetching && !currentTopic) ?
+        {(isFetching || !currentTopic) ?
           <ActivityIndicator/> : 
               <View style={{paddingBottom: 100, height: '100%'}}>
                 <rnAnimated.View style={{...styles.wrapper,flex: 1, transform: [{ scale: headerScale }]}}>
