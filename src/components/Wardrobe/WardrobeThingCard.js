@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'rea
 import React, { useRef } from 'react'
 import { GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme'
 import { storage } from '../../const'
-import {Image} from 'react-native-elements'
+import {Image} from '@rneui/themed'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export const WardrobeThingCard = ({item, selected, onPress, isFetching}) => {

@@ -12,7 +12,6 @@ import { BG_COLOR, INPUTS_BG, TEXT_COLOR, GRAY_COLOR } from '../theme';
 import { TopicPage } from '../pages/TopicPage';
 import { FullButton } from './UI/FullButton';
 import { LinearGradient } from 'expo-linear-gradient';
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import ItemScreen from './ItemScreen';
 import LookPage from '../pages/LookPage';
 import Wardrobe from './Wardrobe/Wardrobe';
@@ -21,7 +20,6 @@ import * as Linking from 'expo-linking';
 import MyWardrobe from './Wardrobe/MyWardrobe';
 import InternetConnectionAlert from 'react-native-internet-connection-alert';
 import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
-import * as Analytics from "expo-firebase-analytics";
 import ArticlePage from '../pages/ArticlePage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import GenderSelectionPage from '../pages/GenderSelectionPage';
@@ -32,7 +30,7 @@ import { i18n } from '../../i18n/i18n';
 const prefix = Linking.createURL('/');
 
 const Stack = createNativeStackNavigator()
-const Share = createSharedElementStackNavigator()
+const Share = createNativeStackNavigator()
 
 const AppContainer = (props) => {
   const sheetRef = useRef(null)
@@ -79,30 +77,28 @@ const AppContainer = (props) => {
   );
 
   const linking = {
-    prefixes: [prefix, 'https://papaya.pw/'],
+    prefixes: [prefix, 'https://papaya.sozvuchno.ru/'],
     config: {
       screens: {
         LookPage: {
           path: 'looks/:lookSlug',
-          parse: (lookSlug) => `${lookSlug}`
+          parse: { lookSlug: (lookSlug) => `${lookSlug}` }
         },
         TopicPage: {
           path: 'topics/:topicSlug',
-          parse: (topicSlug) => `${topicSlug}`
+          parse: { topicSlug: (topicSlug) => `${topicSlug}` }
         },
         ArticlePage: {
           path: 'article/:articleSlug',
-          parse: (articleSlug) => `${articleSlug}`
+          parse: { articleSlug: (articleSlug) => `${articleSlug}` }
         }
       }
     }
   };
 
   const shareHandler = async (slug, name) => {
-    Analytics.logEvent('share', {contentType: 'Share look' + name});
-
     const options={
-        message: `Посмотри этот образ:\n${name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/looks/${slug}`,
+        message: `Посмотри этот образ:\n${name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.sozvuchno.ru/looks/${slug}`,
     }
     try{
         await rnShare.share(options)
@@ -134,7 +130,7 @@ const AppContainer = (props) => {
   if(!props.isAuth || !isFirstTime){
     return(<SafeAreaProvider>
         <StatusBar barStyle="light-content"/>
-        <NavigationContainer theme={MyTheme} linking={linking}>
+        <NavigationContainer theme={MyTheme} linking={linking} fallback={<View style={{flex:1, backgroundColor:'#111', alignItems:'center', justifyContent:'center'}}><Text style={{color:'#fff'}}>Загрузка…</Text></View>}>
             {!props.isAuth ? <Stack.Navigator screenOptions={{headerShown: false}}>
               <Stack.Screen name="FirstScreen">
                   {() => <FirstScreen googleLogin={props.googleLogin} appleLogin={props.appleLogin}/>}
@@ -156,6 +152,7 @@ const AppContainer = (props) => {
       <SafeAreaProvider>
         <StatusBar barStyle="light-content"/>
         <NavigationContainer theme={MyTheme} linking={linking}
+        fallback={<View style={{flex:1, backgroundColor:'#111', alignItems:'center', justifyContent:'center'}}><Text style={{color:'#fff'}}>Загрузка…</Text></View>}
         ref={navigationRef}
         onReady={() => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
@@ -166,14 +163,12 @@ const AppContainer = (props) => {
 
           if (previousRouteName !== currentRouteName) {
             routeNameRef.current = currentRouteName;
-            await Analytics.logEvent("screen_view",{
-              "prev_screen_name": previousRouteName,
-              "screen_name": currentRouteName,});
           }
         }}>
-          <Share.Navigator screenOptions={{  
-            headerShown: true, 
+          <Share.Navigator screenOptions={{
+            headerShown: true,
             headerBackTitleVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
             headerBackImage: () => (
               <Icon name="chevron-back-outline" size={28} style={{color: TEXT_COLOR}}/>
             ),
@@ -201,7 +196,6 @@ const AppContainer = (props) => {
                   headerBackButtonMenuEnabled: true,
                   headerTransparent: true,
                   headerTitle: route.params.lookName,
-                  headerBlurEffect: '',
                   headerRight: () => (
                     <TouchableOpacity style={{marginRight: 8}} activeOpacity={.6} onPress={() => shareHandler(route.params.lookSlug, route.params.lookName)}>
                       <Icon name="share-outline" style={styles.icon}/>
@@ -228,7 +222,6 @@ const AppContainer = (props) => {
                   title: '',
                   headerBackTitleVisible: false,
                   headerTransparent: true,
-                  headerBlurEffect: '',
                 })}
               />
               <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: i18n.t('headerTitles.wardrobe')}}/>

@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import { View, StyleSheet, SafeAreaView, Image, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableOpacity, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler'
 import { SearchBar } from "@rneui/themed";
 import { GRAY_COLOR, TEXT_COLOR, INPUTS_BG, BG_COLOR } from '../theme';
@@ -114,6 +115,8 @@ const SearchPage = ({
         <SafeAreaView>
             <SearchBar
                 platform="ios"
+                searchIcon={{ type: 'ionicon', name: 'search' }}
+                clearIcon={{ type: 'ionicon', name: 'close-circle' }}
                 containerStyle={{backgroundColor: null, paddingHorizontal: 8}}
                 inputContainerStyle={{backgroundColor: '#1F1F1F'}}
                 inputStyle={{backgroundColor: '#1F1F1F', color: TEXT_COLOR}}

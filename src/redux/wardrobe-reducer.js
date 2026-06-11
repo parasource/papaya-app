@@ -95,22 +95,20 @@ export const setInterests = (interests) => async (dispatch) => {
     await wardrobeAPI.setWardrobe(interests)
 }
 
-export const removeThingWardrobe = (id, wardrobe) => (dispatch) => {
+export const removeThingWardrobe = (id, wardrobe) => async (dispatch) => {
     let removeWardrobe = [...wardrobe]
     let index = removeWardrobe.indexOf(id);
     if (index !== -1) {
         removeWardrobe.splice(index, 1);
     }
-    let rmInterests = JSON.stringify({wardrobe: removeWardrobe})
-    wardrobeAPI.setWardrobe(rmInterests)
     dispatch(removeThing(removeWardrobe))
+    await wardrobeAPI.setWardrobe(JSON.stringify({wardrobe: removeWardrobe}))
 }
 
-export const addThingWardrobe = (id, wardrobe) => (dispatch) => {
+export const addThingWardrobe = (id, wardrobe) => async (dispatch) => {
     let addWardrobe = [...wardrobe, id]
-    let addInterests = JSON.stringify({wardrobe: addWardrobe})
-    wardrobeAPI.setWardrobe(addInterests)
     dispatch(addThing(addWardrobe))
+    await wardrobeAPI.setWardrobe(JSON.stringify({wardrobe: addWardrobe}))
 }
 
 export const requestWardrobe = (id) => async (dispatch) => {
@@ -148,6 +146,10 @@ export const requestSelectedWardrobeThings = (id) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
     let response = await wardrobeAPI.getSelectedWardrobe()
     if(response.status == 200){
+        // синхронизируем категории и id с сервером — категория без вещей исчезает из панели
+        const selectedCategories = [...new Set(response.data.map(item => item.category_id))]
+        dispatch(getSelectedWardrobeCategories(selectedCategories))
+        dispatch(getSelectedWardrobe(response.data.map(el => el.id)))
         let wardrobeThings = response.data.filter(item => item.category_id === id)
         dispatch(getSelectedWardrobeThings(wardrobeThings))
         dispatch(toggleIsFetching(false))

@@ -1,1 +1,1 @@
-export const storage = "https://static.papaya.pw"
+export const storage = "https://static.papaya.sozvuchno.ru"

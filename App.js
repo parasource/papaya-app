@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
+import { Platform } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
-import AppLoading from 'expo-app-loading';
 import useFonts from './src/hooks/useFont';
 import AppContainer from './src/components/AppContainer';
 import * as Notifications from 'expo-notifications';
@@ -9,6 +9,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as Device from 'expo-device'
 import { authAPI } from './src/api/api';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const defaultErrorHandler = ErrorUtils.getGlobalHandler()
 
@@ -26,7 +29,8 @@ ErrorUtils.setGlobalHandler(myErrorHandler)
 Notifications.setNotificationHandler({
   handleNotification: async () => {
     return {
-      shouldShowAlert: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
       shouldPlaySound: true,
       shouldSetBadge: true,
     }
@@ -42,9 +46,17 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const LoadFonts = async () => {
-    await useFonts();
-  };
+  useEffect(() => {
+    useFonts()
+      .catch(error => console.log(error))
+      .then(() => SetIsReady(true));
+  }, []);
+
+  useEffect(() => {
+    if (IsReady) {
+      SplashScreen.hideAsync().catch(() => {});
+    }
+  }, [IsReady]);
 
   useEffect(() => {
     if (Platform.OS !== 'android') {
@@ -52,41 +64,34 @@ export default function App() {
           setExpoPushToken(token)
           authAPI.setAPNS(token)
       });
-  
+
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         setNotification(notification);
       });
-  
+
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         console.log(response);
       });
     }
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
     };
   }, []);
 
   if (!IsReady) {
-    return (
-      <AppLoading
-        startAsync={LoadFonts}
-        onFinish={async () => {
-          await SplashScreen.preventAutoHideAsync()
-          SetIsReady(true)
-        }}
-        onError={error => console.log(error)}
-      />
-    );
+    return null;
   }
 
   return (
-    <Provider store={store}>
-        <ActionSheetProvider>
-          <AppContainer/>
-        </ActionSheetProvider>
-    </Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+          <ActionSheetProvider>
+            <AppContainer/>
+          </ActionSheetProvider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -105,7 +110,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getDevicePushTokenAsync()).data;
-  } 
+  }
 
   return token;
 }

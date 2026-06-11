@@ -10,7 +10,7 @@ import { LooksFeed } from './LooksFeed';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AnimatedTopicHeader } from '../UI/AnimatedTopicHeader';
 
-MAX_HEADER_HEIGHT = 282
+const MAX_HEADER_HEIGHT = 282
 
 const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) => {
   const [page, setPage] = useState(0)
@@ -36,7 +36,7 @@ const Topic = ({navigation, isFetching, currentTopic, route, getCurrentTopic}) =
 
   const shareHandler = async () => {
     const options={
-        message: `Посмотри эту подборку образов:\n${currentTopic?.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.pw/topics/${topicSlug}`,
+        message: `Посмотри эту подборку образов:\n${currentTopic?.topic.name}\n\nБольше образов ты найдешь в приложении Papaya\n\nhttps://papaya.sozvuchno.ru/topics/${topicSlug}`,
     }
     try{
       await Share.share(options)

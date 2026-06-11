@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Animated, Platform } from 'react-native'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR, BG_COLOR } from '../theme';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,7 +11,7 @@ import { getCurrentLook, dislikeLook, likeLook, unlikeLook, undislikeLook, unsav
 import { LookItem } from '../components/LookItem';
 import { storage } from '../const';
 import * as Haptics from 'expo-haptics'
-import * as Analytics from 'expo-firebase-analytics';
+
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import { openBrowserAsync } from 'expo-web-browser';
@@ -128,7 +128,7 @@ const LookPage = ({
                                         undislikeLook(lookSlug)
                                     }
                                     likeLook(lookSlug)
-                                    Analytics.logEvent('Like_look', {contentType: 'Like look' + currentLook?.name});
+                                    
                                 }
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
                             }} label={i18n.t('look.like')} iconName={!isLiked ? "heart-outline" : "heart"} iconStyle={{...styles.icon ,color: TEXT_COLOR}} stylesBtn={{marginRight: 4, backgroundColor: isLiked ? 'rgba(255, 71, 71, 1)' : 'rgba(31,31,31, 1)'}}/>
@@ -140,7 +140,7 @@ const LookPage = ({
                                         unlikeLook(lookSlug)
                                     }
                                     dislikeLook(lookSlug)
-                                    Analytics.logEvent('Dislike_look', {contentType: 'Dislike look' + currentLook?.name});
+                                    
                                 }
                                 Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
                             }}
@@ -157,7 +157,7 @@ const LookPage = ({
                                 if(isSaved){unsaveLook(lookSlug)}
                                 else{
                                     saveLook(lookSlug)
-                                    Analytics.logEvent('save_look', {contentType: 'Save look' + currentLook?.name});}
+                                    }
                                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
                             }} iconName={!isSaved ? "bookmark-outline" : "bookmark"} styleBtn={{marginHorizontal: 4}} iconStyle={styles.icon}/>
                 </View>

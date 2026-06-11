@@ -3,7 +3,7 @@ import { HomePage } from '../../pages/HomePage';
 import { FavoritesPage } from '../../pages/FavoritesPage';
 import ProfilePage from '../../pages/ProfilePage';
 import { TEXT_COLOR } from '../../theme';
-import { Platform, Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import SearchPage from '../../pages/SearchPage';
 import { BlurView } from 'expo-blur';
 import { useState } from 'react';
@@ -19,60 +19,44 @@ export const TabBottomNavigator = (props) => {
 
   return(
     <Tab.Navigator
-      screenOptions={({ route, navigation }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          let title;
-          if (route.name === "Home") {
-            iconName = 'home';
-            title = "tabbar.home"
-          } else if (route.name === "Search") {
-            iconName = 'search';
-            title = "tabbar.search"
-          } else if (route.name === "Favorites") {
-            iconName = 'bookmark';
-            title = "tabbar.bookmarked"
-          } else if (route.name === "Profile") {
-            iconName = 'person';
-            title = "tabbar.profile"
-          }
-          return (
-            <Pressable style={{justifyContent: 'center', alignItems: 'center'}} 
-            onPress={() => {
-              let history = navigation.getState().history
-              if(title === "Главная" && history.length === 1){
-                if(onTop === 1) setOnTop(2)
-                else setOnTop(1)
-              }else if(title === "Поиск"){
-                navigation.navigate(route.name, {isFocused: false})
-              }
-              navigation.navigate(route.name)
-            }}
-            >
-              <Icon name={iconName} size={24} style={{color: TEXT_COLOR, opacity: focused ? 1.0 : 0.5}}/>
-              <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{i18n.t(title)}</Text>
-            </Pressable>
-          )
-        },
+      screenOptions={({ route }) => {
+        const icons = { Home: 'home', Search: 'search', Favorites: 'bookmark', Profile: 'person' }
+        const titles = { Home: 'tabbar.home', Search: 'tabbar.search', Favorites: 'tabbar.bookmarked', Profile: 'tabbar.profile' }
+        return {
+        tabBarIcon: ({ focused }) => (
+          <Icon name={icons[route.name]} size={24} style={{color: TEXT_COLOR, opacity: focused ? 1.0 : 0.5}}/>
+        ),
+        tabBarLabel: ({ color }) => (
+          <Text numberOfLines={1} style={{fontSize: 13, fontFamily: 'SFmedium', color: color}}>{i18n.t(titles[route.name])}</Text>
+        ),
         tabBarActiveTintColor: TEXT_COLOR,
         tabBarInactiveTintColor: "rgba(255, 255,255, .5)",
-        backgroundColor: 'transparent',
         tabBarStyle: styles.tab,
-        tabBarLabel: () => {return null},
         headerShown: false,
         tabBarHideOnKeyboard: true,
         tabBarBackground: () => (
           <BlurView tint="dark" intensity={Platform.OS === 'ios' ? 100 : 150} style={StyleSheet.absoluteFill} />
         ),
-      })}
+      }}}
     >
-        <Tab.Screen name="Home">
+        <Tab.Screen name="Home"
+          listeners={({ navigation }) => ({
+            tabPress: () => {
+              if (navigation.isFocused()) {
+                setOnTop(prev => prev === 1 ? 2 : 1)
+              }
+            }
+          })}>
             {({navigation, route}) => <HomePage handelSnapPress={handelSnapPress} navigation={navigation} onTop={onTop} route={route} onTopEnd={() => setOnTop(null)}/>}
         </Tab.Screen>
         <Tab.Screen
           name="Search"
           component={SearchPage}
-          screenOptions={{tabBarHideOnKeyboard: true}}
+          listeners={({ navigation }) => ({
+            tabPress: () => {
+              navigation.navigate('Search', { isFocused: false })
+            }
+          })}
         />
         <Tab.Screen
           name="Favorites"

@@ -9,11 +9,11 @@ import { i18n } from "../../../i18n/i18n";
 const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
 	const keyboardHeight = useKeyboard()
 
-  const setHistory = feed.history.filter((value, index, self) => {
+  const setHistory = (feed?.history ?? []).filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
 
-  const setPopular = feed.suggestions.filter((value, index, self) => {
+  const setPopular = (feed?.suggestions ?? []).filter((value, index, self) => {
     return self.findIndex(v => v.query === value.query) === index;
   })
 
@@ -39,7 +39,7 @@ const SearchFocus = ({feed, onClick, onClear, autofill, onTagPress}) => {
             })}
           </View>
           : <View>
-          {feed.history.length > 0 && 
+          {setHistory.length > 0 &&
           <View style={styles.row}>
             <View style={{
               width: '100%',

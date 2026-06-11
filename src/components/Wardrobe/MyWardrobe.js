@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { BG_COLOR, GRAY_COLOR, GREEN_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
 import { WardrobeThingCard } from './WardrobeThingCard';
 import { LinearGradient } from 'expo-linear-gradient';
-import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryColumns from '../UI/MasonryColumns';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { i18n } from '../../../i18n/i18n';
 
@@ -36,6 +36,14 @@ const MyWardrobe = ({
     requestSelectedWardrobe()
   }, [sex])
 
+  // если в текущей категории не осталось вещей — переключаемся на первую доступную
+  useEffect(() => {
+    if(categoryId && selectedWardrobeCategories?.length > 0 && !selectedWardrobeCategories.includes(categoryId)){
+      setIndex(0)
+      setCategoryId([...selectedWardrobeCategories].sort((a, b) => a - b)[0])
+    }
+  }, [selectedWardrobeCategories])
+
   useEffect(() => {
     categories != localCategories ? setLocalCategories(categories) : null
 
@@ -54,28 +62,25 @@ const MyWardrobe = ({
   }, [scrollIndex, categoryId])
 
   const MapWardrobe = () => {
-    if(!categoryId) setCategoryId(selectedWardrobeCategories.sort((a, b) => a - b)[0])
-
-    return <MasonryList
+    return <MasonryColumns
           data={selectedWardrobe}
           numColumns={2}
-          keyExtractor={(item) => item.id + "wardrobe-thing"}
           renderItem={({item}) => (
           <WardrobeThingCard
             isFetching={isFetching}
-            item={item} 
+            item={item}
+            key={item.id + "wardrobe-thing"}
             selected={selectedWardrobeId.includes(item.id)}
-            onPress={() => {
+            onPress={async () => {
               if(selectedWardrobeId.includes(item.id)){
-                removeThingWardrobe(item.id, selectedWardrobeId) 
+                await removeThingWardrobe(item.id, selectedWardrobeId)
               }else{
-                addThingWardrobe(item.id, selectedWardrobeId) 
+                await addThingWardrobe(item.id, selectedWardrobeId)
               }
+              requestSelectedWardrobeThings(categoryId)
             }}
             />
           )}
-          nestedScrollEnabled
-          ListFooterComponent={() => <View style={{height: 128}}></View>}
       />
   }
 
@@ -91,7 +96,7 @@ const MyWardrobe = ({
       <ScrollView showsVerticalScrollIndicator={false}>
           <FlatList
             ref={wardrobeRef}
-            data={localCategories.sort(el => el.id).filter(category => selectedWardrobeCategories.includes(category.id))}
+            data={[...localCategories].sort((a, b) => a.id - b.id).filter(category => selectedWardrobeCategories.includes(category.id))}
             horizontal
             initialScrollIndex={scrollIndex}
             renderItem={({item, index}) => (

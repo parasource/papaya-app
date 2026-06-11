@@ -4,7 +4,7 @@ import { INPUTS_BG, MUTE_TEXT, TEXT_COLOR } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { connect } from 'react-redux';
 import { logout, remove, updateUser } from '../redux/auth-reducer';
-import { Switch } from 'react-native-elements';
+import { Switch } from '@rneui/themed';
 import Chevron from '../../assets/img/icons/chevron.left.svg'
 import { i18n } from '../../i18n/i18n';
 
@@ -78,7 +78,7 @@ const ProfilePage = ({navigation, logout, remove, name, toggleNotification, sex,
             <Text style={styles.listItemLabel}>{i18n.t('profile.pushTitle')}</Text>
             <Switch value={isActive} onValueChange={pushHandler} color={'#34C759'}/>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:support@papaya.pw') }>
+          <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('mailto:support@papaya.sozvuchno.ru') }>
             <Text style={styles.listItemLabel}>{i18n.t('profile.support')}</Text>
           </TouchableOpacity>
           <Text style={styles.logout} onPress={logoutAlert}>{i18n.t('profile.logout')}</Text>

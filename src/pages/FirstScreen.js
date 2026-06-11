@@ -38,7 +38,7 @@ export const FirstScreen = ({googleLogin, appleLogin}) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} source={{uri: 'http://static.papaya.parasource.tech/ui/welcome-background.jpg'}}/>
+      <ImageBackground style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} source={{uri: 'https://static.papaya.sozvuchno.ru/ui/welcome-background.jpg'}}/>
       <LinearGradient colors={['rgba(17, 17, 17, 0)', 'rgba(17, 17, 17, 1)']} style={styles.gradient}/>
       <View style={styles.dark}></View>
       <View style={{...styles.wrapper, paddingTop: inset.top + 40}}> 

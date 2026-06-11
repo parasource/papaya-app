@@ -1,8 +1,7 @@
 import { View, TouchableHighlight, StyleSheet, Text} from 'react-native'
 import React from 'react'
 import { INPUTS_BG, TEXT_COLOR } from '../../theme'
-import { Image } from 'react-native-elements'
-import { SharedElement } from 'react-navigation-shared-element'
+import { Image } from '@rneui/themed'
 import { storage } from '../../const';
 
 const FeedCard = ({navigation, item, withPop}) => {
@@ -17,12 +16,10 @@ const FeedCard = ({navigation, item, withPop}) => {
       style = {styles.wrapper}>
         <View> 
           <View style={styles.cardWrapper}> 
-            <SharedElement id={`feedCard${item.slug}`}>
-              <Image source={{uri: `${storage}/${item.imageResized}`}}
-                resizeMode = "cover"
-                style = {{height: '100%'}}
-                PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>  
-            </SharedElement>
+            <Image source={{uri: `${storage}/${item.imageResized}`}}
+              resizeMode = "cover"
+              style = {{height: '100%'}}
+              PlaceholderContent={<View style={{width: '100%', height: '100%', backgroundColor: INPUTS_BG}}></View>}/>
           </View>
           <Text style={styles.text}>{item.name}</Text>
         </View>

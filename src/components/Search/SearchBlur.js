@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "react-native";
 import { View, StyleSheet } from "react-native";
 import { GRAY_COLOR, TEXT_COLOR } from "../../theme";
-import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryColumns from "../UI/MasonryColumns";
 import MasonryCard from "../Feed/MasonryCard";
 import { i18n } from "../../../i18n/i18n";
 
@@ -14,15 +14,11 @@ const SearchBlur = ({ popular, navigation}) => {
       <Text style={styles.title}>{i18n.t('search.popular')}</Text>
       {popular ? (
         <View style={styles.row}>
-          <MasonryList
-            contentContainerStyle={{
-              alignSelf: 'stretch',
-              marginHorizontal: -8
-            }}
+          <MasonryColumns
+            style={{ marginHorizontal: -8 }}
             numColumns={2}
             data={popular}
             renderItem={renderItem}
-            scrollEnabled={false}
           />
         </View>
       ) : (

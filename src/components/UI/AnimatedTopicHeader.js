@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Animated, Text, View, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { TEXT_COLOR } from '../../theme';

@@ -6,7 +6,7 @@ import { i18n } from '../../../i18n/i18n';
 const FakeSearchBar = ({navigation}) => {
     return (
         <View style={{flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginTop: 12}}>
-            <Image source={{uri: 'http://static.papaya.parasource.tech/ui/logo.png'}} style={{height: 40, width: 35, marginRight: 12}}/>
+            <Image source={{uri: 'https://static.papaya.sozvuchno.ru/ui/logo.png'}} style={{height: 40, width: 35, marginRight: 12}}/>
             <TouchableOpacity activeOpacity={0.8} style={styles.searchWrapper} 
                 onPress={() => navigation.navigate('Search', {isFocused: true})}>
                 <Icon name="search" style={{fontSize: 20, color: '#888'}}/>

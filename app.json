@@ -7,9 +7,6 @@
     "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "locales": {
-      "ru": "./locales/ru.json"
-    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
@@ -29,7 +26,7 @@
         {
           "ios": {
             "useFrameworks": "static",
-            "deploymentTarget": "13.0"
+            "deploymentTarget": "16.4"
           }
         }
       ]
@@ -47,7 +44,7 @@
       "usesAppleSignIn": true,
       "googleServicesFile": "./GoogleService-Info.plist",
       "associatedDomains": [
-        "applinks:papaya.pw"
+        "applinks:papaya.sozvuchno.ru"
       ]
     },
     "android": {
@@ -55,7 +52,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#111111"
       },
-      "useNextNotificationsApi": true,
       "package": "tech.parasource.papaya.ios"
     },
     "web": {
@@ -71,22 +67,6 @@
           "measurementId": "G-YXX10KCGBQ"
         }
       }
-    },
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": [
-        "expo.ts",
-        "expo.tsx",
-        "expo.js",
-        "expo.jsx",
-        "ts",
-        "tsx",
-        "js",
-        "jsx",
-        "json",
-        "wasm",
-        "svg"
-      ]
     },
     "extra": {
       "eas": {

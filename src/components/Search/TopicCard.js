@@ -1,7 +1,7 @@
 import { View, TouchableHighlight, StyleSheet, Text} from 'react-native'
 import React from 'react'
 import { TEXT_COLOR, INPUTS_BG } from '../../theme'
-import { Image } from 'react-native-elements'
+import { Image } from '@rneui/themed'
 import { storage } from '../../const';
 import { LinearGradient } from 'expo-linear-gradient';
 import { i18n } from '../../../i18n/i18n';

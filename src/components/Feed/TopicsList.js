@@ -6,7 +6,7 @@ import TopicCard from '../Search/TopicCard';
 const TopicsList = ({topics, navigation}) => {
     return (
         <View>
-            {topics && (
+            {topics?.length > 0 && (
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.scrollRow}>
                   {topics.map((card, index) => {

@@ -15,6 +15,8 @@ const ArticlesCarousel = ({articles, navigation}) => {
         height: width / 2,
     };
 
+    if(!articles?.length) return null
+
     return (
         <View>
             <Carousel

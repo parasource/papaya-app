@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Linking, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
-import { Image } from 'react-native-elements'
+import { Image } from '@rneui/themed'
 import { GRAY_COLOR, TEXT_COLOR } from '../theme'
 import { storage } from '../const';
 import { i18n } from '../../i18n/i18n';

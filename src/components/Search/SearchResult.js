@@ -1,10 +1,10 @@
 import React from "react";
 import { ActivityIndicator, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { GRAY_COLOR, INPUTS_BG, TEXT_COLOR } from '../../theme';
-import MasonryList from '@react-native-seoul/masonry-list';
+import MasonryColumns from "../UI/MasonryColumns";
 import TopicCard from "./TopicCard";
 import MasonryCard from "../Feed/MasonryCard";
-import { Image } from "react-native-elements";
+import { Image } from '@rneui/themed';
 import { storage } from '../../const';
 import { i18n } from "../../../i18n/i18n";
 
@@ -46,15 +46,11 @@ const SearchResult = ({feed, navigation, isFetching, searchItems, handleSnapPres
             <>
 
               <Text style={{color: TEXT_COLOR, fontSize: 17, fontFamily: 'SFsemibold', marginTop: 18}}>{i18n.t('search.result')}</Text>
-              <MasonryList
-                  contentContainerStyle={{
-                    alignSelf: 'stretch',
-                    marginHorizontal: -8
-                  }}
+              <MasonryColumns
+                  style={{ marginHorizontal: -8 }}
                   numColumns={2}
                   data={[...new Map(feed.map((item) => [item["ID"], item])).values()]}
                   renderItem={renderItem}
-                  scrollEnabled={false}
               />
             </>
           ) : (
