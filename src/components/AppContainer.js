@@ -23,6 +23,7 @@ import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import ArticlePage from '../pages/ArticlePage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import GenderSelectionPage from '../pages/GenderSelectionPage';
+import OutfitBuilderPage from '../pages/OutfitBuilderPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as StoreReview from 'expo-store-review';
 import { i18n } from '../../i18n/i18n';
@@ -225,6 +226,7 @@ const AppContainer = (props) => {
                 })}
               />
               <Share.Screen name="Wardrobe" component={Wardrobe} options={{title: i18n.t('headerTitles.wardrobe')}}/>
+              <Share.Screen name="OutfitBuilder" component={OutfitBuilderPage} options={({ route }) => ({ title: route.params?.outfit ? 'Редактировать образ' : 'Новый образ' })}/>
               <Share.Screen name="MyWardrobe" component={MyWardrobe} options={{ title: i18n.t('headerTitles.myWardrobe')}}/>
               <Share.Screen name="WardrobeDetail" component={WardrobeDetail} options={({ route }) => ({ title: route.params.categoryName })}/>
               <Share.Screen
