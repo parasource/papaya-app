@@ -15,10 +15,14 @@ import * as Haptics from 'expo-haptics'
 import { PinchGestureHandler, State } from 'react-native-gesture-handler';
 import { AnimatedHeader } from '../components/UI/AnimatedHeader';
 import { openBrowserAsync } from 'expo-web-browser';
+import SkeletonLookPage from '../components/UI/SkeletonLookPage';
 import { LooksFeed } from '../components/Feed/LooksFeed';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import ButtonWithBounceAnimation from '../components/UI/ButtonWithBounceAnimation';
 import { i18n } from '../../i18n/i18n';
+import { aiAPI } from '../api/aiAPI';
+import usePhotoPicker from '../hooks/usePhotoPicker';
+import TryOnModal from '../components/AI/TryOnModal';
 
 const LookPage = ({
         route,
@@ -43,6 +47,30 @@ const LookPage = ({
     const [sheetInfo, setSheetInfo] = useState(null);
     const snapPoints = [320]
 
+    const { pickPhoto } = usePhotoPicker()
+    const [tryOnVisible, setTryOnVisible] = useState(false)
+    const [tryOnLoading, setTryOnLoading] = useState(false)
+    const [tryOnError, setTryOnError] = useState(null)
+    const [tryOnResult, setTryOnResult] = useState(null)
+
+    const handleTryOn = async () => {
+        const uri = await pickPhoto()
+        if (!uri) return
+        setTryOnResult(null)
+        setTryOnError(null)
+        setTryOnVisible(true)
+        setTryOnLoading(true)
+        try {
+            const itemIds = (currentLook?.items || []).map(i => i.id)
+            const res = await aiAPI.editPhoto(uri, itemIds)
+            setTryOnResult(res.data)
+        } catch (e) {
+            setTryOnError('Не удалось выполнить примерку. Попробуй позже.')
+        } finally {
+            setTryOnLoading(false)
+        }
+    }
+
     const handelSnapPress = useCallback((index) => {
         sheetRef.current?.snapToIndex(index)
     }, [])
@@ -51,7 +79,7 @@ const LookPage = ({
         props => (
             <BottomSheetBackdrop
                 {...props}
-                appearsOnIndex={1}
+                appearsOnIndex={0}
                 disappearsOnIndex={-1}
                 enableTouchThrough={true}
             />
@@ -98,9 +126,13 @@ const LookPage = ({
           }
     };
 
+  if (!currentLook?.image) {
+    return <SkeletonLookPage />
+  }
+
   return (
-    <View>
-        <ScrollView 
+    <View style={{flex: 1}}>
+        <ScrollView
             showsVerticalScrollIndicator={false}
             onScroll={Animated.event(
                 [{ nativeEvent: { contentOffset: { y: offset } } }],
@@ -153,14 +185,20 @@ const LookPage = ({
                         }/>
                     </View>
                     <View style={styles.iconsGroup}>
-                    <ButtonWithBounceAnimation onPress={() => {
-                                if(isSaved){unsaveLook(lookSlug)}
-                                else{
-                                    saveLook(lookSlug)
+                        <ButtonWithBounceAnimation
+                            onPress={handleTryOn}
+                            iconName="shirt-outline"
+                            iconStyle={styles.icon}
+                            stylesBtn={{ backgroundColor: 'rgb(31,31,31)', marginRight: 4 }}
+                        />
+                        <ButtonWithBounceAnimation onPress={() => {
+                                    if(isSaved){unsaveLook(lookSlug)}
+                                    else{
+                                        saveLook(lookSlug)
                                     }
-                                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-                            }} iconName={!isSaved ? "bookmark-outline" : "bookmark"} styleBtn={{marginHorizontal: 4}} iconStyle={styles.icon}/>
-                </View>
+                                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                }} iconName={!isSaved ? "bookmark-outline" : "bookmark"} styleBtn={{marginHorizontal: 4}} iconStyle={styles.icon}/>
+                    </View>
             </View>
             <View style={styles.container}>
                 {(currentLook?.authorTag && currentLook?.authorTag) && <View style={{flexDirection: 'row', marginTop: 16}}>
@@ -209,10 +247,11 @@ const LookPage = ({
                 </View>
             </View>
         </ScrollView>
-        <BottomSheet 
-            ref={sheetRef} 
+        <BottomSheet
+            ref={sheetRef}
             index={-1}
             snapPoints={snapPoints}
+            enableDynamicSizing={false}
             enablePanDownToClose={true}
             backgroundStyle={{backgroundColor: INPUTS_BG}}
             backdropComponent={renderBackdrop}>
@@ -225,7 +264,7 @@ const LookPage = ({
                             <Text style={styles.sheetTitle}>{sheetInfo?.name}</Text>
                         </View>
                         <View>
-                            <TouchableOpacity onPress={() => navigation.navigate('Search', {isFocused: false, searchValue: sheetInfo.name})} 
+                            <TouchableOpacity onPress={() => navigation.navigate('MainNavigator', {screen: 'Search', params: {isFocused: false, searchValue: sheetInfo.name}})}
                             style={styles.sheetBtnWrapper}>
                                 <Text style={{color: TEXT_COLOR, fontFamily: 'SFsemibold', fontSize: 12}}>{i18n.t('look.searchLooks')}</Text>
                             </TouchableOpacity>
@@ -248,6 +287,13 @@ const LookPage = ({
             </View>
         </BottomSheet>
         <AnimatedHeader animValue={offset}/>
+        <TryOnModal
+            visible={tryOnVisible}
+            onClose={() => setTryOnVisible(false)}
+            isLoading={tryOnLoading}
+            error={tryOnError}
+            resultBase64={tryOnResult}
+        />
     </View>
   )
 }

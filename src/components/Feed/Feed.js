@@ -9,6 +9,7 @@ import ArticlesCarousel from './ArticlesCarousel';
 import TopicsList from './TopicsList';
 import FakeSearchBar from '../UI/FakeSearchBar';
 import { Alert } from '../UI/Alert';
+import SkeletonFeed from '../UI/SkeletonFeed';
 import { FeedCategories } from './FeedCategories';
 import VersionCheck from 'react-native-version-check-expo';
 import { i18n } from '../../../i18n/i18n';
@@ -135,8 +136,12 @@ const Feed = ({
                 const { layout } = event.nativeEvent;
                 setCategoriesY(layout.y)
               }}>
-              <LooksFeed looks={isActive == null ? looks : categoriesLooks} 
-                navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => handelSnapPress(0)}/>
+              {isFetching && looks.length === 0 ? (
+                <SkeletonFeed />
+              ) : (
+                <LooksFeed looks={isActive == null ? looks : categoriesLooks}
+                  navigation={navigation} isListEnd={isListEnd} page={page} modalHandler={() => handelSnapPress(0)}/>
+              )}
             </View>
           </View>
       </ScrollView>

@@ -172,6 +172,7 @@ export const getCurrentArticle = (slug) => async (dispatch) => {
 
 export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(toggleIsFetching(true))
+    dispatch(setLook({}))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
         dispatch(setLook({...response.data.look, similar: response.data.similar}))

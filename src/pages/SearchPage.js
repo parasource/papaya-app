@@ -14,6 +14,10 @@ import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { storage } from '../const';
 import { openBrowserAsync } from 'expo-web-browser';
 import { i18n } from '../../i18n/i18n';
+import { aiAPI } from '../api/aiAPI';
+import usePhotoPicker from '../hooks/usePhotoPicker';
+import PhotoRecommendsModal from '../components/AI/PhotoRecommendsModal';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SearchPage = ({
     navigation, 
@@ -41,6 +45,34 @@ const SearchPage = ({
     const [isOpen, setIsOpen] = useState(false);
     const [isResult, setIsResult] = useState(false);
     const [isFocus, setIsFocus] = useState(false);
+
+    const { pickPhoto } = usePhotoPicker()
+    const [photoModalVisible, setPhotoModalVisible] = useState(false)
+    const [photoLoading, setPhotoLoading] = useState(false)
+    const [photoError, setPhotoError] = useState(null)
+    const [photoComment, setPhotoComment] = useState('')
+    const [photoLooks, setPhotoLooks] = useState([])
+
+    const handlePhotoSearch = async () => {
+        const uri = await pickPhoto()
+        if (!uri) return
+        setPhotoLooks([])
+        setPhotoComment('')
+        setPhotoError(null)
+        setPhotoModalVisible(true)
+        setPhotoLoading(true)
+        try {
+            const res = await aiAPI.getRecommends(uri)
+            setPhotoComment(res.data?.comment || '')
+            // looks_ids — массив {id, comment}; нужно загрузить сами образы
+            // TODO: когда будет готов бэкенд — добавить маппинг ids → looks
+            setPhotoLooks(res.data?.looks_ids || [])
+        } catch (e) {
+            setPhotoError('Не удалось подобрать образы. Попробуй другое фото.')
+        } finally {
+            setPhotoLoading(false)
+        }
+    }
 
     const handleSnapPress = useCallback((index) => {
         sheetRef.current?.snapToIndex(index)
@@ -113,6 +145,8 @@ const SearchPage = ({
 
     return (
         <SafeAreaView>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingRight: 8 }}>
+            <View style={{ flex: 1 }}>
             <SearchBar
                 platform="ios"
                 searchIcon={{ type: 'ionicon', name: 'search' }}
@@ -142,6 +176,14 @@ const SearchPage = ({
                 blurOnSubmit={true}
                 ref={hiddenButtonRef}
             />
+            </View>
+            <TouchableOpacity
+                onPress={handlePhotoSearch}
+                style={{ width: 36, height: 36, backgroundColor: '#1F1F1F', borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}
+            >
+                <Icon name="camera-outline" size={20} color={TEXT_COLOR} />
+            </TouchableOpacity>
+            </View>
             <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
                     {(isFocus && !isResult) && <View>
@@ -156,7 +198,16 @@ const SearchPage = ({
                     {(!isFocus && !isResult) && <SearchBlur recommended={topicsRecommended} popular={topicsPopular} navigation={navigation}/>}
                 </View>
             </ScrollView>
-            {isResult && <BottomSheet 
+            <PhotoRecommendsModal
+                visible={photoModalVisible}
+                onClose={() => setPhotoModalVisible(false)}
+                isLoading={photoLoading}
+                error={photoError}
+                comment={photoComment}
+                looks={photoLooks}
+                navigation={navigation}
+            />
+            {isResult && <BottomSheet
                 ref={sheetRef} 
                 index={-1}
                 snapPoints={snapPoints}

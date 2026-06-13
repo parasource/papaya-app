@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { requestBookmarked } from '../../redux/looks-reducer';
 import { TEXT_COLOR } from '../../theme';
 import { LooksFeed } from '../Feed/LooksFeed';
+import SkeletonFeed from '../UI/SkeletonFeed';
 import { i18n } from '../../../i18n/i18n';
 
 const wait = timeout => {
@@ -52,7 +53,11 @@ const Bookmarked = ({requestBookmarked, bookmarked, navigation, isSavedEnd, isFe
         onScroll={({nativeEvent}) => scrollHandler(nativeEvent)}
         scrollEventThrottle={16}>
             <Text style={styles.title}>{i18n.t('favorite.title')}</Text>
-            <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={isSavedEnd}/>
+            {isFetching && bookmarked.length === 0 ? (
+              <SkeletonFeed />
+            ) : (
+              <LooksFeed looks={bookmarked} navigation={navigation} isListEnd={isSavedEnd}/>
+            )}
             <View style={{height: 100}}></View>
         </ScrollView>
     );

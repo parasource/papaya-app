@@ -8,6 +8,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import MasonryColumns from '../UI/MasonryColumns';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { i18n } from '../../../i18n/i18n';
+import { aiAPI } from '../../api/aiAPI';
+import usePhotoPicker from '../../hooks/usePhotoPicker';
+import ScanResultModal from '../AI/ScanResultModal';
 
 const MyWardrobe = ({
     isFetching,
@@ -29,6 +32,49 @@ const MyWardrobe = ({
   const [categoryId, setCategoryId] = useState();
   const [scrollIndex, setIndex] = useState(0);
   const [localCategories, setLocalCategories] = useState([])
+
+  const { pickPhoto } = usePhotoPicker()
+  const [scanVisible, setScanVisible] = useState(false)
+  const [scanLoading, setScanLoading] = useState(false)
+  const [scanError, setScanError] = useState(null)
+  const [scanItems, setScanItems] = useState([])
+  const [scanSelected, setScanSelected] = useState(new Set())
+
+  const handleScan = async () => {
+    const uri = await pickPhoto()
+    if (!uri) return
+    setScanItems([])
+    setScanError(null)
+    setScanSelected(new Set())
+    setScanVisible(true)
+    setScanLoading(true)
+    try {
+      const res = await aiAPI.scanPhoto(uri)
+      const items = Array.isArray(res.data) ? res.data : [res.data]
+      setScanItems(items)
+    } catch (e) {
+      setScanError('Не удалось распознать вещи. Попробуй другое фото.')
+    } finally {
+      setScanLoading(false)
+    }
+  }
+
+  const toggleScanItem = (id) => {
+    setScanSelected(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const confirmScanItems = async () => {
+    const ids = [...scanSelected]
+    const newWardrobe = [...selectedWardrobeId, ...ids]
+    await addThingWardrobe(ids[0], selectedWardrobeId) // упрощённо — добавляем по одному
+    // TODO: когда бэкенд вернёт реальные id — добавить через setWardrobe весь массив
+    setScanVisible(false)
+    requestSelectedWardrobeThings(categoryId)
+  }
 
   useEffect(() => {
     setCategoryId(null)
@@ -86,7 +132,14 @@ const MyWardrobe = ({
 
   return (
     <View style={styles.row}>
-      {selectedWardrobeId.length <= 0 ? <Text style={{
+      {isFetching && selectedWardrobeId.length === 0 ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingBottom: 80 }}>
+          <ActivityIndicator size="large" color={TEXT_COLOR} />
+          <Text style={{ color: GRAY_COLOR, fontFamily: 'SFregular', fontSize: 14, marginTop: 12, textAlign: 'center' }}>
+            Загружаем ваш гардероб…
+          </Text>
+        </View>
+      ) : selectedWardrobeId.length <= 0 ? <Text style={{
         fontSize: 16,
         fontFamily: 'SFregular',
         color: GRAY_COLOR,
@@ -129,13 +182,28 @@ const MyWardrobe = ({
           <View style={{height: 120}}></View>
       </ScrollView>}
       <LinearGradient colors={['rgba(17, 17, 17, 0)', '#111']} style={styles.gradient}>
-            <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('Wardrobe')}>
-              <Icon name="add-outline" style={{fontSize: 24}}/>
-              <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
-                {i18n.t('wardrobe.addItem')}
-              </Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={[styles.addBtn, { flex: 1, marginRight: 8 }]} onPress={() => navigation.navigate('Wardrobe')}>
+                <Icon name="add-outline" style={{fontSize: 24}}/>
+                <Text style={{fontFamily: 'SFsemibold', fontSize: 12, lineHeight: 20}}>
+                  {i18n.t('wardrobe.addItem')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.addBtn, { width: 52, paddingHorizontal: 0 }]} onPress={handleScan}>
+                <Icon name="scan-outline" style={{fontSize: 22}}/>
+              </TouchableOpacity>
+            </View>
       </LinearGradient>
+      <ScanResultModal
+        visible={scanVisible}
+        onClose={() => setScanVisible(false)}
+        isLoading={scanLoading}
+        error={scanError}
+        items={scanItems}
+        selectedIds={scanSelected}
+        onToggle={toggleScanItem}
+        onConfirm={confirmScanItems}
+      />
     </View>
   )
 }
@@ -188,7 +256,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: GREEN_COLOR,
     borderRadius: 12,
-    width: '100%',
     justifyContent: 'center'
   }
 })
