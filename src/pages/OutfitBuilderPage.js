@@ -175,12 +175,12 @@ const OutfitBuilderPage = ({ navigation, route }) => {
     }
 
     const handleAiPhoto = async () => {
-        const uri = await pickPhoto()
-        if (!uri) return
+        const photo = await pickPhoto()
+        if (!photo) return
         setPhotoLoading(true)
         try {
-            const itemIds = selectedItems.map(i => i.id)
-            const res = await aiAPI.editPhoto(uri, itemIds)
+            const itemImageUrls = selectedItems.map(i => i.image)
+            const res = await aiAPI.editPhoto(photo.uri, itemImageUrls)
             setPreviewPhoto(res.data) // base64 от бэкенда
         } catch {
             Alert.alert('Не удалось создать AI-фото', 'Попробуй позже')

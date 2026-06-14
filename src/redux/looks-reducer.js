@@ -175,6 +175,7 @@ export const getCurrentLook = (slug) => async (dispatch) => {
     dispatch(setLook({}))
     const response = await feedAPI.getLook(slug)
     if(response.status == 200){
+        console.log('[LOOK items]', response.data.look?.items?.map(i => i.image))
         dispatch(setLook({...response.data.look, similar: response.data.similar}))
         dispatch(toggleLiked(response.data.isLiked))
         dispatch(toggleDisliked(response.data.isDisliked))

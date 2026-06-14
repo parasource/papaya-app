@@ -54,15 +54,15 @@ const LookPage = ({
     const [tryOnResult, setTryOnResult] = useState(null)
 
     const handleTryOn = async () => {
-        const uri = await pickPhoto()
-        if (!uri) return
+        const photo = await pickPhoto()
+        if (!photo) return
         setTryOnResult(null)
         setTryOnError(null)
         setTryOnVisible(true)
         setTryOnLoading(true)
         try {
-            const itemIds = (currentLook?.items || []).map(i => i.id)
-            const res = await aiAPI.editPhoto(uri, itemIds)
+            const itemImageUrls = (currentLook?.items || []).map(i => i.image)
+            const res = await aiAPI.editPhoto(photo.uri, itemImageUrls)
             setTryOnResult(res.data)
         } catch (e) {
             setTryOnError('Не удалось выполнить примерку. Попробуй позже.')

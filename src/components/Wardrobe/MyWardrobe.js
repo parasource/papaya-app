@@ -41,15 +41,15 @@ const MyWardrobe = ({
   const [scanSelected, setScanSelected] = useState(new Set())
 
   const handleScan = async () => {
-    const uri = await pickPhoto()
-    if (!uri) return
+    const photo = await pickPhoto()
+    if (!photo) return
     setScanItems([])
     setScanError(null)
     setScanSelected(new Set())
     setScanVisible(true)
     setScanLoading(true)
     try {
-      const res = await aiAPI.scanPhoto(uri)
+      const res = await aiAPI.scanPhoto(photo.uri)
       const items = Array.isArray(res.data) ? res.data : [res.data]
       setScanItems(items)
     } catch (e) {
