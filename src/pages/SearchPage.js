@@ -52,21 +52,23 @@ const SearchPage = ({
     const [photoError, setPhotoError] = useState(null)
     const [photoComment, setPhotoComment] = useState('')
     const [photoLooks, setPhotoLooks] = useState([])
+    const [photoItems, setPhotoItems] = useState([])
 
     const handlePhotoSearch = async () => {
-        const uri = await pickPhoto()
-        if (!uri) return
+        const photo = await pickPhoto()
+        if (!photo) return
         setPhotoLooks([])
+        setPhotoItems([])
         setPhotoComment('')
         setPhotoError(null)
         setPhotoModalVisible(true)
         setPhotoLoading(true)
         try {
-            const res = await aiAPI.getRecommends(uri)
+            const res = await aiAPI.getRecommends(photo.uri)
             setPhotoComment(res.data?.comment || '')
-            // looks_ids — массив {id, comment}; нужно загрузить сами образы
-            // TODO: когда будет готов бэкенд — добавить маппинг ids → looks
-            setPhotoLooks(res.data?.looks_ids || [])
+            // Бэкенд возвращает { comment, looks: [...], items: [{id, image, name, comment}] }
+            setPhotoLooks(res.data?.looks || [])
+            setPhotoItems(res.data?.items || [])
         } catch (e) {
             setPhotoError('Не удалось подобрать образы. Попробуй другое фото.')
         } finally {
@@ -205,6 +207,7 @@ const SearchPage = ({
                 error={photoError}
                 comment={photoComment}
                 looks={photoLooks}
+                items={photoItems}
                 navigation={navigation}
             />
             {isResult && <BottomSheet
